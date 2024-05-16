@@ -1,0 +1,33 @@
+.listener {
+  .actionWrapper {
+    margin-bottom: 20px;
+  }
+
+  .listenerList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .formWrapper {
+    border: 1px solid var(--color-neutral-3);
+    border-radius: var(--border-radius-medium);
+    padding: 20px;
+    :global {
+      .arco-form-label-item {
+        flex: 0 0 120px;
+      }
+
+      .arco-form-item-wrapper {
+        flex: 1 !important;
+      }
+    }
+
+    display: flex;
+    gap: 12px;
+
+    .formItem {
+      flex: 1;
+    }
+  }
+}
