@@ -1,5 +1,5 @@
 import { CaseEntity } from "@/service/case";
-import ConfigPreview from "../CaseEditor/components/ConfigEditor/components/ConfigPreview";
+import ConfigPreview from "../CaseEditor/ConfigEditor/components/ConfigPreview";
 import styles from "./index.module.less";
 import GridDescriptions, { DataType } from "@/components/GridDescriptions";
 

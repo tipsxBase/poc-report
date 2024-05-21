@@ -8,7 +8,7 @@ import styles from "./index.module.less";
 import { toFormPath } from "@/shared/path";
 import { useMemoizedFn } from "ahooks";
 import { IconPlus } from "@arco-design/web-react/icon";
-import { MockDataDefine } from "@/pages/CaseManage/components/CaseEditor/components/ConfigEditor/sharedType";
+import { MockDataDefine } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 import MockRuleConfig from "../MockRuleConfig";
 
 export interface MockDataLineProps {

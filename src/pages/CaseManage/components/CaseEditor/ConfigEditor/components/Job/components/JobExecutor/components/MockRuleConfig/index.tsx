@@ -20,7 +20,7 @@ import {
   needGlobalRef,
   needMinAndMax,
   needScale,
-} from "@/pages/CaseManage/components/CaseEditor/components/ConfigEditor/sharedType";
+} from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 import get from "lodash/get";
 import { ReactNode } from "react";
 import { IconDelete } from "@arco-design/web-react/icon";

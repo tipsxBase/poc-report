@@ -6,12 +6,18 @@ import {
   Input,
   Link,
   Message,
+  Modal,
   Popconfirm,
   Space,
   Table,
 } from "@arco-design/web-react";
 import styles from "./index.module.less";
-import { IconPlus, IconRefresh, IconSearch } from "@arco-design/web-react/icon";
+import {
+  IconPlus,
+  IconRefresh,
+  IconSearch,
+  IconUpload,
+} from "@arco-design/web-react/icon";
 import { useMemo, useRef, useState } from "react";
 import { useMemoizedFn, useMount } from "ahooks";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
@@ -26,6 +32,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { parseJsonToYml } from "@/shared/yaml";
 import UpdateMetric from "./components/UpdateMetric";
 import Statics from "./components/Statics";
+import ImportConfig, { ImportConfigInstance } from "./components/ImportConfig";
 
 /**
  * 用例管理
@@ -33,10 +40,17 @@ import Statics from "./components/Statics";
 const CaseManage = () => {
   const [form] = Form.useForm();
   const [action, setAction] = useState<
-    "update" | "add" | "copy" | "view" | "upload" | "viewUploadResult"
+    | "update"
+    | "add"
+    | "copy"
+    | "view"
+    | "upload"
+    | "viewUploadResult"
+    | "uploadCase"
   >();
+  const [uploadCaseVisible, setUploadCaseVisible] = useState(false);
   const rawEntityRef = useRef<CaseEntity>();
-
+  const importConfigInstance = useRef<ImportConfigInstance>();
   const caseEditorInstance = useRef<CaseEditorInstance>();
 
   const {
@@ -88,7 +102,7 @@ const CaseManage = () => {
     caseEditorInstance.current.getValues().then((res) => {
       const { case_name, case_content, category_id } = res;
 
-      if (action === "add" || action === "copy") {
+      if (action === "add" || action === "copy" || action === "uploadCase") {
         insertCase({
           category_id,
           case_name,
@@ -218,6 +232,23 @@ const CaseManage = () => {
     rawEntityRef.current = null;
   });
 
+  const onUploadCase = useMemoizedFn(() => {
+    setUploadCaseVisible(true);
+  });
+
+  const onCloseCase = useMemoizedFn(() => {
+    setUploadCaseVisible(false);
+  });
+
+  const doImport = useMemoizedFn(() => {
+    const config = importConfigInstance.current.getRawValues();
+    rawEntityRef.current = {
+      case_content: config,
+    };
+    setUploadCaseVisible(false);
+    setAction("uploadCase");
+  });
+
   const editorTitle = useMemo(() => {
     if (action === "add") {
       return "新建用例";
@@ -227,6 +258,8 @@ const CaseManage = () => {
       return "复制用例";
     } else if (action === "view") {
       return "查看用例";
+    } else if (action === "uploadCase") {
+      return "上传用例";
     }
     return "";
   }, [action]);
@@ -269,9 +302,14 @@ const CaseManage = () => {
       </Form>
       <Divider type="horizontal" />
       <div>
-        <Button onClick={onAddCase} icon={<IconPlus />} type="outline">
-          新建用例
-        </Button>
+        <Space>
+          <Button onClick={onAddCase} icon={<IconPlus />}>
+            新建用例
+          </Button>
+          <Button onClick={onUploadCase} icon={<IconUpload />}>
+            导入用例
+          </Button>
+        </Space>
       </div>
       <div className={styles.table}>
         <Table
@@ -300,7 +338,10 @@ const CaseManage = () => {
         width="100%"
       >
         {action === "view" && <CasePreviewer config={rawEntityRef.current} />}
-        {(action === "add" || action === "copy" || action === "update") && (
+        {(action === "add" ||
+          action === "copy" ||
+          action === "update" ||
+          action === "uploadCase") && (
           <CaseEditor
             rawEntity={rawEntityRef.current}
             action={action}
@@ -310,6 +351,14 @@ const CaseManage = () => {
         {action === "upload" && <UpdateMetric />}
         {action === "viewUploadResult" && <Statics />}
       </Drawer>
+      <Modal
+        title="导入用例"
+        visible={uploadCaseVisible}
+        onCancel={onCloseCase}
+        onOk={doImport}
+      >
+        <ImportConfig ref={importConfigInstance} />
+      </Modal>
     </div>
   );
 };

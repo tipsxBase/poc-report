@@ -1,9 +1,15 @@
-import { Button, Form, Input, Select } from "@arco-design/web-react";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+} from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { IconDelete } from "@arco-design/web-react/icon";
 import { toFormPath } from "@/shared/path";
 import { enumToSelectOptions } from "@/shared/emum";
-import { ProcessorType } from "@/pages/CaseManage/components/CaseEditor/components/ConfigEditor/sharedType";
+import { ProcessorType } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 import get from "lodash/get";
 import SqlEditor from "@/components/SqlEditor";
 import SqlCollection from "../SqlCollection";
@@ -48,7 +54,13 @@ const ProcessorUnit = (props: ProcessorUnitProps) => {
         >
           <Input placeholder="请输入执行器名称" />
         </Form.Item>
-
+        <Form.Item
+          label="延迟时间"
+          tooltip="事务延迟提交的时间，会计入响应时长"
+          field={toFormPath(parentField, "transactionDelayTime")}
+        >
+          <InputNumber placeholder="请输入事务延迟时间" min={0} />
+        </Form.Item>
         <Form.Item
           noStyle
           shouldUpdate={(prev, next) =>

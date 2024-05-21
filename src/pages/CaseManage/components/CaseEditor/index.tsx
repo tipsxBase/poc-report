@@ -8,12 +8,12 @@ import {
   useState,
 } from "react";
 import { useMemoizedFn } from "ahooks";
-import ConfigEditor, { ConfigEditorInstance } from "./components/ConfigEditor";
+import ConfigEditor, { ConfigEditorInstance } from "./ConfigEditor";
 import CategorySelect from "@/components/CategorySelect";
 import { CaseEntity } from "@/service/case";
 
 export interface CaseEditorProps {
-  action: "add" | "update" | "copy";
+  action: "add" | "update" | "copy" | "uploadCase";
   rawEntity: CaseEntity;
 }
 
@@ -58,6 +58,14 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
         return {
           formInitialValues: { case_name, category_id },
           initialCaseConfig: config,
+        };
+      }
+
+      if (action === "uploadCase") {
+        const { case_content } = rawEntity;
+        return {
+          formInitialValues: null,
+          initialCaseConfig: case_content,
         };
       }
 

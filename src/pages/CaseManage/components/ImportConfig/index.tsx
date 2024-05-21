@@ -4,7 +4,7 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { useMemoizedFn } from "ahooks";
 import { UploadItem } from "@arco-design/web-react/es/Upload";
 import { parseYmlToJson } from "@/shared/yaml";
-import { SharedInstance } from "../../sharedType";
+import { SharedInstance } from "../CaseEditor/ConfigEditor/sharedType";
 import { IconDelete } from "@arco-design/web-react/icon";
 export interface ImportConfigProps {}
 
@@ -54,7 +54,12 @@ const ImportConfig = forwardRef<ImportConfigInstance, ImportConfigProps>(
     return (
       <div className={styles.importConfig}>
         {!file ? (
-          <Upload drag autoUpload={false} onChange={onUploadChange} />
+          <Upload
+            drag
+            accept=".yml,.yaml"
+            autoUpload={false}
+            onChange={onUploadChange}
+          />
         ) : (
           <div className={styles.uploadItem}>
             <span className={styles.fileName}>{file.name}</span>

@@ -4,7 +4,7 @@ import { useMemoizedFn } from "ahooks";
 import { IconPlus } from "@arco-design/web-react/icon";
 import { toFormPath } from "@/shared/path";
 import ProcessorUnit from "../ProcessorUnit";
-import { TaskletProcessor } from "@/pages/CaseManage/components/CaseEditor/components/ConfigEditor/sharedType";
+import { TaskletProcessor } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 
 export interface ProcessorConfigProps {
   parentField: string;
