@@ -17,7 +17,6 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       execute
   ])
   .setup(|_app| {
-      // app.manage(SqliteMap::default());
       Ok(())
   }).build()
 }

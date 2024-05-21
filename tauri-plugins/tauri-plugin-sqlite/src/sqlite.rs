@@ -1,5 +1,5 @@
 use rusqlite::{types::Value as SqliteValue, Connection, OpenFlags, ToSql};
-use std::{collections::HashMap, env, fs};
+use std::collections::HashMap;
 use tauri::command;
 use serde::{Serialize, Serializer};
 use serde_json::Value as JsonValue;
@@ -13,18 +13,6 @@ pub enum Error {
     Sqlite(#[from] rusqlite::Error),
 }
 
-fn get_database_path() -> String {
-    let mut path = dirs_next::home_dir().unwrap();
-    path.push(".poc_db");
-
-    if !path.exists() {
-        if let Err(_) = fs::create_dir(&path) {
-            panic!("Failed to create 'poc_db' directory");
-        }
-    }
-    path.push("poc-report.db");
-    path.to_str().unwrap().to_string()
-}
 
 
 
@@ -43,41 +31,41 @@ type Result<T> = std::result::Result<T, Error>;
 
 #[command]
 pub async fn open() -> Result<bool> {
-  Connection::open(get_database_path()).expect("Failed to open database");  
+  Connection::open(shared::sqlite::get_database_path()).expect("Failed to open database");  
   Ok(true)
 }
 
 #[command]
 pub async fn open_with_flags() -> Result<bool> {
     let flags = OpenFlags::default();
-    Connection::open_with_flags(get_database_path(), flags)?;  
+    Connection::open_with_flags(shared::sqlite::get_database_path(), flags)?;  
     Ok(true)
 }
 
 #[command]
 pub async fn close() -> Result<bool> {
-    let arc_conn = Connection::open(get_database_path())?;
+    let arc_conn = Connection::open(shared::sqlite::get_database_path())?;
     drop(arc_conn);
     Ok(true)
 }
 
 #[command]
 pub async fn execute_sql(sql: String) -> Result<usize> {
-  let arc_conn = Connection::open(get_database_path())?;
+  let arc_conn = Connection::open(shared::sqlite::get_database_path())?;
   let res = arc_conn.execute(&sql, [])?;
   Ok(res)
 }
 
 #[command]
 pub async fn execute_batch(sql: String) -> Result<bool> {
-  let arc_conn = Connection::open(get_database_path())?;
+  let arc_conn = Connection::open(shared::sqlite::get_database_path())?;
   arc_conn.execute_batch(sql.as_str())?;
   Ok(true)
 }
 
 #[command]
 pub async fn execute(sql: String, args: JsonValue) -> Result<usize> {
-  let conn = Connection::open(get_database_path())?;
+  let conn = Connection::open(shared::sqlite::get_database_path())?;
   let mut args_sqlite_values = HashMap::<String, SqliteValue>::new();
   let mut named_args: Vec<(&str, &dyn ToSql)> = vec![];
 
@@ -101,8 +89,8 @@ pub async fn query_with_args(
     sql: String,
     args: JsonValue,
 ) -> Result<Vec<HashMap<String, JsonValue>>> {
-    let conn = Connection::open(get_database_path())?;
-    let mut stmt = conn.prepare(sql.as_str())?;
+    let conn = Connection::open(shared::sqlite::get_database_path())?;
+    let mut stmt: rusqlite::Statement = conn.prepare(sql.as_str())?;
 
     let mut names: Vec<String> = Vec::new();
     for name in stmt.column_names() {
@@ -114,7 +102,9 @@ pub async fn query_with_args(
 
     if let JsonValue::Object(json_value) = args {
         for (k, v) in json_value {
-            args_sqlite_values.insert(k.clone(), utils::sqlite_utils::value_to_rusqlite_value(&v)?);
+            let mut new_k = k.clone();
+            new_k.insert_str(0, ":");
+            args_sqlite_values.insert(new_k, utils::sqlite_utils::value_to_rusqlite_value(&v)?);
         }
     }
 

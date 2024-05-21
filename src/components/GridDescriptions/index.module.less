@@ -1,0 +1,35 @@
+.gridDescriptions {
+	.gridTitle {
+		font-size: 16px;
+		font-weight: 500;
+		color: #1d2129;
+		margin-bottom: 20px;
+	}
+
+	.gridDescription {
+		display: flex;
+		margin-bottom: 20px;
+		line-height: 32px;
+
+		.label {
+			overflow: hidden;
+			color: #4e5969;
+			flex: 0 0 64px;
+			text-align: right;
+		}
+
+		.value {
+			overflow: hidden;
+			color: #1d2129;
+			flex: 1;
+		}
+
+		&:has(.gridDescriptions) {
+			margin-bottom: 0;
+		}
+	}
+
+	.divider {
+		margin-top: 0;
+	}
+}

@@ -26,6 +26,9 @@ dependencies:
   ahooks:
     specifier: ^3.7.11
     version: 3.7.11(react@18.2.0)
+  classnames:
+    specifier: ^2.5.1
+    version: 2.5.1
   echarts:
     specifier: ^5.5.0
     version: 5.5.0
@@ -53,9 +56,18 @@ dependencies:
   react-router-dom:
     specifier: ^6.22.3
     version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+  sql-bricks:
+    specifier: ^3.0.1
+    version: 3.0.1
+  sql-bricks-sqlite:
+    specifier: ^1.0.0
+    version: 1.0.0
   sql-formatter:
     specifier: ^15.3.1
     version: 15.3.1
+  zustand:
+    specifier: ^4.5.2
+    version: 4.5.2(@types/react@18.2.74)(react@18.2.0)
 
 devDependencies:
   '@arco-plugins/vite-react':
@@ -1402,6 +1414,10 @@ packages:
       supports-color: 7.2.0
     dev: true
 
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+    dev: false
+
   /codemirror@6.0.1(@lezer/common@1.2.1):
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
@@ -2588,6 +2604,17 @@ packages:
     dev: true
     optional: true
 
+  /sql-bricks-sqlite@1.0.0:
+    resolution: {integrity: sha512-+AqF7BrwJgmiCxuN+4r4ZdopZy3IYFfau9RGhVKqM70W4aTlGtks/lsDkO8r65PyGirdtRJzwkvwjXnghnc5OQ==}
+    dependencies:
+      sql-bricks: 3.0.1
+      underscore: 1.13.6
+    dev: false
+
+  /sql-bricks@3.0.1:
+    resolution: {integrity: sha512-ZkU/R+bwf7d9FxlwMJp/31P5bluVCjUuftutkqJjQKH1QMCE1iaEc0xeY0aVepc38fxC+ljUrqausGCzzcHzHQ==}
+    dev: false
+
   /sql-formatter@15.3.1:
     resolution: {integrity: sha512-L/dqan+Hrt0PpPdCbHcI9bdfOvqaQZR7v5c5SWMJ3bUGQSezK09Mm9q2I3B4iObjaq7FyoldIM+fDSmfzGRXCA==}
     hasBin: true
@@ -2693,6 +2720,10 @@ packages:
     hasBin: true
     dev: true
 
+  /underscore@1.13.6:
+    resolution: {integrity: sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==}
+    dev: false
+
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
@@ -2748,6 +2779,14 @@ packages:
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.3.0
+    dev: false
+
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /vite@5.2.8(@types/node@20.12.5)(less@4.2.0):
@@ -2820,4 +2859,24 @@ packages:
     resolution: {integrity: sha512-O3MilSi/9mwoovx77m6ROZM7sXShR/O/JIanvzTwjN3FORfLSr81PsUGd7jlaYOeds9d8tw82oP44+3YucVo+w==}
     dependencies:
       tslib: 2.3.0
+    dev: false
+
+  /zustand@4.5.2(@types/react@18.2.74)(react@18.2.0):
+    resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0.6'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.74
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false

@@ -1,0 +1,66 @@
+.formWrap {
+	display: grid !important;
+	grid-template-columns: 1fr 183px;
+	width: 100%;
+	gap: 16px;
+	transition: all 0.3s;
+	position: relative;
+
+	.btnWrap {
+		transition: all 0.3s;
+		display: flex;
+		gap: 8px;
+	}
+
+	.gridWrap {
+		overflow: hidden;
+		transition: all ease-in-out 200ms;
+
+		.openIcon {
+			position: absolute;
+			left: 50%;
+			bottom: -23px;
+			transform: translateX(-50%) rotate(90deg);
+			z-index: 111;
+			cursor: pointer;
+			width: 56px;
+			height: 56px;
+			clip-path: polygon(14px 4px, 34px 4px, 34px 53px, 14px 53px);
+		}
+
+		.closeIcon {
+			position: absolute;
+			left: 50%;
+			bottom: -34px;
+			transform: translateX(-50%) rotate(270deg);
+			z-index: 111;
+			cursor: pointer;
+			width: 56px;
+			height: 56px;
+			clip-path: polygon(14px 4px, 34px 4px, 34px 53px, 14px 53px);
+		}
+
+		:global {
+			.arco-row {
+				flex-wrap: nowrap;
+			}
+		}
+	}
+}
+
+.multiLineFormWrap {
+	grid-template-columns: 1fr 1px 94px;
+	gap: 28px;
+
+	.divider {
+		flex: 0 0 1px;
+		height: 86px;
+		background-color: #d6d6d6;
+	}
+
+	.btnWrap {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
+}

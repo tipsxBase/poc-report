@@ -6,19 +6,21 @@ import { Link, useLocation } from "react-router-dom";
 
 const MenuItem = Menu.Item;
 
-export interface BaseMenuProps {}
+export interface BaseMenuProps {
+  collapse: boolean;
+}
 
 const routeMapping = {
-  "/": "metric",
-  "/config": "config",
-  "/update": "update",
+  "/": "cases",
+  "/business": "business",
 };
 
 /**
  *
  */
-const BaseMenu = () => {
+const BaseMenu = (props: BaseMenuProps) => {
   const location = useLocation();
+  const { collapse } = props;
 
   const pathname = location.pathname;
   const selectedKeys = useMemo(() => {
@@ -26,30 +28,22 @@ const BaseMenu = () => {
   }, [pathname]);
 
   return (
-    <Menu
-      selectedKeys={selectedKeys}
-      className={styles.baseMenu}
-      mode="horizontal"
-    >
-      <MenuItem key="metric">
+    <div className={styles.baseMenu}>
+      <Menu collapse={collapse} selectedKeys={selectedKeys}>
         <Link to="/">
-          <IconHome />
-          指标统计
+          <MenuItem key="cases">
+            <IconHome />
+            用例管理
+          </MenuItem>
         </Link>
-      </MenuItem>
-      <MenuItem key="config">
-        <Link to="/config">
-          <IconCalendar />
-          配置生成
+        <Link to="/business">
+          <MenuItem key="business">
+            <IconCalendar />
+            项目管理
+          </MenuItem>{" "}
         </Link>
-      </MenuItem>
-      <MenuItem key="update">
-        <Link to="/update">
-          <IconCalendar />
-          更新指标
-        </Link>
-      </MenuItem>
-    </Menu>
+      </Menu>
+    </div>
   );
 };
 

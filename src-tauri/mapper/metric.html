@@ -1,0 +1,20 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+  <insert id="insert">
+    `INSERT INTO poc_metric (case_id, job_id, total_statement, avg_statement_cast_mills,
+    avg_sql_cast_mills,
+    statement_qps, sql_qps, write_mib_pre_second, start_mills, end_mills, execute_time, p80, p95, avg_row_width) VALUES
+    <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
+      <if test="key == 'metric_id'">
+        <continue />
+      </if>
+      #{item}
+    </foreach>
+  </insert>
+
+  <select id="delete_by_case_id">
+    DELETE FROM metric_id WHERE case_id = #{case_id}
+  </select>
+
+</mapper>

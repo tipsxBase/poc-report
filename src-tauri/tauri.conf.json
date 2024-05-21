@@ -62,10 +62,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 720,
         "resizable": true,
-        "title": "测试数据",
-        "width": 800
+        "title": "POC工具",
+        "width": 1440
       }
     ]
   }

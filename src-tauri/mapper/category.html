@@ -1,0 +1,45 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+
+  <insert id="insert">
+    `insert into poc_category (category_name, category_type) values `
+    <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
+      <if test="key == 'category_id'">
+        <continue />
+      </if>
+      #{item}
+    </foreach>
+  </insert>
+
+  <select id="select_list">
+    `select`
+    <if test="do_count == true">
+      ` count(1) from poc_category`
+    </if>
+    <if test="do_count == false">
+      ` * from poc_category`
+    </if>
+    <where>
+      <if test="category_name != ''">
+        ` and category_name like #{category_name}`
+      </if>
+    </where>
+    <if test="do_count == false">
+      ` limit ${page_no},${page_size}`
+    </if>
+  </select>
+
+  <select id="select_all">
+    select category_name, category_id from poc_category
+  </select>
+
+  <update id="update_by_id">
+    update poc_category set category_name = #{category.category_name} where category_id = #{category.category_id}
+  </update>
+
+  <delete id="delete_by_id">
+    delete from poc_category where category_id = #{category_id}
+  </delete>
+
+</mapper>

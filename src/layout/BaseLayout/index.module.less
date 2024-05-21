@@ -1,1 +1,20 @@
-.baseLayout {}
+.baseLayout {
+  .sider {
+    img {
+      width: 180px;
+    }
+    :global {
+      .arco-layout-sider-children {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+    }
+
+    .collapseBtn {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+    }
+  }
+}

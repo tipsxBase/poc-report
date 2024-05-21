@@ -1,8 +1,7 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
-import Statics from "../pages/Statics";
-import Config from "../pages/Config";
 import BaseLayout from "../layout/BaseLayout";
-import UpdateMetric from "@/pages/UpdateMetric";
+import CaseManage from "@/pages/CaseManage";
+import BusinessManage from "@/pages/BusinessManage";
 
 const routes: RouteObject[] = [
   {
@@ -11,15 +10,11 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <Statics />,
+        element: <CaseManage />,
       },
       {
-        path: "/config",
-        element: <Config />,
-      },
-      {
-        path: "/update",
-        element: <UpdateMetric />,
+        path: "/business",
+        element: <BusinessManage />,
       },
     ],
   },

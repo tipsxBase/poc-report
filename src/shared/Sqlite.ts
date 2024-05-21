@@ -30,6 +30,10 @@ export class SQLite {
       args: values ?? {},
     });
   }
+
+  async executeBatch(sql: string): Promise<boolean> {
+    return await invoke("plugin:sqlite|execute_batch", { sql });
+  }
 }
 
 export default SQLite;

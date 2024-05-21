@@ -1,0 +1,126 @@
+// table高度自适应并滚动 父元素必须为flex-column布局 Table组件需设置 scroll={{y: true}}
+// 使用文档地址（https://alidocs.dingtalk.com/i/nodes/R4GpnMqJzlbbLmG0HAmBPzvEWKe0xjE3）使用钉钉打开
+.auto-scroll-y-table-mixin(@marginTop: 20px, @tableHeaderHeight: 41px) {
+  margin-top: @marginTop;
+  flex: 1 0 0px;
+  overflow: hidden;
+
+  :global {
+    .arco-table,
+    .arco-spin-children,
+    .arco-spin {
+      height: 100%;
+    }
+
+    .arco-spin-children {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      width: 100%;
+
+      .arco-table-container {
+        flex: 1 0 0px;
+        overflow: hidden;
+
+        .arco-table-content-inner,
+        .arco-table-content-scroll {
+          height: 100%;
+        }
+
+        .arco-table-body {
+          max-height: calc(100% - @tableHeaderHeight);
+        }
+
+        &::before {
+          content: none;
+        }
+      }
+    }
+  }
+}
+
+// Tree组件title超出自动隐藏
+.tree-title-auto-hidden {
+  :global {
+    .arco-tree-node-title {
+      display: flex;
+      overflow: hidden;
+    }
+
+    .arco-tree-node-title-text {
+      flex: 1 0 0px;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .arco-tree-node-drag-icon {
+      position: initial !important;
+    }
+  }
+}
+
+.auto-width-form(@labelWidth) {
+  :global {
+    .arco-form-item {
+      .arco-form-label-item {
+        flex: 0 0 @labelWidth + 16px;
+      }
+
+      @media screen and (max-width: 1600px) {
+        // 避免缩小窗口后错位
+        .arco-form-label-item {
+          display: none;
+        }
+      }
+
+      .arco-form-item-wrapper {
+        flex: 1 0 0px;
+      }
+    }
+  }
+}
+
+// 左侧树容器的padding
+@left-tree-container-padding: 4px 10px;
+
+@baseWidth: 1920;
+@baseHeight: 1080;
+
+@baseFont: 16;
+
+.pxToVW (@px, @attr: width) {
+  @vw: (@px / @baseWidth) * 100;
+
+  @{attr}: ~"@{vw}vw";
+}
+
+.pxToRem (@px, @attr: width) {
+  @vw: (@px / @baseFont);
+
+  @{attr}: ~"@{vw}rem";
+}
+
+.poc-arco-form-item-label-width(@labelWidth) {
+  :global {
+    .arco-form {
+      &.has-divider {
+        .arco-form-item {
+          margin-bottom: 0;
+        }
+      }
+
+      .arco-form-item {
+        .arco-form-label-item {
+          flex: 0 0 ~"@{labelWidth}px";
+        }
+
+        .arco-form-item-wrapper {
+          flex: 1 !important;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}

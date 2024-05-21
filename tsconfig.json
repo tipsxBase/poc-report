@@ -26,6 +26,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "plugin/plugin.d.ts"],
+  "include": ["src", "plugin/sql-plugin/sql.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
