@@ -22,10 +22,11 @@
     </if>
     ` left join poc_category category on p_case.category_id = category.category_id`
     <where>
-      <if test="case.case_name != null">
+      <if test="case.case_name != null && case.case_name != ''">
         ` and p_case.case_name like #{case.case_name}`
       </if>
-      <if test="case.category_id != null"> ` and p_case.category_id = #{case.category_id}` </if>
+      <if test="case.category_id != null && case.category_id != ''"> ` and p_case.category_id = #{case.category_id}`
+      </if>
     </where>
     <if test="do_count == false">
       ` order by p_case.case_name ASC`

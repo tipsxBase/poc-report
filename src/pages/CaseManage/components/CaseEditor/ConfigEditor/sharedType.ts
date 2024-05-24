@@ -16,7 +16,7 @@ export enum ResultDataType {
 
 export enum MockRuleType {
   "title" = "中文标题",
-  "sentence" = "中文兔子",
+  "sentence" = "中文句子",
   "decimalBetween" = "两个数之间的BigDecimal",
   "doubleBetween" = "两个数之间的浮点数",
   "snowflake" = "雪花ID",
@@ -167,6 +167,7 @@ export const needMinAndMax = (type: string) => {
     "sentence",
     "doubleBetween",
     "integerBetween",
+    "longBetween",
     "decimalBetween",
     "dateBetween",
   ].includes(type);

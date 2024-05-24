@@ -133,7 +133,6 @@ const CaseManage = () => {
           .then((res) => {
             console.log(res);
             Message.success("修改成功");
-            resetPagination();
             clearAction();
             doSearch();
           })

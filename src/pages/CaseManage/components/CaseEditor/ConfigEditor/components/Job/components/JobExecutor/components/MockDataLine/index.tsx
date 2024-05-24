@@ -47,32 +47,28 @@ const MockDataLine = (props: MockDataLineProps) => {
 
   return (
     <div className={styles.mockDataLine}>
-      <Form.Item field={toFormPath(parentField, "batch")}>
+      <Form.Item label="批次大小" field={toFormPath(parentField, "batch")}>
         <InputNumber placeholder="一个批次的大小" />
       </Form.Item>
-      <div>
-        <div>
-          <Button onClick={addMockRule} type="outline" icon={<IconPlus />}>
-            添加规则
-          </Button>
-        </div>
-        <div className={styles.dataDefineList}>
-          <Form.List field={toFormPath(parentField, "dataDefineList")}>
-            {(fields, { remove }) => {
-              return fields.map((item, index) => {
-                return (
-                  <MockRuleConfig
-                    getRefGlobals={getRefGlobals}
-                    parentField={item.field}
-                    key={item.key}
-                    remove={() => remove(index)}
-                  />
-                );
-              });
-            }}
-          </Form.List>
-        </div>
+      <div className={styles.dataDefineList}>
+        <Form.List field={toFormPath(parentField, "dataDefineList")}>
+          {(fields, { remove }) => {
+            return fields.map((item, index) => {
+              return (
+                <MockRuleConfig
+                  getRefGlobals={getRefGlobals}
+                  parentField={item.field}
+                  key={item.key}
+                  remove={() => remove(index)}
+                />
+              );
+            });
+          }}
+        </Form.List>
       </div>
+      <Button onClick={addMockRule} type="outline" icon={<IconPlus />}>
+        添加规则
+      </Button>
     </div>
   );
 };

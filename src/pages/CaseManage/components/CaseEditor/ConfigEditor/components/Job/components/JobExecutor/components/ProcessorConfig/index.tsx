@@ -33,16 +33,6 @@ const ProcessorConfig = (props: ProcessorConfigProps) => {
   });
   return (
     <div className={styles.processorConfig}>
-      <div className={styles.operator}>
-        <Button
-          onClick={addProcessor}
-          type="outline"
-          icon={<IconPlus />}
-          size="small"
-        >
-          添加执行器
-        </Button>
-      </div>
       <Form.List
         rules={[{ required: true, message: "执行器不能为空" }]}
         field={toFormPath(parentField, "processors")}
@@ -63,6 +53,14 @@ const ProcessorConfig = (props: ProcessorConfigProps) => {
           );
         }}
       </Form.List>
+      <Button
+        onClick={addProcessor}
+        type="outline"
+        icon={<IconPlus />}
+        size="small"
+      >
+        添加执行器
+      </Button>
     </div>
   );
 };

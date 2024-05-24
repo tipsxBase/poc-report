@@ -128,21 +128,21 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
             if (needMinAndMax(mockRule)) {
               items.push(
                 <Form.Item
-                  key="max"
-                  label="最大值"
-                  field={toFormPath(parentField, "max")}
-                >
-                  <Input placeholder="请输入最大值" />
-                </Form.Item>
-              );
-
-              items.push(
-                <Form.Item
                   key="min"
                   label="最小值"
                   field={toFormPath(parentField, "min")}
                 >
                   <Input placeholder="请输入最小值" />
+                </Form.Item>
+              );
+
+              items.push(
+                <Form.Item
+                  key="max"
+                  label="最大值"
+                  field={toFormPath(parentField, "max")}
+                >
+                  <Input placeholder="请输入最大值" />
                 </Form.Item>
               );
             }

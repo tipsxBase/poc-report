@@ -126,30 +126,26 @@ const JobExecutor = (props: JobExecutorProps) => {
           />
         </Form.Item>
         <Form.Item label="执行单元定义">
-          <div>
-            <div className={styles.resultOperation}>
-              <Button onClick={addTasklet} type="outline" icon={<IconPlus />}>
-                添加执行单元
-              </Button>
-            </div>
-            <div className={styles.taskletQueue}>
-              <Form.List field={toFormPath(parentField, "taskletQueue")}>
-                {(fields, { remove }) => {
-                  return fields.map((item, index) => {
-                    return (
-                      <TaskUnit
-                        form={form}
-                        parentField={item.field}
-                        key={item.key}
-                        remove={() => remove(index)}
-                        getRefGlobals={getRefGlobals}
-                      />
-                    );
-                  });
-                }}
-              </Form.List>
-            </div>
+          <div className={styles.taskletQueue}>
+            <Form.List field={toFormPath(parentField, "taskletQueue")}>
+              {(fields, { remove }) => {
+                return fields.map((item, index) => {
+                  return (
+                    <TaskUnit
+                      form={form}
+                      parentField={item.field}
+                      key={item.key}
+                      remove={() => remove(index)}
+                      getRefGlobals={getRefGlobals}
+                    />
+                  );
+                });
+              }}
+            </Form.List>
           </div>
+          <Button onClick={addTasklet} type="outline" icon={<IconPlus />}>
+            添加执行单元
+          </Button>
         </Form.Item>
       </div>
       <div className={styles.operationWrapper}>

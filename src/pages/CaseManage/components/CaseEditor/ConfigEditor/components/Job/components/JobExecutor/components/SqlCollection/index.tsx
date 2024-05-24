@@ -37,11 +37,6 @@ const SqlCollection = (props: SqlCollectionProps) => {
 
   return (
     <div className={styles.sqlCollection}>
-      <div className={styles.operation}>
-        <Button onClick={onAdd} icon={<IconPlus />} type="outline">
-          添加SQL
-        </Button>
-      </div>
       <div className={styles.sqlGroup}>
         {sqlCollection &&
           sqlCollection.map((sql, index) => (
@@ -60,6 +55,9 @@ const SqlCollection = (props: SqlCollectionProps) => {
             </div>
           ))}
       </div>
+      <Button onClick={onAdd} icon={<IconPlus />} type="outline">
+        添加SQL
+      </Button>
     </div>
   );
 };
