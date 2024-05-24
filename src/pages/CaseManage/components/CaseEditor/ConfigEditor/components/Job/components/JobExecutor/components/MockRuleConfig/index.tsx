@@ -201,6 +201,29 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                   }}
                 </Form.Item>
               );
+
+              items.push(
+                <Form.Item
+                  key="globalRule"
+                  label="引用规则"
+                  tooltip={
+                    <div>
+                      <p>从全局取数的规则</p>
+                      <p>只支持以下三种情况，默认是increment</p>
+                      <p>random: 随机取数</p>
+                      <p>increment: 顺序取数</p>
+                      <p>数字: 指定数字位置取数</p>
+                    </div>
+                  }
+                  field={toFormPath(parentField, "globalRule")}
+                >
+                  {() => {
+                    return (
+                      <Input placeholder="请输入取数规则, random、increment或数字" />
+                    );
+                  }}
+                </Form.Item>
+              );
             }
 
             if (needEnum(mockRule)) {

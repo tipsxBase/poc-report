@@ -28,7 +28,7 @@ export interface ConfigEditorProps {
 }
 
 export interface ConfigEditorInstance {
-  getValues: () => any;
+  getValues: () => Promise<string>;
 }
 
 const stepConfig = {
@@ -110,7 +110,13 @@ const ConfigEditor = forwardRef<ConfigEditorInstance, ConfigEditorProps>(
       () => {
         return {
           getValues: () => {
-            return JSON.stringify(JSON.stringify(config));
+            if (instance.current) {
+              return instance.current?.getValues().then((values) => {
+                const nextConfig = { ...config, ...values };
+                return JSON.stringify(JSON.stringify(nextConfig));
+              });
+            }
+            return Promise.resolve(JSON.stringify(JSON.stringify(config)));
           },
         };
       },

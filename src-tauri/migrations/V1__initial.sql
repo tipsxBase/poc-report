@@ -4,7 +4,9 @@ CREATE TABLE poc_case (
 	case_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, -- id
   category_id INTEGER NOT NULL, -- 类别ID
 	case_name TEXT NOT NULL, -- 用例名称
-	case_content TEXT NOT NULL -- 用例内容YAML
+	case_content TEXT NOT NULL, -- 用例内容YAML
+  created_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime')),
+  updated_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime'))
 );
 
 CREATE INDEX poc_case_case_id_IDX ON poc_case (case_id,case_name);
@@ -16,7 +18,9 @@ CREATE UNIQUE INDEX poc_case_case_name_IDX ON poc_case (case_name);
 CREATE TABLE poc_category (
 	category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, -- 类别ID
 	category_name TEXT NOT NULL, -- 类别名称
-  category_type INTEGER NOT NULL DEFAULT 2
+  category_type INTEGER NOT NULL DEFAULT 2, -- 1 系统内置 --2 用户定义
+  created_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime')),
+  updated_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime'))
 );
 
 INSERT INTO poc_category (category_name, category_type) values ('系统用例库', 1);
@@ -34,7 +38,9 @@ CREATE TABLE poc_metric(
   write_mib_pre_second  REAL, -- 每秒写入的数据量
   p80  INTEGER, -- P80
   p95  INTEGER, -- P95
-  avg_row_width REAL -- 平均行宽
+  avg_row_width REAL, -- 平均行宽
+  created_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime')),
+  updated_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime'))
 );
 
 
@@ -45,5 +51,7 @@ CREATE TABLE poc_server_statics(
   case_id INTEGER NOT NULL,
   time  INTEGER, -- 时间点
   value  TEXT, -- JSON
-  type INTEGER -- 类型 1 SAR 2 ActiveConnection
+  type INTEGER, -- 类型 1 SAR 2 ActiveConnection
+  created_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime')),
+  updated_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime'))
 );

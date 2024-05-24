@@ -65,10 +65,14 @@ const CaseManage = () => {
 
   const doSearch = useMemoizedFn(() => {
     const values = form.getFieldsValue();
+    console.log(values);
     fetchCaseList(values);
   });
 
-  const onReset = useMemoizedFn(() => {});
+  const onReset = useMemoizedFn(() => {
+    form.resetFields();
+    doSearch();
+  });
 
   const onUpdate = useMemoizedFn((row: CaseEntity) => {
     setAction("update");
@@ -292,7 +296,7 @@ const CaseManage = () => {
             </>
           }
         >
-          <Form.Item label="项目名称" field="category_name">
+          <Form.Item label="归属项目" field="category_id">
             <CategorySelect />
           </Form.Item>
           <Form.Item label="用例名称" field="case_name">
@@ -336,6 +340,18 @@ const CaseManage = () => {
         onOk={doConfirm}
         unmountOnExit
         width="100%"
+        footer={
+          action === "view" || action === "viewUploadResult" ? (
+            <Button onClick={clearAction}>返回</Button>
+          ) : (
+            <Space>
+              <Button type="outline" onClick={doConfirm}>
+                确认
+              </Button>{" "}
+              <Button onClick={clearAction}>取消</Button>
+            </Space>
+          )
+        }
       >
         {action === "view" && <CasePreviewer config={rawEntityRef.current} />}
         {(action === "add" ||
@@ -356,6 +372,7 @@ const CaseManage = () => {
         visible={uploadCaseVisible}
         onCancel={onCloseCase}
         onOk={doImport}
+        unmountOnExit
       >
         <ImportConfig ref={importConfigInstance} />
       </Modal>

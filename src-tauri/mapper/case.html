@@ -22,18 +22,22 @@
     </if>
     ` left join poc_category category on p_case.category_id = category.category_id`
     <where>
-      <if test="category_name != null">
+      <if test="case.case_name != null">
         ` and p_case.case_name like #{case.case_name}`
       </if>
-      <if test="category_id != null"> ` and p_case.category_id = #{case.category_id}` </if>
+      <if test="case.category_id != null"> ` and p_case.category_id = #{case.category_id}` </if>
     </where>
+    <if test="do_count == false">
+      ` order by p_case.case_name ASC`
+    </if>
     <if test="do_count == false"> ` limit ${page_no},${page_size}` </if>
+
   </select>
 
   <update id="update_by_id">
     update poc_case set case_name = #{case.case_name}, case_content =
-    #{case.case_content}, category_id = #{case.category_id} where case_id =
-    #{case.case_id}
+    #{case.case_content}, category_id = #{case.category_id}, updated_at = datetime(CURRENT_TIMESTAMP, 'localtime') where
+    case_id = #{case.case_id}
   </update>
 
   <delete id="delete_by_id">

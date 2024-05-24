@@ -41,7 +41,7 @@ export const parseJsonToYml = (json: object) => {
 };
 
 const formatJson = (json: any) => {
-  const { globalPreProcessors, jobs } = json;
+  const { globalPreProcessors, jobs, writeLogCronExpression } = json;
   if (globalPreProcessors) {
     json["globalPreProcessors"] = globalPreProcessors.map((p) => {
       if (!p.id) {
@@ -68,6 +68,10 @@ const formatJson = (json: any) => {
 
       return j;
     });
+  }
+
+  if (!writeLogCronExpression) {
+    json.writeLogCronExpression = "0/30 * * * * ?";
   }
 
   return json;

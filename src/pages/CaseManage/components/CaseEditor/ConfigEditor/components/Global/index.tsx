@@ -6,7 +6,8 @@ import { useMemoizedFn } from "ahooks";
 import { randomId } from "@/shared/randomId";
 import { forwardRef, useImperativeHandle } from "react";
 import { GlobalPreProcessor, SharedInstance } from "../../sharedType";
-
+import get from "lodash/get";
+import set from "lodash/set";
 export interface GlobalConfigProps {
   initialValues: {
     globalPreProcessors: GlobalPreProcessor[];
@@ -57,7 +58,13 @@ const GlobalConfig = forwardRef<GlobalConfigInstance, GlobalConfigProps>(
       () => {
         return {
           getValues() {
-            return form.validate();
+            return form.validate().then((res) => {
+              return set(
+                {},
+                "globalPreProcessors",
+                get(res, "globalPreProcessors", [])
+              );
+            });
           },
           getRawValues() {
             return form.getFieldsValue() as any;

@@ -6,6 +6,8 @@ import JobExecutor from "./components/JobExecutor";
 import { randomId } from "@/shared/randomId";
 import { forwardRef, useImperativeHandle } from "react";
 import { Job, SharedInstance } from "../../sharedType";
+import get from "lodash/get";
+import set from "lodash/set";
 
 export interface JobConfigProps {
   initialValues: JobValue;
@@ -56,7 +58,9 @@ const JobConfig = forwardRef<JobConfigInstance, JobConfigProps>(
       () => {
         return {
           getValues() {
-            return form.validate();
+            return form.validate().then((res) => {
+              return set({}, "jobs", get(res, "jobs", []));
+            });
           },
           getRawValues() {
             return form.getFieldsValue() as any;

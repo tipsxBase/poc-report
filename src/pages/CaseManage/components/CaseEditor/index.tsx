@@ -41,6 +41,12 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
     const { action, rawEntity } = props;
 
     const { formInitialValues, initialCaseConfig } = useMemo(() => {
+      if (!rawEntity || !action) {
+        return {
+          formInitialValues: null,
+          initialCaseConfig: null,
+        };
+      }
       if (action === "add") {
         return {
           formInitialValues: null,
@@ -68,11 +74,6 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
           initialCaseConfig: case_content,
         };
       }
-
-      return {
-        formInitialValues: null,
-        initialCaseConfig: null,
-      };
     }, [rawEntity, action]);
 
     const [step, setStep] = useState(1);
@@ -92,10 +93,13 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
       () => {
         return {
           getValues: () => {
-            return form.validate().then((values) => {
+            return Promise.all([
+              form.validate(),
+              configEditorInstance.current.getValues(),
+            ]).then(([values, case_content]) => {
               return {
                 ...values,
-                case_content: configEditorInstance.current.getValues(),
+                case_content: case_content,
               };
             });
           },

@@ -6,6 +6,8 @@ import { useMemoizedFn } from "ahooks";
 import { IconDelete, IconPlus } from "@arco-design/web-react/icon";
 import { toFormPath } from "@/shared/path";
 import { enumToSelectOptions } from "@/shared/emum";
+import get from "lodash/get";
+import set from "lodash/set";
 
 interface ListenerValue {
   listeners: Listener[];
@@ -27,7 +29,9 @@ const ListenerConfig = forwardRef<ListenerInstance, ListenerConfigProps>(
       () => {
         return {
           getValues() {
-            return form.validate();
+            return form.validate().then((res) => {
+              return set({}, "listeners", get(res, "listeners", []));
+            });
           },
           getRawValues() {
             return form.getFieldsValue() as any;
