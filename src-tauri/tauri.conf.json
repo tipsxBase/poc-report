@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "poc-report",
+    "productName": "POC",
     "version": "0.1.0"
   },
   "tauri": {

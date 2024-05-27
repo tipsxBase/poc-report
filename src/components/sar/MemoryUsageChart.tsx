@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { Source } from "./shared";
 import EChart from "../EChart";
 
+export interface MemoryUsage {
+  [key: string]: any;
+}
+
 export interface MemoryUsageChartProps {
   dimensions: string[];
   source: Source<MemoryUsage>[];

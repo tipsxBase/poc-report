@@ -2,6 +2,10 @@ import { useCallback } from "react";
 import { Source } from "./shared";
 import EChart from "../EChart";
 
+export interface DiskUsage {
+  [key: string]: any;
+}
+
 export interface DiskUsageChartProps {
   dimensions: string[];
   source: Array<{

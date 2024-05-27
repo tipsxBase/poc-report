@@ -2,6 +2,10 @@ import { useCallback } from "react";
 import { Source } from "./shared";
 import EChart from "../EChart";
 
+export interface NetworkUsage {
+  [key: string]: any;
+}
+
 export interface NetworkUsageChartProps {
   dimensions: string[];
   source: Array<{

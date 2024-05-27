@@ -1,9 +1,9 @@
 import { Source, omit, parseSource, praseArrayUsage } from "./shared";
-import { CpuUsageChart } from "./CpuUsageChart";
+import { CpuUsage, CpuUsageChart } from "./CpuUsageChart";
 import { useEffect, useMemo, useState } from "react";
-import MemoryUsageChart from "./MemoryUsageChart";
-import DiskUsageChart from "./DiskUsageChart";
-import NetworkUsageChart from "./NetworkUsageChart";
+import MemoryUsageChart, { MemoryUsage } from "./MemoryUsageChart";
+import DiskUsageChart, { DiskUsage } from "./DiskUsageChart";
+import NetworkUsageChart, { NetworkUsage } from "./NetworkUsageChart";
 import SQLite from "@/shared/Sqlite";
 
 const Sar = () => {

@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { Source } from "./shared";
 import EChart from "../EChart";
 
+export interface CpuUsage {
+  [key: string]: any;
+}
+
 export interface CpuUsageProps {
   dimensions: string[];
   source: Source<Omit<CpuUsage, "cpu">>[];
