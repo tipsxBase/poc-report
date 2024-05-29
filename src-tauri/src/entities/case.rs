@@ -1,4 +1,4 @@
-use rbatis::{dark_std::defer, executor::Executor, html_sql, htmlsql_select_page, plugin::page::PageRequest, snowflake::new_snowflake_id, Page, RBatis};
+use rbatis::{dark_std::defer, executor::Executor, html_sql, htmlsql_select_page, plugin::page::PageRequest, Page, RBatis};
 
 use crate::entities::PageResult;
 

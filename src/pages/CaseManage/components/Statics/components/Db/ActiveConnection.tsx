@@ -1,17 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
-import EChart from "../EChart";
-import SQLite from "@/shared/Sqlite";
+import EChart from "@/components/EChart";
+import { CaseEntity, CaseStatic, StaticType } from "@/service/case";
+import useCaseStore from "@/stores/case";
 
-const ActiveConnection = () => {
-  const [metricForActiveConnection, setMetricForActiveConnection] = useState(
-    []
-  );
+export interface ActiveConnectionProps {
+  rawEntity: CaseEntity;
+}
+
+const ActiveConnection = (props: ActiveConnectionProps) => {
+  const { rawEntity } = props;
+
+  const { case_id } = rawEntity;
+
+  const [metricForActiveConnection, setMetricForActiveConnection] = useState<
+    CaseStatic[]
+  >([]);
+
+  const { selectStatics } = useCaseStore();
+
   const option = useMemo(() => {
     const xAxisData: number[] = [];
     const activeConnectionsData: number[] = [];
     metricForActiveConnection.forEach((p) => {
       const { time, value } = p;
-      const { activeConnections } = JSON.parse(value);
+      const { activeConnections } = JSON.parse(JSON.parse(value));
       xAxisData.push(time);
       activeConnectionsData.push(activeConnections);
     });
@@ -59,12 +71,10 @@ const ActiveConnection = () => {
   }, [metricForActiveConnection]);
 
   useEffect(() => {
-    SQLite.open().then((db) => {
-      db.queryWithArgs("SELECT * FROM poc_active_connections").then((c) => {
-        setMetricForActiveConnection(c as any);
-      });
+    selectStatics(case_id, StaticType.ACTIVE_CONNECTION).then((res) => {
+      setMetricForActiveConnection(res);
     });
-  }, []);
+  }, [case_id, selectStatics]);
 
   return <EChart option={option} />;
 };

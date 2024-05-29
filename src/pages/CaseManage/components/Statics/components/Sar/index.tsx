@@ -4,10 +4,21 @@ import { useEffect, useMemo, useState } from "react";
 import MemoryUsageChart, { MemoryUsage } from "./MemoryUsageChart";
 import DiskUsageChart, { DiskUsage } from "./DiskUsageChart";
 import NetworkUsageChart, { NetworkUsage } from "./NetworkUsageChart";
-import SQLite from "@/shared/Sqlite";
+import { CaseEntity, CaseStatic, StaticType } from "@/service/case";
+import useCaseStore from "@/stores/case";
 
-const Sar = () => {
-  const [metricForSar, setMetricForSar] = useState([]);
+export interface SarProps {
+  rawEntity: CaseEntity;
+}
+
+const Sar = (props: SarProps) => {
+  const [metricForSar, setMetricForSar] = useState<CaseStatic[]>([]);
+
+  const { rawEntity } = props;
+
+  const { case_id } = rawEntity;
+
+  const { selectStatics } = useCaseStore();
 
   const {
     cpuDimensions,
@@ -81,8 +92,9 @@ const Sar = () => {
     const memorySource: Source<MemoryUsage>[] = [];
     metricForSar.forEach((m) => {
       const { time, value } = m;
-      const { cpuUsages, memoryUsage, diskUsages, networkUsages } =
-        JSON.parse(value);
+      const { cpuUsages, memoryUsage, diskUsages, networkUsages } = JSON.parse(
+        JSON.parse(value)
+      );
       parseSource(cpuSource, time, omit(cpuUsages, "cpu"));
       parseSource(memorySource, time, memoryUsage);
       praseArrayUsage(diskUsageDimensionsSources, "device", time, diskUsages);
@@ -106,12 +118,10 @@ const Sar = () => {
   }, [metricForSar]);
 
   useEffect(() => {
-    SQLite.open().then((db) => {
-      db.queryWithArgs("SELECT * FROM poc_sar").then((sar) => {
-        setMetricForSar(sar as any);
-      });
+    selectStatics(case_id, StaticType.ECS_SAR).then((res) => {
+      setMetricForSar(res);
     });
-  }, []);
+  }, [case_id, selectStatics]);
 
   return (
     <div>

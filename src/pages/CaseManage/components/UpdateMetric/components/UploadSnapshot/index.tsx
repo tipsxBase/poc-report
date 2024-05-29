@@ -1,107 +1,145 @@
-import { Upload } from "@arco-design/web-react";
+import { Message, Tooltip, Upload } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { useMemoizedFn } from "ahooks";
-import SQLite from "@/shared/Sqlite";
 import { UploadItem } from "@arco-design/web-react/es/Upload";
-import { useState } from "react";
-import { IconDelete, IconFile, IconLoading } from "@arco-design/web-react/icon";
+import { useRef, useState } from "react";
+import {
+  IconCheck,
+  IconFile,
+  IconInfoCircleFill,
+  IconLoading,
+} from "@arco-design/web-react/icon";
+import { CaseEntity, CaseMetric } from "@/service/case";
+import useCaseStore from "@/stores/case";
+import classNames from "classnames";
 
-export interface UploadSnapshotProps {}
+export interface UploadSnapshotProps {
+  rawEntity: CaseEntity;
+}
 
 /**
  *
  */
-const UploadSnapshot = () => {
-  const [loading, setLoading] = useState(false);
+const UploadSnapshot = (props: UploadSnapshotProps) => {
+  const { rawEntity } = props;
+  const { case_id } = rawEntity;
   const [fileList, setFileList] = useState<UploadItem[]>();
+  const uploadingRef = useRef<boolean>(false);
+  const { insertMetric } = useCaseStore();
+
   const onUploadChange = useMemoizedFn((files: UploadItem[]) => {
+    if (uploadingRef.current) {
+      Message.warning("正在上传请稍候在试。");
+      return;
+    }
+    files = files.filter((file) => file.status === "init");
     if (files.length === 0) {
       setFileList([]);
       return;
     }
-    setLoading(true);
-    const [file] = files;
-    setFileList([file]);
+
+    setFileList(
+      files.map((file) => {
+        file.status = "uploading";
+        return file;
+      })
+    );
+    uploadingRef.current = true;
     const reader = new FileReader();
     reader.onload = async function (e) {
       // 当文件读取完成时，更新图片的 src 属性
       const snapshot = JSON.parse(e.target.result as string);
+      const metrics = snapshot.map((item) => {
+        const metric: CaseMetric = {
+          case_id: case_id,
+          total_statement: item.totalStatement,
+          avg_statement_cast_mills: item.avgStatementCastMills,
+          avg_sql_cast_mills: item.avgSqlCastMills,
+          statement_qps: Math.round(item.statementQps),
+          sql_qps: Math.round(item.sqlQps),
+          write_mib_pre_second: item.writeMibPreSecond,
+          p80: item.p80,
+          p95: item.p95,
+          avg_row_width: item.avgRowWidth,
+        };
+        return metric;
+      });
 
-      const db = await SQLite.open();
-      await db.execute(`CREATE TABLE IF NOT EXISTS poc_metric_snapshot(
-				jobId  TEXT,
-				totalStatement  INTEGER,
-				avgStatementCastMills  REAL,
-				avgSqlCastMills  REAL,
-				statementQps  REAL,
-				sqlQps  REAL,
-				writeMibPreSecond  REAL,
-				startMills  INTEGER,
-				endMills  INTEGER,
-				executeTime  TEXT,
-				p80  INTEGER,
-				p95  INTEGER,
-				avgRowWidth  REAL
-			)`);
-      await db.execute("DELETE FROM poc_metric_snapshot");
-      for (let i = 0; i < snapshot.length; i++) {
-        const metric = snapshot[i];
-        await db.execute(
-          `INSERT
-					INTO
-					poc_metric_snapshot(jobId,
-					totalStatement,
-					avgStatementCastMills,
-					avgSqlCastMills,
-					statementQps,
-					sqlQps,
-					writeMibPreSecond,
-					startMills,
-					endMills,
-					executeTime,
-					p80,
-					p95,
-					avgRowWidth)
-				VALUES(
-					'${metric.jobId}',
-					'${metric.totalStatement}',
-					'${metric.avgStatementCastMills}',
-					'${metric.avgSqlCastMills}',
-					'${metric.statementQps}',
-					'${metric.sqlQps}',
-					'${metric.writeMibPreSecond}',
-					'${metric.startMills}',
-					'${metric.endMills}',
-					'${metric.executeTime}',
-					'${metric.p80}',
-					'${metric.p95}',
-					'${metric.avgRowWidth}'
-				)`
-        );
-      }
-      setLoading(false);
+      insertMetric(metrics)
+        .then(() => {
+          setFileList(
+            files.map((file) => {
+              file.status = "done";
+              return file;
+            })
+          );
+          uploadingRef.current = false;
+        })
+        .catch((err) => {
+          setFileList(
+            files.map((file) => {
+              file.status = "error";
+              file.response = err;
+              return file;
+            })
+          );
+          uploadingRef.current = false;
+        });
     };
-    reader.readAsText(file.originFile);
+
+    reader.onerror = function (err) {
+      setFileList(
+        files.map((file) => {
+          file.status = "done";
+          file.response = err;
+          return file;
+        })
+      );
+      uploadingRef.current = false;
+    };
+
+    reader.readAsText(files[0].originFile);
   });
 
   const renderUploadItem = useMemoizedFn(
     (_: React.ReactNode, file: UploadItem) => {
+      let statusNode = null;
+
+      if (file.status === "uploading") {
+        statusNode = (
+          <span className={styles.icon}>
+            <IconLoading />
+          </span>
+        );
+      } else if (file.status === "done") {
+        statusNode = (
+          <span className={classNames(styles.icon, styles.success)}>
+            <IconCheck />
+          </span>
+        );
+      } else if (file.status === "error") {
+        statusNode = (
+          <span className={classNames(styles.icon, styles.error)}>
+            <Tooltip content={JSON.stringify(file.response)}>
+              <IconInfoCircleFill />
+            </Tooltip>
+          </span>
+        );
+      } else {
+        statusNode = (
+          <span className={styles.icon}>
+            <IconLoading />
+          </span>
+        );
+      }
+
       return (
         <div className={styles.uploadItem}>
           <span className={styles.fileName}>
             <IconFile />
             {file.name}
           </span>
-
-          {loading ? (
-            <span className={styles.icon}>
-              <IconLoading />
-            </span>
-          ) : (
-            <span className={styles.icon}>
-              <IconDelete />
-            </span>
-          )}
+          {statusNode}
         </div>
       );
     }

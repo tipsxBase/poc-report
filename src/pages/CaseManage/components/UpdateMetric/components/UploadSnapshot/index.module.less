@@ -12,9 +12,18 @@
       flex: 1;
       display: flex;
       gap: 20px;
+      align-items: center;
     }
     .icon {
       cursor: pointer;
+
+      &.success {
+        color: rgb(var(--green-6));
+      }
+
+      &.error {
+        color: rgb(var(--red-6));
+      }
     }
   }
 }

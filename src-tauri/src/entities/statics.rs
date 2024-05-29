@@ -1,27 +1,22 @@
 use rbatis::{dark_std::defer, executor::Executor, html_sql, impl_insert, rbdc::db::ExecResult, RBatis};
+use serde_json::json;
 
 use super::shared_types::RResult;
 
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
-pub struct PocMetric {
-    pub metric_id: Option<i64>, 
+pub struct PocServerStatics {
+    pub statics_id: Option<i64>,
     pub case_id: i64,
-    pub total_statement:  i64,
-    pub avg_statement_cast_mills:  f64,
-    pub avg_sql_cast_mills:  f64,
-    pub statement_qps:  f64,
-    pub sql_qps:  f64,
-    pub write_mib_pre_second:  f64,
-    pub p80:  i64,
-    pub p95:  i64,
-    pub avg_row_width: f64 
+    pub time: i64,
+    pub value: String,
+    pub static_type: i8
 }
 
 
-impl_insert!(PocMetric{});
+impl_insert!(PocServerStatics{});
 
 
-#[html_sql("mapper/metric.html")]
+#[html_sql("mapper/statics.html")]
 async fn delete_by_case_id(
     rb: &dyn Executor,
     case_id: i64,
@@ -29,16 +24,17 @@ async fn delete_by_case_id(
     impled!()
 }
 
-#[html_sql("mapper/metric.html")]
+#[html_sql("mapper/statics.html")]
 async fn select_by_case_id(
     rb: &dyn Executor,
     case_id: i64,
-) -> Vec<PocMetric> {
+    static_type: i8
+) -> Vec<PocServerStatics> {
     impled!()
 }
 
 
-pub async fn insert_batch(metrics: Vec<PocMetric>) -> RResult<ExecResult>{
+pub async fn insert_batch(statics: Vec<PocServerStatics>) -> RResult<ExecResult>{
   _ = fast_log::init(
       fast_log::Config::new()
           .console()
@@ -58,14 +54,16 @@ pub async fn insert_batch(metrics: Vec<PocMetric>) -> RResult<ExecResult>{
   )
   .unwrap();
 
-  // 删除之前的 case_id对应的统计数据
-  let _ = delete_by_case_id(&rb, metrics[0].case_id).await; 
+  println!("{}", json!(statics));
 
-  let data = PocMetric::insert_batch(&rb, &metrics, 100).await;
+  // 删除之前的 case_id对应的统计数据
+  let _ = delete_by_case_id(&rb, statics[0].case_id).await; 
+
+  let data = PocServerStatics::insert_batch(&rb, &statics, 100).await;
   data
 }
 
-pub async fn select_metrics(case_id: i64) -> RResult<Vec<PocMetric>>{
+pub async fn select_statics(case_id: i64, static_type: i8) -> RResult<Vec<PocServerStatics>>{
     _ = fast_log::init(
         fast_log::Config::new()
             .console()
@@ -85,6 +83,5 @@ pub async fn select_metrics(case_id: i64) -> RResult<Vec<PocMetric>>{
     )
     .unwrap();
 
-    select_by_case_id(&rb, case_id).await
-
+    select_by_case_id(&rb, case_id, static_type).await
 }

@@ -1,28 +1,29 @@
 import { Form } from "@arco-design/web-react";
 import styles from "./index.module.less";
-import UploadMetric from "./components/UploadMetric";
 import UploadSar from "./components/UploadSar";
 import UploadSnapshot from "./components/UploadSnapshot";
+import { CaseEntity } from "@/service/case";
 
-export interface UpdateMetricProps {}
+export interface UpdateMetricProps {
+  rawEntity: CaseEntity;
+}
 
 /**
  *
  */
-const UpdateMetric = () => {
+const UpdateMetric = (props: UpdateMetricProps) => {
+  const { rawEntity } = props;
+
   return (
     <div className={styles.updateMetric}>
       <h1>请上传指标统计文件</h1>
       <div className={styles.formWrapper}>
         <Form>
-          <Form.Item label="指标数据" layout="vertical">
-            <UploadMetric />
-          </Form.Item>
           <Form.Item label="过程快照" layout="vertical">
-            <UploadSnapshot />
+            <UploadSnapshot rawEntity={rawEntity} />
           </Form.Item>
-          <Form.Item label="SAR监控" layout="vertical">
-            <UploadSar />
+          <Form.Item label="监控数据" layout="vertical">
+            <UploadSar rawEntity={rawEntity} />
           </Form.Item>
         </Form>
       </div>

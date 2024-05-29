@@ -44,7 +44,7 @@ const CaseManage = () => {
     | "add"
     | "copy"
     | "view"
-    | "upload"
+    | "uploadResult"
     | "viewUploadResult"
     | "uploadCase"
   >();
@@ -165,8 +165,8 @@ const CaseManage = () => {
     Message.success(`文件下载成功->${fileName}`);
   });
 
-  const onUpload = useMemoizedFn((row: CaseEntity) => {
-    setAction("upload");
+  const onUploadResult = useMemoizedFn((row: CaseEntity) => {
+    setAction("uploadResult");
     rawEntityRef.current = row;
   });
 
@@ -207,7 +207,7 @@ const CaseManage = () => {
               <Link onClick={() => onCopy(item)}>复制</Link>
               <Link onClick={() => onUpdate(item)}>修改</Link>
               <Link onClick={() => onDownload(item)}>下载</Link>
-              <Link onClick={() => onUpload(item)}>上传测试结果</Link>
+              <Link onClick={() => onUploadResult(item)}>上传测试结果</Link>
               <Link onClick={() => onViewResult(item)}>查看测试结果</Link>
               <Popconfirm title="确认删除？" onOk={() => doDelete(item)}>
                 <Link>删除</Link>
@@ -217,7 +217,15 @@ const CaseManage = () => {
         },
       },
     ];
-  }, [doDelete, onCopy, onDownload, onUpdate, onUpload, onView, onViewResult]);
+  }, [
+    doDelete,
+    onCopy,
+    onDownload,
+    onUpdate,
+    onUploadResult,
+    onView,
+    onViewResult,
+  ]);
 
   const onPaginationUpdate = useMemoizedFn(
     (pageNumber: number, pageSize: number) => {
@@ -263,6 +271,10 @@ const CaseManage = () => {
       return "查看用例";
     } else if (action === "uploadCase") {
       return "上传用例";
+    } else if (action === "uploadResult") {
+      return "上传测试结果";
+    } else if (action === "viewUploadResult") {
+      return "查看测试结果";
     }
     return "";
   }, [action]);
@@ -363,8 +375,12 @@ const CaseManage = () => {
             ref={caseEditorInstance}
           />
         )}
-        {action === "upload" && <UpdateMetric />}
-        {action === "viewUploadResult" && <Statics />}
+        {action === "uploadResult" && (
+          <UpdateMetric rawEntity={rawEntityRef.current} />
+        )}
+        {action === "viewUploadResult" && (
+          <Statics rawEntity={rawEntityRef.current} />
+        )}
       </Drawer>
       <Modal
         title="导入用例"

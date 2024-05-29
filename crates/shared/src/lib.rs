@@ -23,6 +23,13 @@ pub mod sqlite {
         path.to_str().unwrap().to_string()
     }
 
+    pub fn get_driver_url() -> String{
+        let database = get_database_path();
+        let mut url = String::from("sqlite://");
+        url.push_str(&database);
+        url
+    }
+
     
 }
 

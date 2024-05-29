@@ -1,0 +1,1 @@
+ALTER TABLE poc_server_statics RENAME COLUMN `type` TO static_type;

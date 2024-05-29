@@ -18,21 +18,30 @@ export interface CaseEntity extends CommonEntity {
 }
 
 export interface CaseMetric {
-  metric_id: number;
+  metric_id?: number;
   case_id: number;
-  job_id: string;
   total_statement: number;
   avg_statement_cast_mills: number;
   avg_sql_cast_mills: number;
   statement_qps: number;
   sql_qps: number;
   write_mib_pre_second: number;
-  start_mills: number;
-  end_mills: number;
-  execute_time: string;
   p80: number;
   p95: number;
   avg_row_width: number;
+}
+
+export enum StaticType {
+  ECS_SAR = 1,
+  ACTIVE_CONNECTION = 2,
+}
+
+export interface CaseStatic {
+  statics_id?: number;
+  case_id: number;
+  time: number;
+  value: string;
+  static_type: StaticType;
 }
 
 export const queryCaseList = async (params: CaseParams) => {
@@ -81,9 +90,9 @@ export const updateCase = async (params: CaseEntity) => {
   });
 };
 
-export const insertMetric = (params: CaseMetric) => {
+export const insertMetric = (metrics: CaseMetric[]) => {
   return invoke("insert_metric", {
-    case: params,
+    metrics,
   }).then((res) => {
     const { Ok, Err } = res as any;
     if (Ok) {
@@ -92,5 +101,36 @@ export const insertMetric = (params: CaseMetric) => {
     if (Err) {
       return Promise.reject(Err.E);
     }
+  });
+};
+
+export const insertStatics = (statics: CaseStatic[]) => {
+  return invoke("insert_statics", {
+    statics: statics,
+  })
+    .then((res) => {
+      const { Ok, Err } = res as any;
+      if (Ok) {
+        return Promise.resolve(Ok);
+      }
+      if (Err) {
+        return Promise.reject(Err.E);
+      }
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+};
+
+export const selectStatics = (caseId: number, staticType: StaticType) => {
+  return invoke<CaseStatic[]>("select_statics", {
+    caseId,
+    staticType,
+  });
+};
+
+export const selectMetric = (caseId: number) => {
+  return invoke<CaseMetric[]>("select_metric", {
+    caseId,
   });
 };

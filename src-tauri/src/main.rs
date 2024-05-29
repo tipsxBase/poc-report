@@ -8,8 +8,10 @@ use entities::case::PocCase;
 use entities::category::PocCategory;
 use entities::metric::PocMetric;
 use entities::shared_types::RResult;
+use entities::statics::PocServerStatics;
 use entities::PageResult;
 use rusqlite::Connection;
+use serde_json::json;
 use tauri::Manager;
 use refinery::Migration;
 pub mod entities;
@@ -82,13 +84,32 @@ async fn delete_case(case: PocCase) -> RResult<std::result::Result<rbatis::rbdc:
 
 
 #[tauri::command]
-async fn insert_metric(metric: PocMetric) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result = entities::metric::add(metric).await;
+async fn insert_metric(metrics: Vec<PocMetric>) -> RResult<rbatis::rbdc::db::ExecResult> {
+    println!("{}", json!(metrics));
+    let result = entities::metric::insert_batch(metrics).await;
+    result
+}
+
+#[tauri::command]
+async fn insert_statics(statics: Vec<PocServerStatics>) -> RResult<rbatis::rbdc::db::ExecResult> {
+    println!("{}", json!(statics));
+    let result = entities::statics::insert_batch(statics).await;
     result
 }
 
 
+#[tauri::command]
+async fn select_metric(case_id: i64) -> RResult<Vec<PocMetric>> {
+    let result = entities::metric::select_metrics(case_id).await;
+    result
+}
 
+
+#[tauri::command]
+async fn select_statics(case_id: i64, static_type: i8) -> RResult<Vec<PocServerStatics>> {
+    let result = entities::statics::select_statics(case_id, static_type).await;
+    result
+}
 
 
 
@@ -116,7 +137,7 @@ fn main() {
 
     Ok({}
     )})
-    .invoke_handler(tauri::generate_handler![download_file, insert_category, query_category_list, update_category, delete_category, query_category_all, insert_case, query_case_list, update_case, delete_case, insert_metric])
+    .invoke_handler(tauri::generate_handler![download_file, insert_category, query_category_list, update_category, delete_category, query_category_all, insert_case, query_case_list, update_case, delete_case, insert_metric, insert_statics, select_metric, select_statics])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

@@ -4,10 +4,17 @@ import { PaginationParam } from "./SharedType";
 import { normalizePageResult } from "@/shared/pageResult";
 import {
   CaseEntity,
+  CaseMetric,
   CaseParams,
+  CaseStatic,
+  StaticType,
   deleteCase,
   insertCase,
+  insertMetric,
+  insertStatics,
   queryCaseList,
+  selectMetric,
+  selectStatics,
   updateCase,
 } from "@/service/case";
 
@@ -20,6 +27,13 @@ interface CaseStore {
   deleteCase: (params: CaseEntity) => Promise<unknown>;
   insertCase: (params: CaseEntity) => Promise<unknown>;
   updateCase: (params: CaseEntity) => Promise<unknown>;
+  insertMetric: (params: CaseMetric[]) => Promise<unknown>;
+  insertStatics: (params: CaseStatic[]) => Promise<unknown>;
+  selectStatics: (
+    case_id: number,
+    statics_type: StaticType
+  ) => Promise<CaseStatic[]>;
+  selectMetrics: (case_id: number) => Promise<CaseMetric[]>;
 }
 
 const useCaseStore = create<CaseStore>((set, get) => ({
@@ -81,6 +95,22 @@ const useCaseStore = create<CaseStore>((set, get) => ({
 
   updateCase: (params: CaseEntity) => {
     return updateCase(params);
+  },
+
+  insertMetric: (params: CaseMetric[]) => {
+    return insertMetric(params);
+  },
+
+  insertStatics: (params: CaseStatic[]) => {
+    return insertStatics(params);
+  },
+
+  selectStatics: (case_id, statics_type) => {
+    return selectStatics(case_id, statics_type);
+  },
+
+  selectMetrics: (case_id) => {
+    return selectMetric(case_id);
   },
 }));
 

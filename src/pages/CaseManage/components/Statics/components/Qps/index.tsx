@@ -1,20 +1,28 @@
 import { useEffect, useMemo, useState } from "react";
-import EChart from "../EChart";
+import EChart from "@/components/EChart";
 import "./index.less";
-import SQLite from "@/shared/Sqlite";
-const Qps = () => {
-  const [metric, setMetric] = useState({} as any);
-  const [snapshot, setSnapshot] = useState([]);
+import useCaseStore from "@/stores/case";
+import { CaseEntity, CaseMetric } from "@/service/case";
 
+export interface QpsProps {
+  rawEntity: CaseEntity;
+}
+
+const Qps = (props: QpsProps) => {
+  const { rawEntity } = props;
+  const { case_id } = rawEntity;
+  const [metric, setMetric] = useState<CaseMetric>({} as any);
+  const [snapshot, setSnapshot] = useState<CaseMetric[]>([]);
+  const { selectMetrics } = useCaseStore();
   const { xAxis, statementQpsValue, sqlQpsValue } = useMemo(() => {
     const xAxis = [];
     const statementQpsValue = [];
     const sqlQpsValue = [];
     snapshot.forEach((s, i) => {
-      const { statementQps, sqlQps } = s;
+      const { statement_qps, sql_qps } = s;
       xAxis.push(i);
-      statementQpsValue.push(statementQps);
-      sqlQpsValue.push(sqlQps);
+      statementQpsValue.push(statement_qps);
+      sqlQpsValue.push(sql_qps);
     });
 
     return {
@@ -25,19 +33,11 @@ const Qps = () => {
   }, [snapshot]);
 
   useEffect(() => {
-    SQLite.open().then((db) => {
-      Promise.all([
-        db.queryWithArgs("SELECT * FROM poc_metric limit 1"),
-        db.queryWithArgs("SELECT * FROM poc_metric_snapshot"),
-      ]).then(([metric, snapshot]) => {
-        console.log("metric", metric);
-        if ((metric as any).length > 0) {
-          setMetric(metric[0]);
-        }
-        setSnapshot(snapshot as any);
-      });
+    selectMetrics(case_id).then((res) => {
+      setSnapshot(res);
+      setMetric(res[res.length - 1]);
     });
-  }, []);
+  }, [case_id, selectMetrics]);
 
   const option = {
     title: {
@@ -102,17 +102,12 @@ const Qps = () => {
     <div className="qps">
       <div className="statics">
         <p>
-          每秒SQL数平均数：<span>{Math.round(metric.sqlQps)}</span>
-        </p>
-        <p>
-          每秒事务数平均数：<span>{Math.round(metric.statementQps)}</span>
-        </p>
-        <p>
-          每条SQL平均耗时(ms)：<span>{Math.round(metric.avgSqlCastMills)}</span>
+          每条SQL平均耗时(ms)：
+          <span>{Math.round(metric.avg_sql_cast_mills)}</span>
         </p>
         <p>
           每个事务平均耗时(ms)：
-          <span>{Math.round(metric.avgStatementCastMills)}</span>
+          <span>{Math.round(metric.avg_statement_cast_mills)}</span>
         </p>
         <p>
           P80(ms)：

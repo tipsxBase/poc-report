@@ -1,21 +1,22 @@
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
-
   <delete id="delete_by_case_id">
-    DELETE FROM poc_metric WHERE case_id = #{case_id}
+    DELETE FROM poc_server_statics WHERE case_id = #{case_id}
   </delete>
+
 
   <select id="select_by_case_id">
     select
-    pm.*,
+    pss.*,
     pc.case_name
     from
-    poc_metric pm
+    poc_server_statics pss
     left join poc_case pc on
-    pm.case_id = pc.case_id
+    pss.case_id = pc.case_id
     where
     pc.case_id = #{case_id}
+    and pss.static_type = #{static_type}
   </select>
 
 </mapper>

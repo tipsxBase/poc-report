@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Source } from "./shared";
-import EChart from "../EChart";
+import EChart from "@/components/EChart";
 
 export interface CpuUsage {
   [key: string]: any;
@@ -19,11 +19,6 @@ export const CpuUsageChart = (props: CpuUsageProps) => {
       title: {
         text: "CPU指标分布图",
         left: "center",
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
       },
       legend: {
         top: 50,

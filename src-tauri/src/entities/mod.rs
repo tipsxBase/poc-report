@@ -4,6 +4,7 @@ pub mod category;
 pub mod shared_types;
 pub mod case;
 pub mod metric;
+pub mod statics;
 pub struct Pagination {
   pub current: u64,
   pub size: u64

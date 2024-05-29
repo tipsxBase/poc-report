@@ -1,20 +1,20 @@
 import { useCallback } from "react";
 import { Source } from "./shared";
-import EChart from "../EChart";
+import EChart from "@/components/EChart";
 
-export interface DiskUsage {
+export interface NetworkUsage {
   [key: string]: any;
 }
 
-export interface DiskUsageChartProps {
+export interface NetworkUsageChartProps {
   dimensions: string[];
   source: Array<{
     label: string;
-    value: Source<Omit<DiskUsage, "device">>[];
+    value: Source<Omit<NetworkUsage, "iface">>[];
   }>;
 }
 
-const DiskUsageChart = (props: DiskUsageChartProps) => {
+const NetworkUsageChart = (props: NetworkUsageChartProps) => {
   const { dimensions, source } = props;
 
   const generateOption = useCallback(
@@ -22,18 +22,13 @@ const DiskUsageChart = (props: DiskUsageChartProps) => {
       dimensions: string[],
       source: {
         label: string;
-        value: Array<Source<Omit<DiskUsage, "device">>>;
+        value: Array<Source<Omit<NetworkUsage, "iface">>>;
       }
     ) => {
       return {
         title: {
-          text: `磁盘${source.label}指标分布图`,
+          text: `网络${source.label}指标分布图`,
           left: "center",
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
         },
         legend: {
           top: 50,
@@ -62,7 +57,6 @@ const DiskUsageChart = (props: DiskUsageChartProps) => {
           { type: "line" },
           { type: "line" },
           { type: "line" },
-          { type: "line" },
         ],
       };
     },
@@ -78,4 +72,4 @@ const DiskUsageChart = (props: DiskUsageChartProps) => {
   );
 };
 
-export default DiskUsageChart;
+export default NetworkUsageChart;
