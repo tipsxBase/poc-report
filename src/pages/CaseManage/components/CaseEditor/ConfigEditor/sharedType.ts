@@ -170,6 +170,7 @@ export const needMinAndMax = (type: string) => {
     "longBetween",
     "decimalBetween",
     "dateBetween",
+    "randomString",
   ].includes(type);
 };
 

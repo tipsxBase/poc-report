@@ -55,6 +55,16 @@ const ListenerConfig = forwardRef<ListenerInstance, ListenerConfigProps>(
       form.setFieldValue("listeners", listeners);
     });
 
+    const updateListenerName = useMemoizedFn((index: number, v: string) => {
+      const listeners: Listener[] = form.getFieldValue("listeners");
+      if (v === "NodeMetricListener") {
+        listeners[index].name = "metricForSar";
+      } else if (v === "DbActiveConnectionListener") {
+        listeners[index].name = "metricForActiveConnection";
+      }
+      form.setFieldValue("listeners", listeners);
+    });
+
     return (
       <div className={styles.listener}>
         <div className={styles.actionWrapper}>
@@ -82,19 +92,14 @@ const ListenerConfig = forwardRef<ListenerInstance, ListenerConfigProps>(
                             label="监听器类型"
                           >
                             <Select
+                              onChange={(v) => updateListenerName(index, v)}
                               placeholder="请选择监听器类型"
                               options={enumToSelectOptions(ListenerType)}
                             />
                           </Form.Item>
                           <Form.Item
-                            rules={[
-                              {
-                                required: true,
-                                message: "请输入监听器名称",
-                              },
-                            ]}
                             field={toFormPath(item.field, "name")}
-                            label="监听器名称"
+                            hidden
                           >
                             <Input placeholder="请输入监控器名称" />
                           </Form.Item>
