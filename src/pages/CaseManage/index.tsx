@@ -352,7 +352,9 @@ const CaseManage = () => {
         unmountOnExit
         width="100%"
         footer={
-          action === "view" || action === "viewUploadResult" ? (
+          action === "view" ||
+          action === "viewUploadResult" ||
+          action === "uploadResult" ? (
             <Button onClick={clearAction}>返回</Button>
           ) : (
             <Space>
