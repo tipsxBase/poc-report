@@ -18,12 +18,14 @@ import {
   needFakerExpression,
   needFakerPath,
   needGlobalRef,
+  needMeta,
   needMinAndMax,
   needScale,
 } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 import get from "lodash/get";
 import { ReactNode } from "react";
 import { IconDelete } from "@arco-design/web-react/icon";
+import JsonStructure from "./JsonStructure";
 export interface MockRuleConfigProps {
   parentField: string;
   getRefGlobals: () => any[];
@@ -234,6 +236,18 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                   field={toFormPath(parentField, "enums")}
                 >
                   <InputTag placeholder="请输入枚举值" />
+                </Form.Item>
+              );
+            }
+
+            if (needMeta(mockRule)) {
+              items.push(
+                <Form.Item
+                  key="meta"
+                  label="JSON结构"
+                  field={toFormPath(parentField, "meta")}
+                >
+                  <JsonStructure getRefGlobals={getRefGlobals} />
                 </Form.Item>
               );
             }

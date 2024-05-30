@@ -130,7 +130,7 @@ export enum SQLDataType {
   string = "字符串",
   number = "数字",
   date = "日期",
-  // json = "JSON",
+  json = "JSON",
 }
 
 export interface ResultDataDefine {
@@ -158,7 +158,7 @@ export interface MockDataDefine {
   scale?: number;
   path?: string;
   nullPercent: number;
-  klzss: string;
+  klass: string;
 }
 
 export const needMinAndMax = (type: string) => {
@@ -196,6 +196,10 @@ export const needEnum = (type: string) => {
 
 export const isSnowflake = (type: string) => {
   return ["snowflake"].includes(type);
+};
+
+export const needMeta = (type: string) => {
+  return ["json"].includes(type);
 };
 
 export interface MockRule {

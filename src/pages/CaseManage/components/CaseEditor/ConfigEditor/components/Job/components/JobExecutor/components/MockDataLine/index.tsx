@@ -32,7 +32,7 @@ const MockDataLine = (props: MockDataLineProps) => {
     }
 
     const define: MockDataDefine = {
-      klzss: "SqlDataDefine",
+      klass: "SqlDataDefine",
       key: undefined,
       type: undefined,
       mockRule: undefined,
