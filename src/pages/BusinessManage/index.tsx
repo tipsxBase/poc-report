@@ -60,7 +60,6 @@ const BusinessManage = () => {
 
   const doConfirm = useMemoizedFn(() => {
     businessEditorInstance.current.getValues().then((res) => {
-      console.log(res);
       if (action === "add") {
         insertCategory(res).then(() => {
           Message.success("新建成功");

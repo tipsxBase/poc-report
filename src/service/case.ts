@@ -134,3 +134,10 @@ export const selectMetric = (caseId: number) => {
     caseId,
   });
 };
+
+export const runCase = async (caseName: string, caseContent: string) => {
+  return invoke("run_case", {
+    caseName,
+    caseContent,
+  });
+};

@@ -61,6 +61,7 @@ const CaseManage = () => {
     deleteCase,
     resetPagination,
     insertCase,
+    runCase,
   } = useCaseStore();
 
   const doSearch = useMemoizedFn(() => {
@@ -175,6 +176,14 @@ const CaseManage = () => {
     rawEntityRef.current = row;
   });
 
+  const doExecute = useMemoizedFn((row: CaseEntity) => {
+    const case_json = JSON.parse(JSON.parse(row.case_content));
+    const case_content = parseJsonToYml(case_json);
+    runCase(row.case_name, case_content).then((res) => {
+      debugger;
+    });
+  });
+
   const columns = useMemo<ColumnProps[]>(() => {
     return [
       {
@@ -197,7 +206,7 @@ const CaseManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 510,
+        width: 560,
         render: (_, item) => {
           return (
             <Space
@@ -206,6 +215,7 @@ const CaseManage = () => {
               <Link onClick={() => onView(item)}>查看</Link>
               <Link onClick={() => onCopy(item)}>复制</Link>
               <Link onClick={() => onUpdate(item)}>修改</Link>
+              <Link onClick={() => doExecute(item)}>执行</Link>
               <Link onClick={() => onDownload(item)}>下载</Link>
               <Link onClick={() => onUploadResult(item)}>上传测试结果</Link>
               <Link onClick={() => onViewResult(item)}>查看测试结果</Link>
@@ -219,6 +229,7 @@ const CaseManage = () => {
     ];
   }, [
     doDelete,
+    doExecute,
     onCopy,
     onDownload,
     onUpdate,

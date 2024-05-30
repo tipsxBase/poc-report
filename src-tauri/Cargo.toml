@@ -32,6 +32,7 @@ rbdc-sqlite = { version = "4.5" }
 tokio = { version = "1", features = ["full"] }
 log = "0.4"
 fast_log = "1.6"
+ssh2 = "0.9.4"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

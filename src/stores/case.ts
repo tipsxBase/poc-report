@@ -13,6 +13,7 @@ import {
   insertMetric,
   insertStatics,
   queryCaseList,
+  runCase,
   selectMetric,
   selectStatics,
   updateCase,
@@ -34,6 +35,7 @@ interface CaseStore {
     statics_type: StaticType
   ) => Promise<CaseStatic[]>;
   selectMetrics: (case_id: number) => Promise<CaseMetric[]>;
+  runCase: (caseName: string, caseContent: string) => Promise<unknown>;
 }
 
 const useCaseStore = create<CaseStore>((set, get) => ({
@@ -111,6 +113,10 @@ const useCaseStore = create<CaseStore>((set, get) => ({
 
   selectMetrics: (case_id) => {
     return selectMetric(case_id);
+  },
+
+  runCase: (caseName: string, caseContent: string) => {
+    return runCase(caseName, caseContent);
   },
 }));
 

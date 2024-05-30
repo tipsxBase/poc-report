@@ -1,0 +1,65 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+  <insert id="insert">
+    `insert into poc_server (server_name, category_id, host, port, username, password) values `
+    <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
+      <if test="key == 'server_id'">
+        <continue />
+      </if>
+      <if test="key == 'category_name'">
+        <continue />
+      </if>
+      <if test="key == 'is_default'">
+        <continue />
+      </if>
+      #{item}
+    </foreach>
+  </insert>
+
+  <select id="select_list">
+    `select`
+    <if test="do_count == true"> ` count(1) from poc_server ps` </if>
+    <if test="do_count == false">
+      ` ps.*, pc.category_name from poc_server ps`
+    </if>
+    ` left join poc_category pc on ps.category_id = pc.category_id`
+    <where>
+      <if test="server.case_name != null && server.case_name != ''">
+        ` and ps.case_name like #{server.server_name}`
+      </if>
+      <if test="case.category_id != null && case.category_id != ''"> ` and ps.category_id = #{server.category_id}`
+      </if>
+    </where>
+    <if test="do_count == false">
+      ` order by ps.updated_at ASC`
+    </if>
+    <if test="do_count == false"> ` limit ${page_no},${page_size}` </if>
+  </select>
+
+  <select id="select_by_id">
+    select * from poc_server where server_id = #{server_id}
+  </select>
+
+  <select id="select_default">
+    select * from poc_server where is_default = 1 limit 1
+  </select>
+
+
+  <update id="update_by_id">
+    update poc_server set server_name = #{server.server_name}, category_id = #{server.category_id}, host =
+    #{server.host}, port = #{server.port},
+    username = #{server.username}, password = #{server.username} where
+    server_id = #{server.server_id}
+  </update>
+
+  <update id="update_check_default_by_id">
+    update poc_server set is_default = 1 where server_id = #{server_id};
+    update poc_server set is_default = 0 where server_id != #{server_id}
+  </update>
+
+
+  <delete id="delete_by_id">
+    delete from poc_server where server_id = #{server_id}
+  </delete>
+</mapper>

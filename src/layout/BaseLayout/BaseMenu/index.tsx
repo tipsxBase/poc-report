@@ -13,6 +13,7 @@ export interface BaseMenuProps {
 const routeMapping = {
   "/": "cases",
   "/business": "business",
+  "/server": "server",
 };
 
 /**
@@ -40,7 +41,13 @@ const BaseMenu = (props: BaseMenuProps) => {
           <MenuItem key="business">
             <IconCalendar />
             项目管理
-          </MenuItem>{" "}
+          </MenuItem>
+        </Link>
+        <Link to="/server">
+          <MenuItem key="server">
+            <IconCalendar />
+            服务管理
+          </MenuItem>
         </Link>
       </Menu>
     </div>

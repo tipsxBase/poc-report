@@ -2,6 +2,7 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
 import BaseLayout from "../layout/BaseLayout";
 import CaseManage from "@/pages/CaseManage";
 import BusinessManage from "@/pages/BusinessManage";
+import ServerManage from "@/pages/ServerManage";
 
 const routes: RouteObject[] = [
   {
@@ -15,6 +16,10 @@ const routes: RouteObject[] = [
       {
         path: "/business",
         element: <BusinessManage />,
+      },
+      {
+        path: "/server",
+        element: <ServerManage />,
       },
     ],
   },
