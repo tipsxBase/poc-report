@@ -141,3 +141,15 @@ export const runCase = async (caseName: string, caseContent: string) => {
     caseContent,
   });
 };
+
+export const downloadImage = async (
+  imageData: Record<string, string>,
+  fileDir: string,
+  caseName: string
+) => {
+  return invoke("download_image", {
+    imageData,
+    fileDir,
+    caseName,
+  });
+};

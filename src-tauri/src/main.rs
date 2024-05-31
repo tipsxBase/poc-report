@@ -11,13 +11,17 @@ use entities::PageResult;
 use refinery::Migration;
 use rusqlite::Connection;
 use serde_json::json;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
 use std::mem;
 use tauri::Manager;
+use zip::write::SimpleFileOptions;
+use zip::ZipWriter;
 pub mod entities;
 pub mod request;
 pub mod shell;
+use base64::{engine::general_purpose::STANDARD, Engine as _};
 
 refinery::embed_migrations!("migrations");
 
@@ -202,12 +206,40 @@ async fn run_case(case_content: String, case_name: String) -> i32 {
         &server.password.unwrap(),
     );
     let path = format!("poc/poc-cases/{}.yml", case_name);
-    shell::upload_case(&session, &path, &case_content);
-    let command = format!(
-        "nohup java -jar poc/hexadb-poc.jar -config {} > poc/logs/poc_log.log 2>&1 &",
-        path
-    );
-    shell::exec_command(&session, &command)
+    shell::upload_case(&session, &path, &case_content)
+    // let command = format!(
+    //     "nohup java -jar poc/hexadb-poc.jar -config {} > poc/logs/poc_log.log 2>&1 &",
+    //     path
+    // );
+    // shell::exec_command(&session, &command)
+}
+
+#[tauri::command]
+fn download_image(
+    image_data: HashMap<String, String>,
+    file_dir: String,
+    case_name: String,
+) -> &'static str {
+    let file = File::create(format!("{}/{case_name}.zip", file_dir)).unwrap();
+    let mut zip = ZipWriter::new(file);
+    let options = SimpleFileOptions::default()
+        .compression_method(zip::CompressionMethod::Stored)
+        .unix_permissions(0o755);
+
+    for (name, base64_data) in &image_data {
+        let decoded_data = STANDARD.decode(&base64_data[22..]);
+        match decoded_data {
+            Ok(data) => {
+                zip.start_file(format!("{}.png", name), options).unwrap();
+                zip.write_all(&data).unwrap();
+            }
+            Err(err) => {
+                println!("{}", err)
+            }
+        }
+    }
+    zip.finish().unwrap();
+    "success"
 }
 
 fn main() {
@@ -255,7 +287,8 @@ fn main() {
             delete_server,
             update_server_check_default,
             server_init,
-            run_case
+            run_case,
+            download_image
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

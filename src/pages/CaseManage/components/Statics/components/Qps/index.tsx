@@ -1,5 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
-import EChart from "@/components/EChart";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import EChart, { EChartInstance } from "@/components/EChart";
 import "./index.less";
 import useCaseStore from "@/stores/case";
 import { CaseEntity, CaseMetric } from "@/service/case";
@@ -8,12 +15,22 @@ export interface QpsProps {
   rawEntity: CaseEntity;
 }
 
-const Qps = (props: QpsProps) => {
+export interface QpsInstance {
+  getImage: () => Record<string, string>;
+}
+
+const formatNumber = (value: number) => {
+  const v = Math.round(value);
+  return isNaN(v) ? "暂无数据" : v;
+};
+
+const Qps = forwardRef<QpsInstance, QpsProps>((props, ref) => {
   const { rawEntity } = props;
   const { case_id } = rawEntity;
   const [metric, setMetric] = useState<CaseMetric>({} as any);
   const [snapshot, setSnapshot] = useState<CaseMetric[]>([]);
   const { selectMetrics } = useCaseStore();
+  const echartInstance = useRef<EChartInstance>();
   const { xAxis, statementQpsValue, sqlQpsValue } = useMemo(() => {
     const xAxis = [];
     const statementQpsValue = [];
@@ -34,10 +51,25 @@ const Qps = (props: QpsProps) => {
 
   useEffect(() => {
     selectMetrics(case_id).then((res) => {
+      if (!res || res.length === 0) {
+        return;
+      }
       setSnapshot(res);
       setMetric(res[res.length - 1]);
     });
   }, [case_id, selectMetrics]);
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        getImage: () => {
+          return { qps: echartInstance.current.getImage() };
+        },
+      };
+    },
+    []
+  );
 
   const option = {
     title: {
@@ -103,24 +135,24 @@ const Qps = (props: QpsProps) => {
       <div className="statics">
         <p>
           每条SQL平均耗时(ms)：
-          <span>{Math.round(metric.avg_sql_cast_mills)}</span>
+          <span>{formatNumber(metric.avg_sql_cast_mills)}</span>
         </p>
         <p>
           每个事务平均耗时(ms)：
-          <span>{Math.round(metric.avg_statement_cast_mills)}</span>
+          <span>{formatNumber(metric.avg_statement_cast_mills)}</span>
         </p>
         <p>
           P80(ms)：
-          <span>{Math.round(metric.p80)}</span>
+          <span>{formatNumber(metric.p80)}</span>
         </p>
         <p>
           P95(ms)：
-          <span>{Math.round(metric.p95)}</span>
+          <span>{formatNumber(metric.p95)}</span>
         </p>
       </div>
-      <EChart option={option} />
+      <EChart ref={echartInstance} option={option} />
     </div>
   );
-};
+});
 
 export default Qps;

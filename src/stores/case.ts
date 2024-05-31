@@ -9,6 +9,7 @@ import {
   CaseStatic,
   StaticType,
   deleteCase,
+  downloadImage,
   insertCase,
   insertMetric,
   insertStatics,
@@ -36,6 +37,11 @@ interface CaseStore {
   ) => Promise<CaseStatic[]>;
   selectMetrics: (case_id: number) => Promise<CaseMetric[]>;
   runCase: (caseName: string, caseContent: string) => Promise<unknown>;
+  downloadImage: (
+    imageData: Record<string, string>,
+    fileDir: string,
+    case_name: string
+  ) => Promise<unknown>;
 }
 
 const useCaseStore = create<CaseStore>((set, get) => ({
@@ -117,6 +123,14 @@ const useCaseStore = create<CaseStore>((set, get) => ({
 
   runCase: (caseName: string, caseContent: string) => {
     return runCase(caseName, caseContent);
+  },
+
+  downloadImage: (
+    imageData: Record<string, string>,
+    fileDir: string,
+    case_name: string
+  ) => {
+    return downloadImage(imageData, fileDir, case_name);
   },
 }));
 

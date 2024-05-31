@@ -10,6 +10,7 @@ import {
   Popconfirm,
   Space,
   Table,
+  Tooltip,
 } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import {
@@ -179,8 +180,8 @@ const CaseManage = () => {
   const doExecute = useMemoizedFn((row: CaseEntity) => {
     const case_json = JSON.parse(JSON.parse(row.case_content));
     const case_content = parseJsonToYml(case_json);
-    runCase(row.case_name, case_content).then((res) => {
-      debugger;
+    runCase(row.case_name, case_content).then(() => {
+      Message.success("上传成功。");
     });
   });
 
@@ -215,7 +216,9 @@ const CaseManage = () => {
               <Link onClick={() => onView(item)}>查看</Link>
               <Link onClick={() => onCopy(item)}>复制</Link>
               <Link onClick={() => onUpdate(item)}>修改</Link>
-              <Link onClick={() => doExecute(item)}>执行</Link>
+              <Tooltip content="上传至默认服务">
+                <Link onClick={() => doExecute(item)}>上传</Link>
+              </Tooltip>
               <Link onClick={() => onDownload(item)}>下载</Link>
               <Link onClick={() => onUploadResult(item)}>上传测试结果</Link>
               <Link onClick={() => onViewResult(item)}>查看测试结果</Link>

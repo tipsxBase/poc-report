@@ -1,6 +1,7 @@
-import { useCallback } from "react";
+import { forwardRef, useCallback, useImperativeHandle } from "react";
 import { Source } from "./shared";
-import EChart from "@/components/EChart";
+import EChart, { EChartInstance } from "@/components/EChart";
+import useRefs from "@/hooks/useRefs";
 
 export interface NetworkUsage {
   [key: string]: any;
@@ -14,8 +15,16 @@ export interface NetworkUsageChartProps {
   }>;
 }
 
-const NetworkUsageChart = (props: NetworkUsageChartProps) => {
+export interface NetworkUsageInstance {
+  getImage: () => Record<string, string>;
+}
+
+const NetworkUsageChart = forwardRef<
+  NetworkUsageInstance,
+  NetworkUsageChartProps
+>((props, ref) => {
   const { dimensions, source } = props;
+  const { getRef, refKeys } = useRefs<string, EChartInstance>();
 
   const generateOption = useCallback(
     (
@@ -63,13 +72,32 @@ const NetworkUsageChart = (props: NetworkUsageChartProps) => {
     []
   );
 
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        getImage: () => {
+          return refKeys.reduce((prev, current) => {
+            prev[current] = getRef(current).current.getImage();
+            return prev;
+          }, {} as Record<string, any>);
+        },
+      };
+    },
+    [getRef, refKeys]
+  );
+
   return (
     <div>
       {source.map((s, index) => (
-        <EChart key={index} option={generateOption(dimensions, s)} />
+        <EChart
+          ref={getRef(s.label)}
+          key={index}
+          option={generateOption(dimensions, s)}
+        />
       ))}
     </div>
   );
-};
+});
 
 export default NetworkUsageChart;

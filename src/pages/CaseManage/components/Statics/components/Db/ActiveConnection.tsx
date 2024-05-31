@@ -1,5 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
-import EChart from "@/components/EChart";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import EChart, { EChartInstance } from "@/components/EChart";
 import { CaseEntity, CaseStatic, StaticType } from "@/service/case";
 import useCaseStore from "@/stores/case";
 
@@ -7,9 +14,16 @@ export interface ActiveConnectionProps {
   rawEntity: CaseEntity;
 }
 
-const ActiveConnection = (props: ActiveConnectionProps) => {
-  const { rawEntity } = props;
+export interface ActiveConnectionInstance {
+  getImage: () => Record<string, string>;
+}
 
+const ActiveConnection = forwardRef<
+  ActiveConnectionInstance,
+  ActiveConnectionProps
+>((props, ref) => {
+  const { rawEntity } = props;
+  const echartInstance = useRef<EChartInstance>();
   const { case_id } = rawEntity;
 
   const [metricForActiveConnection, setMetricForActiveConnection] = useState<
@@ -72,11 +86,26 @@ const ActiveConnection = (props: ActiveConnectionProps) => {
 
   useEffect(() => {
     selectStatics(case_id, StaticType.ACTIVE_CONNECTION).then((res) => {
+      if (!res || res.length === 0) {
+        return;
+      }
       setMetricForActiveConnection(res);
     });
   }, [case_id, selectStatics]);
 
-  return <EChart option={option} />;
-};
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        getImage: () => {
+          return { activeConnection: echartInstance.current.getImage() };
+        },
+      };
+    },
+    []
+  );
+
+  return <EChart ref={echartInstance} option={option} />;
+});
 
 export default ActiveConnection;

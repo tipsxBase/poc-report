@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { Source } from "./shared";
-import EChart from "@/components/EChart";
+import EChart, { EChartInstance } from "@/components/EChart";
 
 export interface MemoryUsage {
   [key: string]: any;
@@ -11,8 +11,16 @@ export interface MemoryUsageChartProps {
   source: Source<MemoryUsage>[];
 }
 
-export const MemoryUsageChart = (props: MemoryUsageChartProps) => {
+export interface MemoryUsageInstance {
+  getImage: () => Record<string, string>;
+}
+
+export const MemoryUsageChart = forwardRef<
+  MemoryUsageInstance,
+  MemoryUsageChartProps
+>((props, ref) => {
   const { dimensions, source } = props;
+  const echartInstance = useRef<EChartInstance>();
 
   const option = useMemo(() => {
     return {
@@ -55,7 +63,15 @@ export const MemoryUsageChart = (props: MemoryUsageChartProps) => {
     };
   }, [dimensions, source]);
 
-  return <EChart option={option} />;
-};
+  useImperativeHandle(ref, () => {
+    return {
+      getImage: () => {
+        return { memoryUsage: echartInstance.current.getImage() };
+      },
+    };
+  });
+
+  return <EChart ref={echartInstance} option={option} />;
+});
 
 export default MemoryUsageChart;
