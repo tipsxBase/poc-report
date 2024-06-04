@@ -207,6 +207,7 @@ async fn run_case(case_content: String, case_name: String) -> i32 {
     );
     let path = format!("poc/poc-cases/{}.yml", case_name);
     shell::upload_case(&session, &path, &case_content)
+    // TODO 目前还不支持获取执行的进度，先把这里注释掉
     // let command = format!(
     //     "nohup java -jar poc/hexadb-poc.jar -config {} > poc/logs/poc_log.log 2>&1 &",
     //     path

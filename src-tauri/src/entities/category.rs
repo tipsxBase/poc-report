@@ -7,6 +7,18 @@ use crate::entities::PageResult;
 
 use super::shared_types::RResult;
 
+enum CategoryType {
+    BuiltIn,
+    UserDefine,
+}
+
+fn get_category_type_value(category_type: CategoryType) -> Option<i8> {
+    match category_type {
+        CategoryType::BuiltIn => Some(1),
+        CategoryType::UserDefine => Some(2),
+    }
+}
+
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct PocCategory {
     pub category_id: Option<i64>,
@@ -65,7 +77,7 @@ pub async fn add(
     let table: PocCategory = PocCategory {
         category_id: Some(new_snowflake_id()),
         category_name: category.category_name,
-        category_type: Some(2),
+        category_type: get_category_type_value(CategoryType::UserDefine),
     };
     let data = insert(&rb, &table).await;
     Ok(data)
@@ -121,11 +133,10 @@ pub async fn query_all() -> RResult<Vec<PocCategory>> {
 
     let rb = RBatis::new();
 
-    let database = shared::sqlite::get_database_path();
-    let mut url = String::from("sqlite://");
-    url.push_str(&database);
+    let driver_url = shared::sqlite::get_driver_url();
 
-    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &url).unwrap();
+    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
+        .unwrap();
     let data: Vec<PocCategory> = select_all(&rb).await.unwrap();
     Ok(data)
 }
@@ -144,11 +155,10 @@ pub async fn delete(
 
     let rb = RBatis::new();
 
-    let database = shared::sqlite::get_database_path();
-    let mut url = String::from("sqlite://");
-    url.push_str(&database);
+    let driver_url = shared::sqlite::get_driver_url();
 
-    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &url).unwrap();
+    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
+        .unwrap();
     let data = delete_by_id(&rb, category.category_id.unwrap()).await;
     Ok(data)
 }
@@ -167,11 +177,10 @@ pub async fn update(
 
     let rb = RBatis::new();
 
-    let database = shared::sqlite::get_database_path();
-    let mut url = String::from("sqlite://");
-    url.push_str(&database);
+    let driver_url = shared::sqlite::get_driver_url();
 
-    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &url).unwrap();
+    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
+        .unwrap_err();
     let data = update_by_id(&rb, &category).await;
     Ok(data)
 }
