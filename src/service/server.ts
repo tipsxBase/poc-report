@@ -23,6 +23,7 @@ export interface ServerEntity extends CommonEntity {
   username?: string;
   password?: string;
   is_default?: number;
+  initial_state?: number;
 }
 
 export const queryServerList = async (params: ServerParams) => {

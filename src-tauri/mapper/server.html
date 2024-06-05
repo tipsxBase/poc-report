@@ -13,6 +13,9 @@
       <if test="key == 'is_default'">
         <continue />
       </if>
+      <if test="key == 'initial_state'">
+        <continue />
+      </if>
       #{item}
     </foreach>
   </insert>
@@ -56,6 +59,10 @@
   <update id="update_check_default_by_id">
     update poc_server set is_default = 1 where server_id = #{server_id};
     update poc_server set is_default = 0 where server_id != #{server_id}
+  </update>
+
+  <update id="update_initial_state_by_id">
+    update poc_server set initial_state = #{initial_state} where server_id = #{server_id};
   </update>
 
 

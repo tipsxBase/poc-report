@@ -18,6 +18,7 @@ pub struct PocServer {
     pub username: Option<String>,
     pub password: Option<String>,
     pub is_default: Option<Option<i8>>,
+    pub initial_state: Option<Option<i8>>,
 }
 
 #[html_sql("mapper/server.html")]
@@ -55,6 +56,15 @@ async fn select_default(rb: &dyn Executor) -> PocServer {
     impled!()
 }
 
+#[html_sql("mapper/server.html")]
+async fn update_initial_state_by_id(
+    rb: &dyn Executor,
+    server_id: i64,
+    initial_state: i8,
+) -> rbatis::rbdc::db::ExecResult {
+    impled!()
+}
+
 pub async fn add(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
     _ = fast_log::init(
         fast_log::Config::new()
@@ -83,6 +93,7 @@ pub async fn add(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
         username: server.username,
         password: server.password,
         is_default: None,
+        initial_state: None,
     };
     let data = insert(&rb, &table).await.unwrap();
     Ok(data)
@@ -217,4 +228,27 @@ pub async fn select_default_server() -> PocServer {
 
     let data = select_default(&rb).await.unwrap();
     data
+}
+
+pub async fn update_server_initial_state(
+    server_id: i64,
+    initial_state: i8,
+) -> RResult<rbatis::rbdc::db::ExecResult> {
+    _ = fast_log::init(
+        fast_log::Config::new()
+            .console()
+            .level(log::LevelFilter::Debug),
+    );
+    defer!(|| {
+        log::logger().flush();
+    });
+
+    let rb = RBatis::new();
+
+    let driver_url = shared::sqlite::get_driver_url();
+    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
+        .unwrap();
+
+    let data = update_initial_state_by_id(&rb, server_id, initial_state).await?;
+    Ok(data)
 }

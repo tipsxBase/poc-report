@@ -8,15 +8,25 @@ use crate::request;
 use futures::StreamExt;
 use ssh2::{Error, Session, Sftp};
 
-pub fn create_session(host: &str, port: i32, username: &str, password: &str) -> Session {
+pub fn create_session(
+    host: &str,
+    port: i32,
+    username: &str,
+    password: &str,
+) -> Result<Session, ssh2::Error> {
     let ip = format!("{}:{}", &host, &port);
 
     let tcp = TcpStream::connect(&ip).unwrap();
     let mut session: Session = Session::new().unwrap();
     session.set_tcp_stream(tcp);
     session.handshake().unwrap();
-    session.userauth_password(username, password).unwrap();
-    session
+    let _ = session.userauth_password(username, password);
+    if session.authenticated() {
+        Ok(session)
+    } else {
+        println!("认证失败");
+        Err(ssh2::Error::from_session_error(&session, 60)) // Authentication failed
+    }
 }
 
 pub fn exec_command(session: &Session, command: &str) -> i32 {

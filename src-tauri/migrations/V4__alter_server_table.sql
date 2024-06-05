@@ -1,0 +1,2 @@
+
+ALTER TABLE poc_server ADD COLUMN initial_state INTEGER DEFAULT(0)

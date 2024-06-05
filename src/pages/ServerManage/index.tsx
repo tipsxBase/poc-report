@@ -8,8 +8,8 @@ import {
   Message,
   Popconfirm,
   Space,
-  Switch,
   Table,
+  Tag,
   Tooltip,
 } from "@arco-design/web-react";
 import styles from "./index.module.less";
@@ -19,7 +19,7 @@ import {
   IconRefresh,
   IconSearch,
 } from "@arco-design/web-react/icon";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useMemoizedFn, useMount } from "ahooks";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
 import { ServerEntity } from "@/service/server";
@@ -27,6 +27,7 @@ import ListSearchLayout from "@/components/ListSearchLayout";
 import CategorySelect from "@/components/CategorySelect";
 import useServerStore from "@/stores/server";
 import ServerEditor, { ServerEditorInstance } from "./ServerEditor";
+import { listen } from "@tauri-apps/api/event";
 
 /**
  * 用例管理
@@ -52,7 +53,7 @@ const ServerManage = () => {
 
   const doSearch = useMemoizedFn(() => {
     const values = form.getFieldsValue();
-    console.log(values);
+
     fetchServerList(values);
   });
 
@@ -94,6 +95,15 @@ const ServerManage = () => {
       }
     });
   });
+
+  useEffect(() => {
+    const listenPromise = listen("event", (event) => {
+      console.log("event -> ", event);
+    });
+    return () => {
+      listenPromise.then((f) => f());
+    };
+  }, []);
 
   useMount(() => {
     doSearch();
@@ -146,36 +156,53 @@ const ServerManage = () => {
         dataIndex: "is_default",
         title: (
           <span>
-            是否默认
+            是否默认服务
             <Tooltip content="用例执行时默认会使用此服务，只能指定一个默认服务">
               <IconInfoCircleFill />
             </Tooltip>
           </span>
         ),
+        width: 150,
         key: "is_default",
-        render: (is_default, item) => {
-          return (
-            <Switch
-              onChange={() => updateCheckDefault(item)}
-              checked={!!is_default}
-            />
-          );
+        render: (is_default) => {
+          if (is_default === 0) {
+            return <Tag>否</Tag>;
+          }
+          if (is_default === 1) {
+            return <Tag color="arcoblue">是</Tag>;
+          }
         },
       },
+      {
+        dataIndex: "initial_state",
+        title: "是否初始化",
+        key: "initial_state",
+        width: 120,
+        render: (initial_state) => {
+          if (initial_state === 0) {
+            return <Tag>示初始化</Tag>;
+          }
+          if (initial_state === 1) {
+            return <Tag color="arcoblue">已初始化</Tag>;
+          }
+        },
+      },
+
       {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 200,
+        width: 300,
         render: (_, item) => {
           return (
             <Space
               split={<Divider style={{ margin: "0 4px" }} type="vertical" />}
             >
               <Link onClick={() => onUpdate(item)}>修改</Link>
-              <Tooltip content="初始化会在服务器上创建相应的服务并且上传测试Jar包，及测试用例。">
+              <Tooltip content="初始化会在服务器上创建相应的服务并且上传测试Jar包、JDK。">
                 <Link onClick={() => doServerInitial(item)}>初始化</Link>
               </Tooltip>
+              <Link onClick={() => updateCheckDefault(item)}>设为默认服务</Link>
               <Popconfirm title="确认删除？" onOk={() => doDelete(item)}>
                 <Link>删除</Link>
               </Popconfirm>

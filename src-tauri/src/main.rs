@@ -170,7 +170,7 @@ async fn update_server_check_default(server_id: i64) -> RResult<rbatis::rbdc::db
 }
 
 #[tauri::command]
-async fn server_init(server_id: i64) -> Result<(), String> {
+async fn server_init(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
     let server = entities::server::select_server_by_id(server_id).await;
 
     let session = shell::create_session(
@@ -178,18 +178,10 @@ async fn server_init(server_id: i64) -> Result<(), String> {
         server.port.unwrap(),
         &server.username.unwrap(),
         &server.password.unwrap(),
-    );
+    )
+    .expect("创建会话失败");
 
-    let sftp = match session.sftp() {
-        Ok(sftp) => sftp,
-        Err(error) => {
-            panic!(
-                "打开sftp出现错误，错误码: {}, 错误信息: {}",
-                error.code(),
-                error.message()
-            );
-        }
-    };
+    let sftp = session.sftp().expect("创建sftp失败");
     let poc = Path::new("poc");
     if shell::sftp_directory_is_exist(&sftp, &poc) == false {
         sftp.mkdir(poc, 0o755).expect("创建poc失败");
@@ -208,6 +200,14 @@ async fn server_init(server_id: i64) -> Result<(), String> {
         sftp.mkdir(poc_cases, 0o755).expect("创建poc/poc-cases失败");
         println!("创建poc/poc-cases目录成功");
     }
+    // task::spawn_local(async {
+    //     shell::download_and_upload_sftp(
+    //         "https://hexadb-fe.tos-cn-beijing.volces.com/hexadb-poc.jar",
+    //         &sftp,
+    //         "poc/hexadb-poc.jar",
+    //     )
+    //     .await
+    // });
 
     let _ = shell::download_and_upload_sftp(
         "https://hexadb-fe.tos-cn-beijing.volces.com/hexadb-poc.jar",
@@ -223,7 +223,7 @@ async fn server_init(server_id: i64) -> Result<(), String> {
     )
     .await;
     println!("初始化成功");
-    Ok(())
+    entities::server::update_server_initial_state(server_id, 1).await
 }
 
 fn is_empty<T>(_: &T) -> bool {
@@ -241,7 +241,8 @@ async fn run_case(case_content: String, case_name: String) -> i32 {
         server.port.unwrap(),
         &server.username.unwrap(),
         &server.password.unwrap(),
-    );
+    )
+    .expect("创建会话失败");
     let path = format!("poc/poc-cases/{}.yml", case_name);
     shell::upload_case(&session, &path, &case_content)
     // TODO 目前还不支持获取执行的进度，先把这里注释掉
