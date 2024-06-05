@@ -11,10 +11,10 @@ use entities::PageResult;
 use refinery::Migration;
 use rusqlite::Connection;
 use serde_json::json;
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
 use std::mem;
+use std::{collections::HashMap, path::Path};
 use tauri::Manager;
 use zip::write::SimpleFileOptions;
 use zip::ZipWriter;
@@ -170,7 +170,7 @@ async fn update_server_check_default(server_id: i64) -> RResult<rbatis::rbdc::db
 }
 
 #[tauri::command]
-async fn server_init(server_id: i64) -> bool {
+async fn server_init(server_id: i64) -> Result<(), String> {
     let server = entities::server::select_server_by_id(server_id).await;
 
     let session = shell::create_session(
@@ -180,13 +180,50 @@ async fn server_init(server_id: i64) -> bool {
         &server.password.unwrap(),
     );
 
-    shell::exec_command(&session, "mkdir poc");
-    shell::exec_command(&session, "mkdir poc/logs");
-    shell::exec_command(&session, "mkdir poc/poc-cases");
-    let data = request::upload_jar(&session, "poc/hexadb-poc.jar")
-        .await
-        .unwrap();
-    data
+    let sftp = match session.sftp() {
+        Ok(sftp) => sftp,
+        Err(error) => {
+            panic!(
+                "打开sftp出现错误，错误码: {}, 错误信息: {}",
+                error.code(),
+                error.message()
+            );
+        }
+    };
+    let poc = Path::new("poc");
+    if shell::sftp_directory_is_exist(&sftp, &poc) == false {
+        sftp.mkdir(poc, 0o755).expect("创建poc失败");
+        println!("创建poc目录成功");
+    }
+
+    let poc_logs = Path::new("poc/logs");
+
+    if shell::sftp_directory_is_exist(&sftp, &poc_logs) == false {
+        sftp.mkdir(poc_logs, 0o755).expect("创建poc/logs失败");
+        println!("创建poc/logs目录成功");
+    }
+
+    let poc_cases = Path::new("poc/poc-cases");
+    if shell::sftp_directory_is_exist(&sftp, &poc_cases) == false {
+        sftp.mkdir(poc_cases, 0o755).expect("创建poc/poc-cases失败");
+        println!("创建poc/poc-cases目录成功");
+    }
+
+    let _ = shell::download_and_upload_sftp(
+        "https://hexadb-fe.tos-cn-beijing.volces.com/hexadb-poc.jar",
+        &sftp,
+        "poc/hexadb-poc.jar",
+    )
+    .await;
+
+    let _ = shell::download_and_upload_sftp(
+        "https://hexadb-fe.tos-cn-beijing.volces.com/jdk-17_linux-x64_bin.tar.gz",
+        &sftp,
+        "poc/jdk-17_linux-x64_bin.tar.gz",
+    )
+    .await;
+    println!("初始化成功");
+    Ok(())
 }
 
 fn is_empty<T>(_: &T) -> bool {
