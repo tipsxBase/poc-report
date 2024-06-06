@@ -6,7 +6,7 @@ use std::{
 
 use crate::request;
 use futures::StreamExt;
-use ssh2::{Error, Session, Sftp};
+use ssh2::{Session, Sftp};
 
 pub fn create_session(
     host: &str,
@@ -34,13 +34,8 @@ pub fn exec_command(session: &Session, command: &str) -> i32 {
     channel.exec(command).unwrap();
     let mut s = String::new();
     channel.read_to_string(&mut s).unwrap();
-    println!("{} -> {}", command, s);
     let _ = channel.wait_close();
     channel.exit_status().unwrap()
-}
-
-fn create_sftp(session: &Session) -> Result<Sftp, Error> {
-    session.sftp()
 }
 
 pub fn upload_case(session: &Session, path: &str, content: &str) -> i32 {
