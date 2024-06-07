@@ -34,6 +34,11 @@
     select category_name, category_id from poc_category
   </select>
 
+  <select id="select_enable_select">
+    select category_name, category_id from poc_category where category_type = 2
+  </select>
+
+
   <update id="update_by_id">
     update poc_category set category_name = #{category.category_name} where category_id = #{category.category_id}
   </update>

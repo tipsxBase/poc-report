@@ -1,10 +1,15 @@
 import { CommonEntity, PageResult, PaginationParam } from "@/stores/SharedType";
 import { invoke } from "@tauri-apps/api/tauri";
 
+export enum CategoryType {
+  BuiltIn = 1,
+  UserDefine = 2,
+}
+
 export interface CategoryParams extends PaginationParam {
   category_id?: number;
   category_name?: string;
-  category_type?: number;
+  category_type?: CategoryType;
 }
 
 export interface CategoryEntity extends CommonEntity {

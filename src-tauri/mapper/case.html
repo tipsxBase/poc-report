@@ -18,7 +18,7 @@
     `select`
     <if test="do_count == true"> ` count(1) from poc_case p_case` </if>
     <if test="do_count == false">
-      ` p_case.*, category.category_name from poc_case p_case`
+      ` p_case.*, category.category_name, category_type from poc_case p_case`
     </if>
     ` left join poc_category category on p_case.category_id = category.category_id`
     <where>

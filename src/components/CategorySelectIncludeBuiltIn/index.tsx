@@ -1,19 +1,22 @@
 import { Select, SelectProps } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { useEffect, useState } from "react";
-import { CategoryType, queryCategoryForOptions } from "@/service/category";
+import { queryCategoryForOptions } from "@/service/category";
 
-export interface CategorySelectProps extends Omit<SelectProps, "options"> {}
+export interface CategorySelectIncludeBuiltInProps
+  extends Omit<SelectProps, "options"> {}
 
 /**
  *
  */
-const CategorySelectAll = (props: CategorySelectProps) => {
+const CategorySelectIncludeBuiltIn = (
+  props: CategorySelectIncludeBuiltInProps
+) => {
   const [options, setOptions] = useState<SelectProps["options"]>();
 
   useEffect(() => {
     queryCategoryForOptions().then((options) => {
-      setOptions(options.filter((o) => o.value !== CategoryType.BuiltIn));
+      setOptions(options);
     });
   }, []);
 
@@ -29,4 +32,4 @@ const CategorySelectAll = (props: CategorySelectProps) => {
   );
 };
 
-export default CategorySelectAll;
+export default CategorySelectIncludeBuiltIn;

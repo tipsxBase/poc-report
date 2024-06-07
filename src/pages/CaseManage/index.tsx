@@ -26,7 +26,6 @@ import { CaseEntity, updateCase } from "@/service/case";
 import useCaseStore from "@/stores/case";
 import ListSearchLayout from "@/components/ListSearchLayout";
 import CaseEditor, { CaseEditorInstance } from "./components/CaseEditor";
-import CategorySelect from "@/components/CategorySelect";
 import CasePreviewer from "./components/CasePreviewer";
 import { dialog } from "@tauri-apps/api";
 import { invoke } from "@tauri-apps/api/tauri";
@@ -34,6 +33,8 @@ import { parseJsonToYml } from "@/shared/yaml";
 import UpdateMetric from "./components/UpdateMetric";
 import Statics from "./components/Statics";
 import ImportConfig, { ImportConfigInstance } from "./components/ImportConfig";
+import TableActionColumn from "@/components/TableActionColumn";
+import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
 
 /**
  * 用例管理
@@ -207,25 +208,40 @@ const CaseManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 560,
+        width: 320,
         render: (_, item) => {
           return (
-            <Space
-              split={<Divider style={{ margin: "0 4px" }} type="vertical" />}
-            >
+            <TableActionColumn maxDisplayAction={5}>
               <Link onClick={() => onView(item)}>查看</Link>
               <Link onClick={() => onCopy(item)}>复制</Link>
-              <Link onClick={() => onUpdate(item)}>修改</Link>
+              <Tooltip
+                content="系统内置用例不允许修改"
+                disabled={item.category_type !== 1}
+              >
+                <Link
+                  disabled={item.category_type === 1}
+                  onClick={() => onUpdate(item)}
+                >
+                  修改
+                </Link>
+              </Tooltip>
               <Tooltip content="上传至默认服务">
                 <Link onClick={() => doExecute(item)}>上传</Link>
               </Tooltip>
+              {item.category_type === 1 ? (
+                <Tooltip content="系统内置用例不允许删除">
+                  <Link disabled>删除</Link>
+                </Tooltip>
+              ) : (
+                <Popconfirm title="确认删除？" onOk={() => doDelete(item)}>
+                  <Link>删除</Link>
+                </Popconfirm>
+              )}
+
               <Link onClick={() => onDownload(item)}>下载</Link>
               <Link onClick={() => onUploadResult(item)}>上传测试结果</Link>
               <Link onClick={() => onViewResult(item)}>查看测试结果</Link>
-              <Popconfirm title="确认删除？" onOk={() => doDelete(item)}>
-                <Link>删除</Link>
-              </Popconfirm>
-            </Space>
+            </TableActionColumn>
           );
         },
       },
@@ -322,7 +338,7 @@ const CaseManage = () => {
           }
         >
           <Form.Item label="归属项目" field="category_id">
-            <CategorySelect />
+            <CategorySelectIncludeBuiltIn />
           </Form.Item>
           <Form.Item label="用例名称" field="case_name">
             <Input placeholder="用例名称" />

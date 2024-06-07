@@ -12,6 +12,7 @@ pub struct PocCase {
     pub case_id: Option<i64>,
     pub category_id: Option<i64>,
     pub category_name: Option<String>,
+    pub category_type: Option<i8>,
     pub case_name: Option<String>,
     pub case_content: Option<String>,
 }
@@ -65,6 +66,7 @@ pub async fn add(
     let table: PocCase = PocCase {
         case_id: None,
         category_id: case.category_id,
+        category_type: None,
         category_name: None,
         case_name: case.case_name,
         case_content: case.case_content,

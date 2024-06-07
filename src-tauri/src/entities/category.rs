@@ -54,6 +54,11 @@ async fn select_all(rb: &dyn Executor) -> Vec<PocCategory> {
     impled!()
 }
 
+#[html_sql("mapper/category.html")]
+async fn select_enable_select(rb: &dyn Executor) -> Vec<PocCategory> {
+    impled!()
+}
+
 pub async fn add(
     category: PocCategory,
 ) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {

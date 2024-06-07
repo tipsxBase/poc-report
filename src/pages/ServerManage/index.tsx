@@ -24,10 +24,10 @@ import { useMemoizedFn, useMount } from "ahooks";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
 import { ServerEntity } from "@/service/server";
 import ListSearchLayout from "@/components/ListSearchLayout";
-import CategorySelect from "@/components/CategorySelect";
 import useServerStore from "@/stores/server";
 import ServerEditor, { ServerEditorInstance } from "./ServerEditor";
 import { listen } from "@tauri-apps/api/event";
+import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
 
 /**
  * 用例管理
@@ -267,7 +267,7 @@ const ServerManage = () => {
           }
         >
           <Form.Item label="归属项目" field="category_id">
-            <CategorySelect />
+            <CategorySelectIncludeBuiltIn />
           </Form.Item>
           <Form.Item label="用例名称" field="case_name">
             <Input placeholder="用例名称" />

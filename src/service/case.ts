@@ -13,6 +13,7 @@ export interface CaseEntity extends CommonEntity {
   case_id?: number;
   category_id?: string;
   category_name?: string;
+  category_type?: number;
   case_name?: string;
   case_content?: string;
 }
