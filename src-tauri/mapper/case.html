@@ -10,6 +10,9 @@
       <if test="key == 'category_name'">
         <continue />
       </if>
+      <if test="key == 'category_type'">
+        <continue />
+      </if>
       #{item}
     </foreach>
   </insert>

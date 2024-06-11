@@ -210,14 +210,14 @@ async fn server_init(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
     // });
 
     let _ = shell::download_and_upload_sftp(
-        "https://hexadb-fe.tos-cn-beijing.volces.com/hexadb-poc.jar",
+        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/hexadb-poc.jar",
         &sftp,
         "poc/hexadb-poc.jar",
     )
     .await;
 
     let _ = shell::download_and_upload_sftp(
-        "https://hexadb-fe.tos-cn-beijing.volces.com/jdk-17_linux-x64_bin.tar.gz",
+        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/jdk-17_linux-x64_bin.tar.gz",
         &sftp,
         "poc/jdk-17_linux-x64_bin.tar.gz",
     )

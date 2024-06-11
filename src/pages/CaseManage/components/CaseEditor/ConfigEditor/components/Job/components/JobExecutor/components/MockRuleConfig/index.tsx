@@ -243,6 +243,16 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
             if (needMeta(mockRule)) {
               items.push(
                 <Form.Item
+                  key="array"
+                  label="数组长度"
+                  tooltip="0表示是对象，大于0表示数组长度。默认是0"
+                  field={toFormPath(parentField, "array")}
+                >
+                  <InputNumber placeholder="请输入数组长度" />
+                </Form.Item>
+              );
+              items.push(
+                <Form.Item
                   key="meta"
                   label="JSON结构"
                   field={toFormPath(parentField, "meta")}

@@ -48,6 +48,7 @@ export enum MockRuleType {
   "json" = "JSON",
   "global" = "引用全局",
   "enums" = "枚举",
+  "bool" = "布尔",
 }
 
 export enum ProcessorType {
@@ -110,6 +111,10 @@ export const isJsonType = (type: string) => {
   return type === "global" || ["json"].includes(type);
 };
 
+export const isBoolType = (type: string) => {
+  return ["bool"].includes(type);
+};
+
 export const getValidateTypeFn = (type: string) => {
   switch (type) {
     case "string":
@@ -120,6 +125,8 @@ export const getValidateTypeFn = (type: string) => {
       return isDateType;
     case "json":
       return isJsonType;
+    case "bool":
+      return isBoolType;
     default: {
       return () => false;
     }
@@ -131,6 +138,7 @@ export enum SQLDataType {
   number = "数字",
   date = "日期",
   json = "JSON",
+  bool = "布尔",
 }
 
 export interface ResultDataDefine {

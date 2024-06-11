@@ -1,8 +1,11 @@
 import styles from "./index.module.less";
 import { Menu } from "@arco-design/web-react";
-import { IconHome, IconCalendar } from "@arco-design/web-react/icon";
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { FaServer } from "react-icons/fa";
+import { GrProjects } from "react-icons/gr";
+import { GrTest } from "react-icons/gr";
+import { TbFileTypeSql } from "react-icons/tb";
 
 const MenuItem = Menu.Item;
 
@@ -14,6 +17,7 @@ const routeMapping = {
   "/": "cases",
   "/business": "business",
   "/server": "server",
+  "/ddl": "ddl",
 };
 
 /**
@@ -33,20 +37,26 @@ const BaseMenu = (props: BaseMenuProps) => {
       <Menu collapse={collapse} selectedKeys={selectedKeys}>
         <Link to="/">
           <MenuItem key="cases">
-            <IconHome />
+            <GrTest className="arco-icon" />
             用例管理
           </MenuItem>
         </Link>
         <Link to="/business">
           <MenuItem key="business">
-            <IconCalendar />
+            <GrProjects className="arco-icon" />
             项目管理
           </MenuItem>
         </Link>
         <Link to="/server">
           <MenuItem key="server">
-            <IconCalendar />
+            <FaServer className="arco-icon" />
             服务管理
+          </MenuItem>
+        </Link>
+        <Link to="/ddl">
+          <MenuItem key="ddl">
+            <TbFileTypeSql className="arco-icon" />
+            DDL管理
           </MenuItem>
         </Link>
       </Menu>

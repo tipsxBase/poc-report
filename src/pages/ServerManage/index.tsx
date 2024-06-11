@@ -180,7 +180,7 @@ const ServerManage = () => {
         width: 120,
         render: (initial_state) => {
           if (initial_state === 0) {
-            return <Tag>示初始化</Tag>;
+            return <Tag>未初始化</Tag>;
           }
           if (initial_state === 1) {
             return <Tag color="arcoblue">已初始化</Tag>;
