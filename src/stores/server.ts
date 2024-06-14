@@ -8,6 +8,7 @@ import {
   deleteServer,
   initServer,
   insertServer,
+  queryAllServerList,
   queryServerList,
   updateCheckDefaultServer,
   updateServer,
@@ -24,6 +25,7 @@ interface ServerStore {
   updateServer: (params: ServerEntity) => Promise<unknown>;
   updateCheckDefaultServer: (serverId: number) => Promise<unknown>;
   initServer: (serverId: number) => Promise<unknown>;
+  fetchAllServerList: () => Promise<unknown>;
 }
 
 const useServerStore = create<ServerStore>((set, get) => ({
@@ -51,7 +53,9 @@ const useServerStore = create<ServerStore>((set, get) => ({
       };
     });
   },
-
+  fetchAllServerList: () => {
+    return queryAllServerList();
+  },
   onPaginationChange: (current: number, pageSize: number) => {
     set((state) => {
       return {

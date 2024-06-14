@@ -41,7 +41,11 @@ const ImportConfig = forwardRef<ImportConfigInstance, ImportConfigProps>(
         // 当文件读取完成时，更新图片的 src 属性
         const yamlDoc = e.target.result;
         const config = parseYmlToJson(yamlDoc as string);
-        setConfig(config);
+
+        setConfig({
+          case_name: file.name.split(".")[0],
+          case_content: config,
+        });
       };
 
       reader.readAsText(file.originFile);

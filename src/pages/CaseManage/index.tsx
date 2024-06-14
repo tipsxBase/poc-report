@@ -68,7 +68,6 @@ const CaseManage = () => {
 
   const doSearch = useMemoizedFn(() => {
     const values = form.getFieldsValue();
-    console.log(values);
     fetchCaseList(values);
   });
 
@@ -283,8 +282,10 @@ const CaseManage = () => {
 
   const doImport = useMemoizedFn(() => {
     const config = importConfigInstance.current.getRawValues();
+    const { case_name, case_content } = config;
     rawEntityRef.current = {
-      case_content: config,
+      case_name,
+      case_content,
     };
     setUploadCaseVisible(false);
     setAction("uploadCase");

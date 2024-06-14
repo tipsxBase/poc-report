@@ -40,6 +40,10 @@
     <if test="do_count == false"> ` limit ${page_no},${page_size}` </if>
   </select>
 
+  <select id="select_all">
+    select * from poc_server
+  </select>
+
   <select id="select_by_id">
     select * from poc_server where server_id = #{server_id}
   </select>

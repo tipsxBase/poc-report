@@ -38,6 +38,11 @@ export const queryServerList = async (params: ServerParams) => {
   return res;
 };
 
+export const queryAllServerList = async () => {
+  const res: PageResult<ServerEntity> = await invoke("query_all_server_list");
+  return res;
+};
+
 export const deleteServer = async (params: ServerEntity) => {
   return await invoke("delete_server", {
     server: params,

@@ -1,15 +1,17 @@
 import { useMemoizedFn } from "ahooks";
-import MockRuleConfig from "../..";
 import styles from "./index.module.less";
 import { IconPlus } from "@arco-design/web-react/icon";
 import { Button, Form } from "@arco-design/web-react";
-import { MockDataDefine } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
+import {
+  JsonElementDefine,
+  MockDataDefine,
+} from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 import { forwardRef, useImperativeHandle } from "react";
+import JsonElementConfig from "./JsonElementConfig";
 
 export type JsonConfigValue = { meta: MockDataDefine[] };
 
 export interface JsonConfigProps {
-  getRefGlobals: () => any[];
   initialValues: JsonConfigValue;
 }
 
@@ -21,20 +23,18 @@ export interface JsonConfigInstance {
  */
 const JsonConfig = forwardRef<JsonConfigInstance, JsonConfigProps>(
   (props, ref) => {
-    const { getRefGlobals, initialValues } = props;
+    const { initialValues } = props;
     const [form] = Form.useForm();
     const addMockRule = useMemoizedFn(() => {
-      let meta: MockDataDefine[] = form.getFieldValue("meta");
+      let meta: JsonElementDefine[] = form.getFieldValue("meta");
       if (!meta) {
         meta = [];
       }
 
-      const define: MockDataDefine = {
-        klass: "SqlDataDefine",
+      const define: JsonElementDefine = {
         key: undefined,
         type: undefined,
         mockRule: undefined,
-        nullPercent: 0,
       };
       meta.push(define);
       form.setFieldValue("meta", meta);
@@ -61,12 +61,14 @@ const JsonConfig = forwardRef<JsonConfigInstance, JsonConfigProps>(
                 <div className={styles.defineList}>
                   {fields.map((item, index) => {
                     return (
-                      <MockRuleConfig
-                        getRefGlobals={getRefGlobals}
-                        parentField={item.field}
-                        key={item.key}
-                        remove={() => remove(index)}
-                      />
+                      <>
+                        <JsonElementConfig
+                          parentField={item.field}
+                          key={item.key}
+                          remove={() => remove(index)}
+                        />
+                        <div className={styles.divider} />
+                      </>
                     );
                   })}
                 </div>

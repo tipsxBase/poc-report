@@ -68,9 +68,9 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
       }
 
       if (action === "uploadCase") {
-        const { case_content } = rawEntity;
+        const { case_content, case_name } = rawEntity;
         return {
-          formInitialValues: null,
+          formInitialValues: { case_name },
           initialCaseConfig: case_content,
         };
       }

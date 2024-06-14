@@ -29,6 +29,11 @@ async fn insert(rb: &dyn Executor, args: &PocServer) -> rbatis::rbdc::db::ExecRe
 htmlsql_select_page!(select_list(server: &PocServer) -> PocServer => "mapper/server.html");
 
 #[html_sql("mapper/server.html")]
+async fn select_all(rb: &dyn Executor) -> Vec<PocServer> {
+    impled!()
+}
+
+#[html_sql("mapper/server.html")]
 async fn update_by_id(rb: &dyn Executor, server: &PocServer) -> rbatis::rbdc::db::ExecResult {
     impled!()
 }
@@ -126,6 +131,25 @@ pub async fn query(case: PocServer, current: u64, size: u64) -> RResult<PageResu
         page_size: data.page_size,
     };
     Ok(page_result)
+}
+
+pub async fn query_all_servers() -> RResult<Vec<PocServer>> {
+    _ = fast_log::init(
+        fast_log::Config::new()
+            .console()
+            .level(log::LevelFilter::Debug),
+    );
+    defer!(|| {
+        log::logger().flush();
+    });
+
+    let rb = RBatis::new();
+
+    let driver_url = shared::sqlite::get_driver_url();
+    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
+        .unwrap();
+    let data = select_all(&rb).await?;
+    Ok(data)
 }
 
 pub async fn delete(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {

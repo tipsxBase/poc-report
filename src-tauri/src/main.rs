@@ -152,6 +152,12 @@ async fn query_server_list(
 }
 
 #[tauri::command]
+async fn query_all_server_list() -> RResult<Vec<PocServer>> {
+    let result = entities::server::query_all_servers().await;
+    result
+}
+
+#[tauri::command]
 async fn update_server(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
     let result = entities::server::update(server).await;
     result
@@ -321,6 +327,7 @@ fn main() {
             select_metric,
             select_statics,
             insert_server,
+            query_all_server_list,
             query_server_list,
             update_server,
             delete_server,

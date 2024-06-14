@@ -44,14 +44,13 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
           <Input />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true, message: "请输入字符名称" }]}
+          rules={[{ required: true, message: "请输入字段名称" }]}
           label="字段名称"
           field={toFormPath(parentField, "key")}
         >
           <Input placeholder="请输入规则Key" />
         </Form.Item>
         <Form.Item
-          // rules={[{ required: true, message: "请输入空值比例" }]}
           label="空值比例"
           field={toFormPath(parentField, "nullPercent")}
         >
@@ -257,7 +256,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                   label="JSON结构"
                   field={toFormPath(parentField, "meta")}
                 >
-                  <JsonStructure getRefGlobals={getRefGlobals} />
+                  <JsonStructure />
                 </Form.Item>
               );
             }

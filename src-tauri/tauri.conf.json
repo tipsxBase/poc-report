@@ -18,6 +18,17 @@
         "message": true,
         "open": true,
         "save": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
       }
     },
     "bundle": {
@@ -65,7 +76,8 @@
         "height": 720,
         "resizable": true,
         "title": "POC工具",
-        "width": 1440
+        "width": 1440,
+        "decorations": false
       }
     ]
   }

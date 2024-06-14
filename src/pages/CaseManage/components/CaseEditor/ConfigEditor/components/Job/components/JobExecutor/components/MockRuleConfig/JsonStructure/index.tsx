@@ -8,14 +8,13 @@ import { MockDataDefine } from "@/pages/CaseManage/components/CaseEditor/ConfigE
 export interface JsonStructureProps {
   value?: MockDataDefine[];
   onChange?: (value: MockDataDefine[]) => void;
-  getRefGlobals: () => any[];
 }
 
 /**
  * JSON配置
  */
 const JsonStructure = (props: JsonStructureProps) => {
-  const { getRefGlobals, value, onChange } = props;
+  const { value, onChange } = props;
   const [configVisible, setConfigVisible] = useState(false);
   const jsonConfigInstance = useRef<JsonConfigInstance>();
   const doConfig = useMemoizedFn(() => {
@@ -51,11 +50,7 @@ const JsonStructure = (props: JsonStructureProps) => {
         onOk={doConfirm}
         unmountOnExit
       >
-        <JsonConfig
-          initialValues={initialValues}
-          ref={jsonConfigInstance}
-          getRefGlobals={getRefGlobals}
-        />
+        <JsonConfig initialValues={initialValues} ref={jsonConfigInstance} />
       </Drawer>
     </div>
   );

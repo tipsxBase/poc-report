@@ -49,6 +49,7 @@ export enum MockRuleType {
   "global" = "引用全局",
   "enums" = "枚举",
   "bool" = "布尔",
+  "uuid" = "UUID",
 }
 
 export enum ProcessorType {
@@ -99,6 +100,7 @@ export const isStringType = (type: string) => {
       "phoneNumber",
       "randomString",
       "enums",
+      "uuid",
     ].includes(type)
   );
 };
@@ -115,6 +117,18 @@ export const isBoolType = (type: string) => {
   return ["bool"].includes(type);
 };
 
+export const isArrayType = () => {
+  return true;
+};
+
+export const isObjectType = (type: string) => {
+  return ["object"].includes(type);
+};
+
+export const isArrayObjectType = (type: string) => {
+  return ["arrayObject"].includes(type);
+};
+
 export const getValidateTypeFn = (type: string) => {
   switch (type) {
     case "string":
@@ -127,10 +141,20 @@ export const getValidateTypeFn = (type: string) => {
       return isJsonType;
     case "bool":
       return isBoolType;
+    case "arrayObject":
+      return isArrayObjectType;
+    case "array":
+      return isArrayType;
+    case "object":
+      return isObjectType;
     default: {
       return () => false;
     }
   }
+};
+
+export const needMockRule = (type: string) => {
+  return ["string", "number", "date", "bool", "array"].includes(type);
 };
 
 export enum SQLDataType {
@@ -167,6 +191,62 @@ export interface MockDataDefine {
   path?: string;
   nullPercent: number;
   klass: string;
+}
+
+export enum JsonElementType {
+  string = "字符串",
+  number = "数字",
+  date = "日期",
+  bool = "布尔",
+  object = "对象",
+  array = "数组",
+  arrayObject = "数组对象",
+}
+
+export enum JsonElementMockRuleType {
+  "title" = "中文标题",
+  "sentence" = "中文句子",
+  "decimalBetween" = "两个数之间的BigDecimal",
+  "doubleBetween" = "两个数之间的浮点数",
+  "dateBetween" = "日期",
+  "integerBetween" = "两个数之间的整数(Integer)",
+  "country" = "中文国家",
+  "province" = "中文省份",
+  "city" = "中文城市",
+  "county" = "中文区县",
+  "fullAddress" = "中文全地址",
+  "fakerExpression" = "Faker表达式",
+  "avatar" = "头像URL",
+  "faker" = "Faker方法",
+  "path" = "英文路径",
+  "password" = "密码",
+  "ipV4" = "IpV4",
+  "ipV6" = "IpV6",
+  "url" = "URL",
+  "email" = "邮箱",
+  "cellPhone" = "手机号",
+  "phoneNumber" = "电话号码",
+  "birthday" = "生日",
+  "longBetween" = "两个数之间的整数(Long)",
+  "gender" = "性别",
+  "randomLong" = "随机整数(Long)",
+  "zipCode" = "中文邮编",
+  "port" = "端口",
+  "randomString" = "字符串",
+  "bool" = "布尔",
+  "uuid" = "UUID",
+}
+
+export interface JsonElementDefine {
+  key: string;
+  type: JsonElementType;
+  mockRule: JsonElementMockRuleType;
+  arrayLength?: number;
+  min?: number;
+  max?: number;
+  fakerExpression?: string;
+  scale?: number;
+  path?: string;
 }
 
 export const needMinAndMax = (type: string) => {
@@ -261,3 +341,11 @@ export interface DataSource {
 export interface Basic {
   logPath: string;
 }
+
+export const jsonNeedArrayLength = (type: string) => {
+  return ["array", "arrayObject"].includes(type);
+};
+
+export const jsonNeedJson = (type: string) => {
+  return ["object", "arrayObject"].includes(type);
+};
