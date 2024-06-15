@@ -13,12 +13,7 @@ import {
   Tooltip,
 } from "@arco-design/web-react";
 import styles from "./index.module.less";
-import {
-  IconInfoCircleFill,
-  IconPlus,
-  IconRefresh,
-  IconSearch,
-} from "@arco-design/web-react/icon";
+import { IconPlus, IconRefresh, IconSearch } from "@arco-design/web-react/icon";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMemoizedFn, useMount } from "ahooks";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
@@ -27,7 +22,6 @@ import ListSearchLayout from "@/components/ListSearchLayout";
 import useServerStore from "@/stores/server";
 import ServerEditor, { ServerEditorInstance } from "./ServerEditor";
 import { listen } from "@tauri-apps/api/event";
-import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
 
 /**
  * 用例管理
@@ -47,7 +41,6 @@ const ServerManage = () => {
     resetPagination,
     insertServer,
     updateServer,
-    updateCheckDefaultServer,
     initServer,
   } = useServerStore();
 
@@ -85,7 +78,7 @@ const ServerManage = () => {
           clearAction();
         });
       } else {
-        res.server_id = rawEntityRef.current.category_id;
+        res.server_id = rawEntityRef.current.server_id;
         updateServer(res).then(() => {
           Message.success("修改成功");
           resetPagination();
@@ -109,13 +102,6 @@ const ServerManage = () => {
     doSearch();
   });
 
-  const updateCheckDefault = useMemoizedFn((entity: ServerEntity) => {
-    updateCheckDefaultServer(entity.server_id).then(() => {
-      Message.success("更新成功");
-      doSearch();
-    });
-  });
-
   const doServerInitial = useMemoizedFn((entity: ServerEntity) => {
     initServer(entity.server_id).then(() => {
       Message.success("初始化成功");
@@ -130,11 +116,7 @@ const ServerManage = () => {
         key: "__seriesNumber__",
         width: 80,
       },
-      {
-        dataIndex: "category_name",
-        title: "项目名称",
-        key: "category_name",
-      },
+
       {
         dataIndex: "server_name",
         title: "服务名称",
@@ -150,27 +132,6 @@ const ServerManage = () => {
               {item.host}:{item.port}
             </span>
           );
-        },
-      },
-      {
-        dataIndex: "is_default",
-        title: (
-          <span>
-            是否默认服务
-            <Tooltip content="用例执行时默认会使用此服务，只能指定一个默认服务">
-              <IconInfoCircleFill />
-            </Tooltip>
-          </span>
-        ),
-        width: 150,
-        key: "is_default",
-        render: (is_default) => {
-          if (is_default === 0) {
-            return <Tag>否</Tag>;
-          }
-          if (is_default === 1) {
-            return <Tag color="arcoblue">是</Tag>;
-          }
         },
       },
       {
@@ -202,7 +163,6 @@ const ServerManage = () => {
               <Tooltip content="初始化会在服务器上创建相应的服务并且上传测试Jar包、JDK。">
                 <Link onClick={() => doServerInitial(item)}>初始化</Link>
               </Tooltip>
-              <Link onClick={() => updateCheckDefault(item)}>设为默认服务</Link>
               <Popconfirm title="确认删除？" onOk={() => doDelete(item)}>
                 <Link>删除</Link>
               </Popconfirm>
@@ -211,7 +171,7 @@ const ServerManage = () => {
         },
       },
     ];
-  }, [doDelete, doServerInitial, onUpdate, updateCheckDefault]);
+  }, [doDelete, doServerInitial, onUpdate]);
 
   const onPaginationUpdate = useMemoizedFn(
     (pageNumber: number, pageSize: number) => {
@@ -266,9 +226,6 @@ const ServerManage = () => {
             </>
           }
         >
-          <Form.Item label="归属项目" field="category_id">
-            <CategorySelectIncludeBuiltIn />
-          </Form.Item>
           <Form.Item label="用例名称" field="case_name">
             <Input placeholder="用例名称" />
           </Form.Item>

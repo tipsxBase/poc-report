@@ -11,8 +11,6 @@ use super::shared_types::RResult;
 pub struct PocServer {
     pub server_id: Option<i64>,
     pub server_name: Option<String>,
-    pub category_id: Option<i64>,
-    pub category_name: Option<String>,
     pub host: Option<String>,
     pub port: Option<i32>,
     pub username: Option<String>,
@@ -91,8 +89,6 @@ pub async fn add(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
     let table: PocServer = PocServer {
         server_id: None,
         server_name: server.server_name,
-        category_id: server.category_id,
-        category_name: None,
         host: server.host,
         port: server.port,
         username: server.username,

@@ -25,7 +25,7 @@ import IconWindowClose from "@/assets/mdi_close.svg?react";
 import { appWindow } from "@tauri-apps/api/window";
 import EnvManage from "@/assets/EnvManage.svg?react";
 import useServerStore from "@/stores/server";
-import ServerManage from "@/pages/ServerManage";
+import EnvSettings from "@/pages/EnvSettings";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -41,6 +41,7 @@ const BaseLayout = () => {
   const { fetchAllServerList, updateCheckDefaultServer } = useServerStore();
   const [options, setOptions] = useState<SelectProps["options"]>();
   const [defaultServerId, setDefaultServerId] = useState();
+  const [envSetting, setEnvSetting] = useState(false);
   const toggleCollapse = useMemoizedFn(() => {
     setCollapse((c) => !c);
   });
@@ -50,7 +51,7 @@ const BaseLayout = () => {
       <div className={styles.selectDropdown}>
         {menu}
         <Divider className={styles.divider} />
-        <a className={styles.manageBtn}>
+        <a onClick={openEnvSettings} className={styles.manageBtn}>
           <IconSettings />
           <span>管理环境</span>
         </a>
@@ -103,6 +104,14 @@ const BaseLayout = () => {
     });
   });
 
+  const openEnvSettings = useMemoizedFn(() => {
+    setEnvSetting(true);
+  });
+
+  const closeEnvSettings = useMemoizedFn(() => {
+    setEnvSetting(false);
+  });
+
   return (
     <Layout className={styles.baseLayout} style={{ height: "100vh" }}>
       <Header data-tauri-drag-region className={styles.header}>
@@ -151,14 +160,21 @@ const BaseLayout = () => {
                 className={styles.envBtn}
                 size="small"
                 icon={<EnvManage />}
+                onClick={openEnvSettings}
               />
             </div>
           </div>
           <div className={styles.contentWrapper}>{outlet}</div>
         </Content>
       </Layout>
-      <Drawer title="环境管理" width="100%" visible>
-        <ServerManage />
+      <Drawer
+        visible={envSetting}
+        onCancel={closeEnvSettings}
+        title="环境管理"
+        width="100%"
+        unmountOnExit
+      >
+        <EnvSettings />
       </Drawer>
     </Layout>
   );

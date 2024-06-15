@@ -4,8 +4,6 @@ import { invoke } from "@tauri-apps/api/tauri";
 export interface ServerParams extends PaginationParam {
   server_id?: number;
   server_name?: string;
-  category_id?: number;
-  category_name?: string;
   host?: string;
   port?: number;
   username?: string;
@@ -16,8 +14,6 @@ export interface ServerParams extends PaginationParam {
 export interface ServerEntity extends CommonEntity {
   server_id?: number;
   server_name?: string;
-  category_id?: number;
-  category_name?: string;
   host?: string;
   port?: number;
   username?: string;
@@ -30,7 +26,6 @@ export const queryServerList = async (params: ServerParams) => {
   const res: PageResult<ServerEntity> = await invoke("query_server_list", {
     server: {
       server_name: params.server_name ?? null,
-      category_id: params.category_id ?? null,
     },
     current: params.current,
     size: params.pageSize,

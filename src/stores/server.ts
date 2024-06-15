@@ -25,7 +25,7 @@ interface ServerStore {
   updateServer: (params: ServerEntity) => Promise<unknown>;
   updateCheckDefaultServer: (serverId: number) => Promise<unknown>;
   initServer: (serverId: number) => Promise<unknown>;
-  fetchAllServerList: () => Promise<unknown>;
+  fetchAllServerList: () => Promise<ServerEntity[]>;
 }
 
 const useServerStore = create<ServerStore>((set, get) => ({
