@@ -34,7 +34,7 @@ export const queryServerList = async (params: ServerParams) => {
 };
 
 export const queryAllServerList = async () => {
-  const res: PageResult<ServerEntity> = await invoke("query_all_server_list");
+  const res: ServerEntity[] = await invoke("query_all_server_list");
   return res;
 };
 

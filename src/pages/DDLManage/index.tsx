@@ -5,7 +5,7 @@ export interface DDLManageProps {}
 /**
  *
  */
-const DDLManage = (props: DDLManageProps) => {
+const DDLManage = () => {
   return <div className={styles.ddlManage}>DdlManage</div>;
 };
 
