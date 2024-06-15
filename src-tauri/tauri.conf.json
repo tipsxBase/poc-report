@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "POC",
+    "productName": "POCMaster",
     "version": "0.1.0"
   },
   "tauri": {
