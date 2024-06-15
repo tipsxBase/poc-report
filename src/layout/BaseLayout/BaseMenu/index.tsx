@@ -2,7 +2,6 @@ import styles from "./index.module.less";
 import { Menu } from "@arco-design/web-react";
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaServer } from "react-icons/fa";
 import { GrProjects } from "react-icons/gr";
 import { GrTest } from "react-icons/gr";
 import { TbFileTypeSql } from "react-icons/tb";
@@ -16,7 +15,6 @@ export interface BaseMenuProps {
 const routeMapping = {
   "/": "cases",
   "/business": "business",
-  "/server": "server",
   "/ddl": "ddl",
 };
 
@@ -45,12 +43,6 @@ const BaseMenu = (props: BaseMenuProps) => {
           <MenuItem key="business">
             <GrProjects className="arco-icon" />
             项目管理
-          </MenuItem>
-        </Link>
-        <Link to="/server">
-          <MenuItem key="server">
-            <FaServer className="arco-icon" />
-            服务管理
           </MenuItem>
         </Link>
         <Link to="/ddl">

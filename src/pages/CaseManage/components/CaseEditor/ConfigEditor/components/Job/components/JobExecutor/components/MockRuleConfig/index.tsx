@@ -3,13 +3,13 @@ import {
   Form,
   Input,
   InputNumber,
-  InputTag,
   Select,
 } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { toFormPath } from "@/shared/path";
 import { enumToSelectOptions } from "@/shared/emum";
 import {
+  GlobalPreProcessor,
   MockRuleType,
   SQLDataType,
   getValidateTypeFn,
@@ -23,9 +23,10 @@ import {
   needScale,
 } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
 import get from "lodash/get";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { IconDelete } from "@arco-design/web-react/icon";
 import JsonStructure from "./JsonStructure";
+import { useConfig } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/ConfigContext";
 export interface MockRuleConfigProps {
   parentField: string;
   getRefGlobals: () => any[];
@@ -37,6 +38,25 @@ export interface MockRuleConfigProps {
  */
 const MockRuleConfig = (props: MockRuleConfigProps) => {
   const { parentField, getRefGlobals, remove } = props;
+  const { getConfig } = useConfig();
+
+  const globalEnumOptions = useMemo(() => {
+    const _globalPreProcessors: GlobalPreProcessor[] = getConfig(
+      "globalPreProcessors"
+    );
+    if (!_globalPreProcessors) {
+      return [];
+    }
+    return _globalPreProcessors
+      .filter((g) => g.klass === "PreEnumProcessor")
+      .map(({ id, name }) => {
+        return {
+          label: name,
+          value: id,
+        };
+      });
+  }, [getConfig]);
+
   return (
     <div className={styles.mockRuleConfig}>
       <div className={styles.formWrapper}>
@@ -232,9 +252,12 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                 <Form.Item
                   key="enums"
                   label="枚举值"
-                  field={toFormPath(parentField, "enums")}
+                  field={toFormPath(parentField, "ref")}
                 >
-                  <InputTag placeholder="请输入枚举值" />
+                  <Select
+                    options={globalEnumOptions}
+                    placeholder="请选择枚举"
+                  />
                 </Form.Item>
               );
             }

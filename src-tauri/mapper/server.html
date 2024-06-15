@@ -28,8 +28,8 @@
     </if>
 
     <where>
-      <if test="server.case_name != null && server.case_name != ''">
-        ` and ps.case_name like #{server.server_name}`
+      <if test="server.server_name != null && server.server_name != ''">
+        ` and ps.server_name like #{server.server_name}`
       </if>
     </where>
     <if test="do_count == false">

@@ -46,7 +46,6 @@ const ServerManage = () => {
 
   const doSearch = useMemoizedFn(() => {
     const values = form.getFieldsValue();
-
     fetchServerList(values);
   });
 
@@ -126,6 +125,7 @@ const ServerManage = () => {
         dataIndex: "server_address",
         title: "服务地址",
         key: "server_address",
+        width: 150,
         render: (_, item) => {
           return (
             <span>
@@ -153,7 +153,7 @@ const ServerManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 300,
+        width: 190,
         render: (_, item) => {
           return (
             <Space
@@ -226,8 +226,8 @@ const ServerManage = () => {
             </>
           }
         >
-          <Form.Item label="用例名称" field="case_name">
-            <Input placeholder="用例名称" />
+          <Form.Item label="服务名称" field="server_name">
+            <Input placeholder="服务名称" />
           </Form.Item>
         </ListSearchLayout>
       </Form>

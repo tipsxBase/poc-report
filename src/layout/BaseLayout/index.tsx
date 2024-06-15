@@ -170,9 +170,10 @@ const BaseLayout = () => {
       <Drawer
         visible={envSetting}
         onCancel={closeEnvSettings}
-        title="环境管理"
+        title="全局配置"
         width="100%"
         unmountOnExit
+        footer={null}
       >
         <EnvSettings />
       </Drawer>

@@ -62,12 +62,14 @@ const JobExecutor = (props: JobExecutorProps) => {
     if (!_globalPreProcessors) {
       return [];
     }
-    return _globalPreProcessors.map(({ id, name }) => {
-      return {
-        label: name,
-        value: id,
-      };
-    });
+    return _globalPreProcessors
+      .filter((g) => g.klass === "PreQueryExistDataProcessor")
+      .map(({ id, name }) => {
+        return {
+          label: name,
+          value: id,
+        };
+      });
   }, [getConfig]);
 
   const getRefGlobals = useMemoizedFn(() => {
