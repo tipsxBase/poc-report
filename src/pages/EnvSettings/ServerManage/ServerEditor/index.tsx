@@ -2,7 +2,6 @@ import { Form, Input, InputNumber } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { forwardRef, useImperativeHandle, useMemo } from "react";
 import { ServerEntity } from "@/service/server";
-import CategorySelect from "@/components/CategorySelect";
 
 export interface ServerEditorProps {
   action: "add" | "update";
@@ -46,18 +45,6 @@ const ServerEditor = forwardRef<ServerEditorInstance, ServerEditorProps>(
     return (
       <div className={styles.serverEditor}>
         <Form form={form} initialValues={initialValues}>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "请选择项目名称",
-              },
-            ]}
-            label="所属项目"
-            field="category_id"
-          >
-            <CategorySelect placeholder="请选择项目" />
-          </Form.Item>
           <Form.Item
             rules={[
               {

@@ -1,0 +1,47 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+  <insert id="insert">
+    `insert into poc_ddl (category_id, ddl_name, ddl_content) values `
+    <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
+      <if test="key == 'ddl_id'">
+        <continue />
+      </if>
+      <if test="key == 'category_name'">
+        <continue />
+      </if>
+      #{item}
+    </foreach>
+  </insert>
+
+  <select id="select_list">
+    `select`
+    <if test="do_count == true"> ` count(1) from poc_ddl pd` </if>
+    <if test="do_count == false">
+      ` pd.*, pc.category_name from poc_ddl pd`
+    </if>
+    ` left join poc_category pc on pd.category_id = pc.category_id`
+    <where>
+      <if test="ddl.ddl_name != null && ddl.ddl_name != ''">
+        ` and pd.ddl_name like #{ddl.ddl_name}`
+      </if>
+      <if test="ddl.category_id != null && ddl.category_id != ''">
+        ` and pd.category_id = #{ddl.category_id}`
+      </if>
+    </where>
+    <if test="do_count == false">
+      ` order by pd.updated_at ASC`
+    </if>
+    <if test="do_count == false"> ` limit ${page_no},${page_size}` </if>
+  </select>
+
+  <update id="update_by_id">
+    update poc_ddl set ddl_name = #{ddl.ddl_name}, category_id = #{ddl.category_id}, ddl_content =
+    #{ddl.ddl_content} where
+    ddl_id = #{ddl.ddl_id}
+  </update>
+
+  <delete id="delete_by_id">
+    delete from poc_ddl where ddl_id = #{ddl_id}
+  </delete>
+</mapper>

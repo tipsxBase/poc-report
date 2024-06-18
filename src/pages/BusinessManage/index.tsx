@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  Drawer,
   Form,
   Input,
   Link,
@@ -19,6 +18,7 @@ import { ColumnProps } from "@arco-design/web-react/es/Table";
 import useCategoryStore from "@/stores/category";
 import { CategoryEntity, updateCategory } from "@/service/category";
 import BusinessEditor, { BusinessEditorInstance } from "./BusinessEditor";
+import LuBanDrawer from "@/components/LuBanDrawer";
 
 /**
  *
@@ -202,7 +202,7 @@ const BusinessManage = () => {
           columns={columns}
         />
       </div>
-      <Drawer
+      <LuBanDrawer
         title={editorTitle}
         width={640}
         visible={!!action}
@@ -215,7 +215,7 @@ const BusinessManage = () => {
           action={action}
           rawEntity={rawEntityRef.current}
         />
-      </Drawer>
+      </LuBanDrawer>
     </div>
   );
 };

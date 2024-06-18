@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  Drawer,
   Form,
   Input,
   Link,
@@ -22,6 +21,7 @@ import ListSearchLayout from "@/components/ListSearchLayout";
 import useServerStore from "@/stores/server";
 import ServerEditor, { ServerEditorInstance } from "./ServerEditor";
 import { listen } from "@tauri-apps/api/event";
+import LuBanDrawer from "@/components/LuBanDrawer";
 
 /**
  * 用例管理
@@ -255,7 +255,7 @@ const ServerManage = () => {
           columns={columns}
         />
       </div>
-      <Drawer
+      <LuBanDrawer
         visible={!!action}
         title={editorTitle}
         onCancel={clearAction}
@@ -268,7 +268,7 @@ const ServerManage = () => {
           ref={serverEditorInstance}
           rawEntity={rawEntityRef.current}
         />
-      </Drawer>
+      </LuBanDrawer>
     </div>
   );
 };

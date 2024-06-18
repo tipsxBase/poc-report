@@ -1,7 +1,6 @@
 import {
   Button,
   Divider,
-  Drawer,
   Form,
   Input,
   Link,
@@ -35,6 +34,7 @@ import Statics from "./components/Statics";
 import ImportConfig, { ImportConfigInstance } from "./components/ImportConfig";
 import TableActionColumn from "@/components/TableActionColumn";
 import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
+import LuBanDrawer from "@/components/LuBanDrawer";
 
 /**
  * 用例管理
@@ -375,7 +375,7 @@ const CaseManage = () => {
           columns={columns}
         />
       </div>
-      <Drawer
+      <LuBanDrawer
         visible={!!action}
         title={editorTitle}
         onCancel={clearAction}
@@ -414,7 +414,7 @@ const CaseManage = () => {
         {action === "viewUploadResult" && (
           <Statics rawEntity={rawEntityRef.current} />
         )}
-      </Drawer>
+      </LuBanDrawer>
       <Modal
         title="导入用例"
         visible={uploadCaseVisible}

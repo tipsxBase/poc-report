@@ -7,6 +7,7 @@ import { Button } from "@arco-design/web-react";
 import { useMemoizedFn } from "ahooks";
 import { format } from "sql-formatter";
 export interface SqlEditorProps {
+  height?: string;
   value?: string;
   onChange?: (v: string) => void;
 }
@@ -15,7 +16,7 @@ export interface SqlEditorProps {
  *
  */
 const SqlEditor = (props: SqlEditorProps) => {
-  const { value, onChange } = props;
+  const { value, onChange, height = "200px" } = props;
 
   const formatSql = useMemoizedFn(() => {
     const formattedSql = format(value, {
@@ -35,7 +36,7 @@ const SqlEditor = (props: SqlEditorProps) => {
   });
 
   return (
-    <div className={styles.sqlEditor}>
+    <div className={styles.sqlEditor} style={{ height }}>
       <Button
         size="mini"
         onClick={formatSql}
@@ -44,7 +45,7 @@ const SqlEditor = (props: SqlEditorProps) => {
       />
       <CodeMirror
         value={value}
-        height="200px"
+        height={height}
         className={styles.sqlEditorCode}
         extensions={[sql()]}
         onChange={onChange}

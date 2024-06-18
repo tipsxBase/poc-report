@@ -3,6 +3,7 @@
 
 use entities::case::PocCase;
 use entities::category::PocCategory;
+use entities::ddl::PocDdl;
 use entities::metric::PocMetric;
 use entities::server::PocServer;
 use entities::shared_types::RResult;
@@ -206,14 +207,12 @@ async fn server_init(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
         sftp.mkdir(poc_cases, 0o755).expect("创建poc/poc-cases失败");
         println!("创建poc/poc-cases目录成功");
     }
-    // task::spawn_local(async {
-    //     shell::download_and_upload_sftp(
-    //         "https://hexadb-fe.tos-cn-beijing.volces.com/hexadb-poc.jar",
-    //         &sftp,
-    //         "poc/hexadb-poc.jar",
-    //     )
-    //     .await
-    // });
+
+    let poc_cases = Path::new("poc/ddl");
+    if shell::sftp_directory_is_exist(&sftp, &poc_cases) == false {
+        sftp.mkdir(poc_cases, 0o755).expect("创建poc/ddl失败");
+        println!("创建poc/ddl目录成功");
+    }
 
     let _ = shell::download_and_upload_sftp(
         "https://hexadb-fe.tos-cn-beijing.volces.com/poc/hexadb-poc.jar",
@@ -250,7 +249,7 @@ async fn run_case(case_content: String, case_name: String) -> i32 {
     )
     .expect("创建会话失败");
     let path = format!("poc/poc-cases/{}.yml", case_name);
-    shell::upload_case(&session, &path, &case_content)
+    shell::upload_content(&session, &path, &case_content)
     // TODO 目前还不支持获取执行的进度，先把这里注释掉
     // let command = format!(
     //     "nohup java -jar poc/hexadb-poc.jar -config {} > poc/logs/poc_log.log 2>&1 &",
@@ -285,6 +284,48 @@ fn download_image(
     }
     zip.finish().unwrap();
     "success"
+}
+
+#[tauri::command]
+async fn insert_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
+    let result = entities::ddl::add(ddl).await;
+    result
+}
+
+#[tauri::command]
+async fn query_ddl_list(ddl: PocDdl, current: u64, size: u64) -> RResult<PageResult<PocDdl>> {
+    let result = entities::ddl::query(ddl, current, size).await;
+    result
+}
+
+#[tauri::command]
+async fn update_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
+    let result = entities::ddl::update(ddl).await;
+    result
+}
+
+#[tauri::command]
+async fn delete_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
+    println!("{:?}", ddl);
+    let result = entities::ddl::delete(ddl).await;
+    result
+}
+
+#[tauri::command]
+async fn upload_ddl(ddl_content: String, ddl_name: String) -> i32 {
+    let server = entities::server::select_default_server().await;
+    if is_empty(&server) {
+        return -1;
+    }
+    let session = shell::create_session(
+        &server.host.unwrap(),
+        server.port.unwrap(),
+        &server.username.unwrap(),
+        &server.password.unwrap(),
+    )
+    .expect("创建会话失败");
+    let path = format!("poc/ddl/{}.sql", ddl_name);
+    shell::upload_content(&session, &path, &ddl_content)
 }
 
 fn main() {
@@ -334,7 +375,12 @@ fn main() {
             update_server_check_default,
             server_init,
             run_case,
-            download_image
+            download_image,
+            insert_ddl,
+            query_ddl_list,
+            update_ddl,
+            delete_ddl,
+            upload_ddl
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

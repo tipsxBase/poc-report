@@ -26,6 +26,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import EnvManage from "@/assets/EnvManage.svg?react";
 import useServerStore from "@/stores/server";
 import EnvSettings from "@/pages/EnvSettings";
+import classNames from "classnames";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -134,7 +135,7 @@ const BaseLayout = () => {
           </Space>
         </div>
       </Header>
-      <Layout className={styles.content}>
+      <Layout className={classNames("poc_master_wrapper", styles.content)}>
         <Sider className={styles.sider} collapsed={collapse}>
           <BaseMenu collapse={collapse} />
         </Sider>

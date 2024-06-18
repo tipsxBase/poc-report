@@ -1,9 +1,10 @@
-import { Button, Drawer } from "@arco-design/web-react";
+import { Button } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { useMemo, useRef, useState } from "react";
 import { useMemoizedFn } from "ahooks";
 import JsonConfig, { JsonConfigInstance } from "./JsonConfig";
 import { MockDataDefine } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/sharedType";
+import LuBanDrawer from "@/components/LuBanDrawer";
 
 export interface JsonStructureProps {
   value?: MockDataDefine[];
@@ -42,7 +43,7 @@ const JsonStructure = (props: JsonStructureProps) => {
   return (
     <div className={styles.jsonConfig}>
       <Button onClick={doConfig}>配置</Button>
-      <Drawer
+      <LuBanDrawer
         title="JSON配置"
         visible={configVisible}
         width={640}
@@ -51,7 +52,7 @@ const JsonStructure = (props: JsonStructureProps) => {
         unmountOnExit
       >
         <JsonConfig initialValues={initialValues} ref={jsonConfigInstance} />
-      </Drawer>
+      </LuBanDrawer>
     </div>
   );
 };

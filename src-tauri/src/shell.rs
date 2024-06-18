@@ -38,7 +38,7 @@ pub fn exec_command(session: &Session, command: &str) -> i32 {
     channel.exit_status().unwrap()
 }
 
-pub fn upload_case(session: &Session, path: &str, content: &str) -> i32 {
+pub fn upload_content(session: &Session, path: &str, content: &str) -> i32 {
     let u_bytes = content.as_bytes();
     let size = u_bytes.len() as u64;
     let mut remote_file = session

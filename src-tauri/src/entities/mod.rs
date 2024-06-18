@@ -2,6 +2,7 @@ use serde::Serialize;
 
 pub mod case;
 pub mod category;
+pub mod ddl;
 pub mod metric;
 pub mod server;
 pub mod shared_types;

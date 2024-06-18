@@ -61,8 +61,17 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
         } catch (error) {
           config = createInitialCase();
         }
+
+        const formInitialValues: any = {
+          case_name,
+        };
+
+        if (action === "update") {
+          formInitialValues.category_id = category_id;
+        }
+
         return {
-          formInitialValues: { case_name, category_id },
+          formInitialValues: formInitialValues,
           initialCaseConfig: config,
         };
       }
