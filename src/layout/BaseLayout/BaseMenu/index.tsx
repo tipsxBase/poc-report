@@ -48,7 +48,7 @@ const BaseMenu = (props: BaseMenuProps) => {
         <Link to="/ddl">
           <MenuItem key="ddl">
             <TbFileTypeSql className="arco-icon" />
-            DDL管理
+            脚本管理
           </MenuItem>
         </Link>
       </Menu>

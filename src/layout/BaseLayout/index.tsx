@@ -2,7 +2,6 @@ import { useOutlet } from "react-router";
 import styles from "./index.module.less";
 import {
   Button,
-  Divider,
   Layout,
   Modal,
   Select,
@@ -45,19 +44,6 @@ const BaseLayout = () => {
   const [envSetting, setEnvSetting] = useState(false);
   const toggleCollapse = useMemoizedFn(() => {
     setCollapse((c) => !c);
-  });
-
-  const dropdownRender = useMemoizedFn((menu: React.ReactNode) => {
-    return (
-      <div className={styles.selectDropdown}>
-        {menu}
-        <Divider className={styles.divider} />
-        <a onClick={openEnvSettings} className={styles.manageBtn}>
-          <IconSettings />
-          <span>管理环境</span>
-        </a>
-      </div>
-    );
   });
 
   useEffect(() => {
@@ -153,7 +139,6 @@ const BaseLayout = () => {
                 size="small"
                 style={{ width: 200 }}
                 placeholder="切换环境"
-                dropdownRender={dropdownRender}
                 options={options}
                 onChange={switchServer}
               />

@@ -191,7 +191,7 @@ const CaseManage = () => {
         dataIndex: "__seriesNumber__",
         title: "序号",
         key: "__seriesNumber__",
-        width: 100,
+        width: 80,
       },
       {
         dataIndex: "category_name",
@@ -349,7 +349,7 @@ const CaseManage = () => {
       <Divider type="horizontal" />
       <div>
         <Space>
-          <Button onClick={onAddCase} icon={<IconPlus />}>
+          <Button type="outline" onClick={onAddCase} icon={<IconPlus />}>
             新建用例
           </Button>
           <Button onClick={onUploadCase} icon={<IconUpload />}>
