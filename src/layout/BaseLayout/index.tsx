@@ -3,7 +3,6 @@ import styles from "./index.module.less";
 import {
   Button,
   Divider,
-  Drawer,
   Layout,
   Modal,
   Select,
@@ -27,6 +26,7 @@ import EnvManage from "@/assets/EnvManage.svg?react";
 import useServerStore from "@/stores/server";
 import EnvSettings from "@/pages/EnvSettings";
 import classNames from "classnames";
+import LuBanDrawer from "@/components/LuBanDrawer";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -168,7 +168,7 @@ const BaseLayout = () => {
           <div className={styles.contentWrapper}>{outlet}</div>
         </Content>
       </Layout>
-      <Drawer
+      <LuBanDrawer
         visible={envSetting}
         onCancel={closeEnvSettings}
         title="全局配置"
@@ -177,7 +177,7 @@ const BaseLayout = () => {
         footer={null}
       >
         <EnvSettings />
-      </Drawer>
+      </LuBanDrawer>
     </Layout>
   );
 };

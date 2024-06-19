@@ -47,7 +47,10 @@ const BusinessManage = () => {
     fetchDdlList(values);
   });
 
-  const onReset = useMemoizedFn(() => {});
+  const onReset = useMemoizedFn(() => {
+    form.resetFields();
+    doSearch();
+  });
 
   const onUpdate = useMemoizedFn((row: DdlEntity) => {
     setAction("update");
@@ -75,7 +78,6 @@ const BusinessManage = () => {
         res.ddl_id = rawEntityRef.current.ddl_id;
         updateDdl(res).then(() => {
           Message.success("修改成功");
-          resetPagination();
           doSearch();
           clearAction();
         });
@@ -128,7 +130,7 @@ const BusinessManage = () => {
       },
       {
         dataIndex: "ddl_name",
-        title: "DDL名称",
+        title: "脚本名称",
         key: "ddl_name",
       },
       {
@@ -175,9 +177,9 @@ const BusinessManage = () => {
 
   const editorTitle = useMemo(() => {
     if (action === "add") {
-      return "新建DDL";
+      return "新建脚本";
     } else if (action === "update") {
-      return "修改DDL";
+      return "修改脚本";
     }
     return "";
   }, [action]);
@@ -213,15 +215,15 @@ const BusinessManage = () => {
           <Form.Item label="归属项目" field="category_id">
             <CategorySelectIncludeBuiltIn />
           </Form.Item>
-          <Form.Item label="DDL名称" field="ddl_name">
-            <Input placeholder="DDL名称" />
+          <Form.Item label="脚本名称" field="ddl_name">
+            <Input placeholder="脚本名称" />
           </Form.Item>
         </ListSearchLayout>
       </Form>
       <Divider type="horizontal" />
       <div>
         <Button onClick={onAddDdl} icon={<IconPlus />} type="outline">
-          新建DDL
+          新建脚本
         </Button>
       </div>
       <div className={styles.table}>
@@ -244,7 +246,7 @@ const BusinessManage = () => {
       </div>
       <LuBanDrawer
         title={editorTitle}
-        width={640}
+        width={1200}
         visible={!!action}
         onCancel={clearAction}
         unmountOnExit

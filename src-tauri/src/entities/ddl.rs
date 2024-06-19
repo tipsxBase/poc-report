@@ -21,7 +21,7 @@ async fn insert(rb: &dyn Executor, args: &PocDdl) -> rbatis::rbdc::db::ExecResul
     impled!()
 }
 
-htmlsql_select_page!(select_list(case: &PocDdl) -> PocDdl => "mapper/ddl.html");
+htmlsql_select_page!(select_list(ddl: &PocDdl) -> PocDdl => "mapper/ddl.html");
 
 #[html_sql("mapper/ddl.html")]
 async fn update_by_id(rb: &dyn Executor, ddl: &PocDdl) -> rbatis::rbdc::db::ExecResult {

@@ -5,6 +5,7 @@ import {
   DrawerProps,
 } from "@arco-design/web-react";
 import { FC, useMemo } from "react";
+import styles from "./index.module.less";
 
 export interface LuBanDrawerProps extends DrawerProps {}
 
@@ -52,6 +53,8 @@ const LuBanDrawer: FC<LuBanDrawerProps> = (props) => {
       unmountOnExit
       maskClosable={false}
       escToExit={false}
+      wrapClassName={styles.luBanDrawer}
+      getPopupContainer={() => document.querySelector(".poc_master_wrapper")}
       {...restProps}
     />
   );

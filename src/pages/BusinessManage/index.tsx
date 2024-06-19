@@ -71,7 +71,6 @@ const BusinessManage = () => {
         res.category_id = rawEntityRef.current.category_id;
         updateCategory(res).then(() => {
           Message.success("修改成功");
-          resetPagination();
           doSearch();
           clearAction();
         });

@@ -80,7 +80,6 @@ const ServerManage = () => {
         res.server_id = rawEntityRef.current.server_id;
         updateServer(res).then(() => {
           Message.success("修改成功");
-          resetPagination();
           doSearch();
           clearAction();
         });

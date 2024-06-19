@@ -58,13 +58,13 @@ const DdlEditor = forwardRef<DdlEditorInstance, DdlEditorProps>(
                 message: "请输入DDL名称",
               },
             ]}
-            label="DDL名称"
+            label="脚本名称"
             field="ddl_name"
           >
             <Input placeholder="请输入DDL名称" />
           </Form.Item>
           <Form.Item label="DDL内容" field="ddl_content">
-            <SqlEditor height="300px" />
+            <SqlEditor height="calc(100vh - 300px)" />
           </Form.Item>
         </Form>
       </div>
