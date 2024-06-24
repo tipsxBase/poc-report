@@ -27,6 +27,7 @@ import { ReactNode, useMemo } from "react";
 import { IconDelete } from "@arco-design/web-react/icon";
 import JsonStructure from "./JsonStructure";
 import { useConfig } from "@/pages/CaseManage/components/CaseEditor/ConfigEditor/ConfigContext";
+import SwitchNumber from "@/components/SwitchNumber";
 export interface MockRuleConfigProps {
   parentField: string;
   getRefGlobals: () => any[];
@@ -270,7 +271,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                   tooltip="0表示是对象，大于0表示数组长度。默认是0"
                   field={toFormPath(parentField, "array")}
                 >
-                  <InputNumber placeholder="请输入数组长度" />
+                  <SwitchNumber />
                 </Form.Item>
               );
               items.push(

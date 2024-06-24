@@ -27,6 +27,8 @@ import EnvSettings from "@/pages/EnvSettings";
 import classNames from "classnames";
 import LuBanDrawer from "@/components/LuBanDrawer";
 import { PiBookBookmark } from "react-icons/pi";
+import ServerInitial from "@/assets/ServerInitial.svg?react";
+import ServerUninitial from "@/assets/ServerUninitial.svg?react";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -47,20 +49,38 @@ const BaseLayout = () => {
     setCollapse((c) => !c);
   });
 
-  useEffect(() => {
+  const fetchServer = useMemoizedFn(() => {
     fetchAllServerList().then((servers: any) => {
       const options = servers.map((server) => {
         if (server.is_default === 1) {
           setDefaultServerId(server.server_id);
         }
         return {
-          label: server.server_name,
+          label: (
+            <span className={styles.serverOption}>
+              {server.initial_state === 1 ? (
+                <ServerInitial
+                  className={classNames(styles.serverIcon, "arco-icon")}
+                />
+              ) : (
+                <ServerUninitial
+                  className={classNames(styles.serverIcon, "arco-icon")}
+                />
+              )}
+
+              {server.server_name}
+            </span>
+          ),
           value: server.server_id,
         };
       });
       setOptions(options);
     });
-  }, [fetchAllServerList]);
+  });
+
+  useEffect(() => {
+    fetchServer();
+  }, [fetchServer]);
 
   const windowMinimize = useMemoizedFn(() => {
     appWindow.minimize();
@@ -98,6 +118,9 @@ const BaseLayout = () => {
 
   const closeEnvSettings = useMemoizedFn(() => {
     setEnvSetting(false);
+  });
+  const afterClose = useMemoizedFn(() => {
+    fetchServer();
   });
 
   return (
@@ -162,6 +185,7 @@ const BaseLayout = () => {
         width="100%"
         unmountOnExit
         footer={null}
+        afterClose={afterClose}
       >
         <EnvSettings />
       </LuBanDrawer>

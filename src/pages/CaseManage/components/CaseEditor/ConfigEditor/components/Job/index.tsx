@@ -53,6 +53,41 @@ const JobConfig = forwardRef<JobConfigInstance, JobConfigProps>(
       form.setFieldValue("jobs", jobs);
     });
 
+    const moveUp = useMemoizedFn((id: string) => {
+      let jobs: Job[] = form.getFieldValue("jobs");
+      if (!jobs) {
+        return;
+      }
+      const position = jobs.findIndex((p) => p.id === id);
+      if (position <= 0) {
+        return;
+      }
+      const prevJob = jobs[position - 1];
+      const currentJob = jobs[position];
+      const prevJobs = jobs.slice(0, position - 1);
+      const nextJobs = jobs.slice(position + 1);
+      jobs = [...prevJobs, currentJob, prevJob, ...nextJobs];
+      form.setFieldValue("jobs", jobs);
+    });
+
+    const moveDown = useMemoizedFn((id: string) => {
+      let jobs: Job[] = form.getFieldValue("jobs");
+      if (!jobs) {
+        return;
+      }
+      const position = jobs.findIndex((p) => p.id === id);
+      if (position < 0 || position === jobs.length - 1) {
+        return;
+      }
+
+      const currentJob = jobs[position];
+      const nextJob = jobs[position + 1];
+      const prevJobs = jobs.slice(0, position);
+      const nextJobs = jobs.slice(position + 2);
+      jobs = [...prevJobs, nextJob, currentJob, ...nextJobs];
+      form.setFieldValue("jobs", jobs);
+    });
+
     useImperativeHandle(
       ref,
       () => {
@@ -88,6 +123,8 @@ const JobConfig = forwardRef<JobConfigInstance, JobConfigProps>(
                         form={form}
                         parentField={item.field}
                         removeJob={removeJob}
+                        moveDown={moveDown}
+                        moveUp={moveUp}
                         key={item.key}
                       />
                     );

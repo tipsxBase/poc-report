@@ -5,7 +5,11 @@ import GlobalPreProcessorConfig from "./components/GlobalPreProcessor";
 import { useMemoizedFn } from "ahooks";
 import { randomId } from "@/shared/randomId";
 import { forwardRef, useImperativeHandle } from "react";
-import { GlobalPreProcessor, SharedInstance } from "../../sharedType";
+import {
+  GlobalPreProcessor,
+  PreProcessorResultType,
+  SharedInstance,
+} from "../../sharedType";
 import get from "lodash/get";
 import set from "lodash/set";
 export interface GlobalConfigProps {
@@ -38,6 +42,7 @@ const GlobalConfig = forwardRef<GlobalConfigInstance, GlobalConfigProps>(
         name: "",
         id: randomId("g"),
         sql: "select",
+        resultType: PreProcessorResultType.LIST_MAP,
         dataDefineList: [],
       };
       globalPreProcessors.push(globalPreProcessor);

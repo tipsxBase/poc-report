@@ -171,11 +171,16 @@ export interface ResultDataDefine {
   type: ResultDataType;
 }
 
+export enum PreProcessorResultType {
+  LIST_MAP = "LIST_MAP",
+  LIST = "LIST",
+}
 export interface GlobalPreProcessor {
   name: string;
   id: string;
   klass: string;
   sql: string;
+  resultType: PreProcessorResultType;
   dataDefineList: ResultDataDefine[];
 }
 
@@ -313,6 +318,7 @@ export interface Tasklet {
 }
 
 export interface Job {
+  id: string;
   name: string;
   numOfThread: number;
   pauseTime: number;
