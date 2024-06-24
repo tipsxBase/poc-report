@@ -26,6 +26,7 @@ import useServerStore from "@/stores/server";
 import EnvSettings from "@/pages/EnvSettings";
 import classNames from "classnames";
 import LuBanDrawer from "@/components/LuBanDrawer";
+import { PiBookBookmark } from "react-icons/pi";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -104,6 +105,7 @@ const BaseLayout = () => {
       <Header data-tauri-drag-region className={styles.header}>
         <img className={styles.logo} src={logo} />
         <div className={styles.systemWrapper}>
+          <PiBookBookmark className={styles.windowIcon} />
           <IconSettings className={styles.windowIcon} />
           <Space>
             <IconWindowMinimize
