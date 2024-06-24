@@ -1,5 +1,6 @@
 import {
   Button,
+  DatePicker,
   Form,
   Input,
   InputNumber,
@@ -148,25 +149,55 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
             }
 
             if (needMinAndMax(mockRule)) {
-              items.push(
-                <Form.Item
-                  key="min"
-                  label="最小值"
-                  field={toFormPath(parentField, "min")}
-                >
-                  <Input placeholder="请输入最小值" />
-                </Form.Item>
-              );
+              if (mockRule === "dateBetween") {
+                items.push(
+                  <Form.Item
+                    key="min"
+                    label="起始时间"
+                    field={toFormPath(parentField, "min")}
+                  >
+                    <DatePicker
+                      showTime
+                      format="YYYY-MM-DD HH:mm:ss"
+                      placeholder="请选择起始时间"
+                    />
+                  </Form.Item>
+                );
 
-              items.push(
-                <Form.Item
-                  key="max"
-                  label="最大值"
-                  field={toFormPath(parentField, "max")}
-                >
-                  <Input placeholder="请输入最大值" />
-                </Form.Item>
-              );
+                items.push(
+                  <Form.Item
+                    key="max"
+                    label="结束时间"
+                    field={toFormPath(parentField, "max")}
+                  >
+                    <DatePicker
+                      showTime
+                      format="YYYY-MM-DD HH:mm:ss"
+                      placeholder="请选择结束时间"
+                    />
+                  </Form.Item>
+                );
+              } else {
+                items.push(
+                  <Form.Item
+                    key="min"
+                    label="最小值"
+                    field={toFormPath(parentField, "min")}
+                  >
+                    <Input placeholder="请输入最小值" />
+                  </Form.Item>
+                );
+
+                items.push(
+                  <Form.Item
+                    key="max"
+                    label="最大值"
+                    field={toFormPath(parentField, "max")}
+                  >
+                    <Input placeholder="请输入最大值" />
+                  </Form.Item>
+                );
+              }
             }
 
             if (needScale(mockRule)) {
