@@ -35,9 +35,7 @@ const JobExecutor = (props: JobExecutorProps) => {
   const { form, parentField, removeJob, moveDown, moveUp } = props;
 
   const { getConfig } = useConfig();
-  const id = useMemo(() => {
-    return form.getFieldValue(toFormPath(parentField, "id"));
-  }, [form, parentField]);
+  const id = form.getFieldValue(toFormPath(parentField, "id"));
 
   const addTasklet = useMemoizedFn(() => {
     const formField = toFormPath(parentField, "taskletQueue");
@@ -181,7 +179,12 @@ const JobExecutor = (props: JobExecutorProps) => {
             );
           }}
         </Form.List>
-        <Button onClick={addTasklet} type="outline" icon={<IconPlus />}>
+        <Button
+          onClick={addTasklet}
+          size="small"
+          type="outline"
+          icon={<IconPlus />}
+        >
           添加执行单元
         </Button>
       </Form.Item>

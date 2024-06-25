@@ -59,14 +59,21 @@ const MockDataLine = (props: MockDataLineProps) => {
                   getRefGlobals={getRefGlobals}
                   parentField={item.field}
                   key={item.key}
-                  remove={() => remove(index)}
+                  remove={() => {
+                    remove(index);
+                  }}
                 />
               );
             });
           }}
         </Form.List>
       </div>
-      <Button onClick={addMockRule} type="outline" icon={<IconPlus />}>
+      <Button
+        size="small"
+        onClick={addMockRule}
+        type="outline"
+        icon={<IconPlus />}
+      >
         添加规则
       </Button>
     </div>

@@ -33,10 +33,7 @@ const ProcessorConfig = (props: ProcessorConfigProps) => {
   });
   return (
     <div className={styles.processorConfig}>
-      <Form.List
-        rules={[{ required: true, message: "执行器不能为空" }]}
-        field={toFormPath(parentField, "processors")}
-      >
+      <Form.List field={toFormPath(parentField, "processors")}>
         {(fields, { remove }) => {
           return (
             <div className={styles.processorList}>
