@@ -44,6 +44,6 @@ fs.writeJSONSync(tauriJSONPath, tauriJSON, { spaces: 2 });
 // 提交到 develop
 await git.add(".").commit(`feat: ${nextVersion}`).push("origin", "develop");
 
-await git.checkout("main").merge("develop").push("origin", "main");
+await git.checkout("main").merge(["develop"]).push("origin", "main");
 
 await git.push("github", "main");
