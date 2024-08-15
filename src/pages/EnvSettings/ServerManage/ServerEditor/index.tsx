@@ -27,6 +27,7 @@ const ServerEditor = forwardRef<ServerEditorInstance, ServerEditorProps>(
       }
       return {
         port: 22,
+        working_directory: "poc",
       };
     }, [action, rawEntity]);
 
@@ -104,6 +105,19 @@ const ServerEditor = forwardRef<ServerEditorInstance, ServerEditorProps>(
             field="password"
           >
             <Input.Password placeholder="请输入密码" />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "请输入工作目录",
+              },
+            ]}
+            label="工作目录"
+            tooltip="工作目录会创建在当前用户的主目录下，不要使用 / 开头，比如当前用户的主目录是 /home/omm，而工作目录是poc，则在服务器上完整的工作目录是 /home/omm/poc"
+            field="working_directory"
+          >
+            <Input prefix="$HOME /" placeholder="请输入工作目录" />
           </Form.Item>
         </Form>
       </div>

@@ -1,7 +1,8 @@
 import { Divider, Link, Menu, Space, Trigger } from "@arco-design/web-react";
 import { IconMore } from "@arco-design/web-react/icon";
-import { Children, Fragment, ReactNode, useMemo } from "react";
+import { Children, Fragment, ReactNode, useMemo, useState } from "react";
 import styles from "./index.module.less";
+import { useMemoizedFn } from "ahooks";
 
 export interface TableActionColumnProps {
   maxDisplayAction?: number;
@@ -21,15 +22,23 @@ const TableActionColumn = (props: TableActionColumnProps) => {
   const { maxDisplayAction = 3, children, triggerClassName } = props;
   const renderChildren = Children.toArray(children);
   const actionCount = Children.count(renderChildren);
-
+  const [popupVisible, setPopupVisible] = useState(false);
   const hiddenChildren = renderChildren.splice(
     maxDisplayAction,
     actionCount - maxDisplayAction
   );
 
+  const onVisibleChange = useMemoizedFn((visible) => {
+    setPopupVisible(visible);
+  });
+
   const dropList = useMemo(() => {
     return (
-      <Menu selectable={false} className={styles.dropMenu}>
+      <Menu
+        selectable={false}
+        onClickMenuItem={() => onVisibleChange(false)}
+        className={styles.dropMenu}
+      >
         {Children.map(hiddenChildren, (child, index) => {
           if (index === 0) {
             return <Menu.Item key={`${index}`}>{child}</Menu.Item>;
@@ -66,6 +75,8 @@ const TableActionColumn = (props: TableActionColumnProps) => {
         trigger="click"
         showArrow
         updateOnScroll
+        onVisibleChange={onVisibleChange}
+        popupVisible={popupVisible}
         position="br"
         popupAlign={{
           bottom: 5,

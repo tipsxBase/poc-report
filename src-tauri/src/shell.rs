@@ -54,16 +54,7 @@ pub fn upload_content(session: &Session, path: &str, content: &str) -> i32 {
 }
 
 pub fn sftp_directory_is_exist(sftp: &Sftp, dirname: &Path) -> bool {
-    match sftp.opendir(dirname) {
-        Ok(_) => {
-            println!("{:?}存在", dirname);
-            true
-        }
-        Err(e) => {
-            eprintln!("{:?}", e);
-            false
-        }
-    }
+    sftp.stat(dirname).is_ok()
 }
 pub async fn download_and_upload_sftp(
     url: &str,

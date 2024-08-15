@@ -5,7 +5,7 @@ use entities::case::PocCase;
 use entities::category::PocCategory;
 use entities::ddl::PocDdl;
 use entities::metric::PocMetric;
-use entities::server::PocServer;
+use entities::server::{self, PocServer};
 use entities::shared_types::RResult;
 use entities::statics::PocServerStatics;
 use entities::PageResult;
@@ -189,58 +189,70 @@ async fn server_init(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
     .expect("创建会话失败");
 
     let sftp = session.sftp().expect("创建sftp失败");
-    let poc = Path::new("poc");
-    if shell::sftp_directory_is_exist(&sftp, &poc) == false {
-        sftp.mkdir(poc, 0o755).expect("创建poc失败");
-        println!("创建poc目录成功");
+
+    let working_directory = server.working_directory.unwrap_or(String::from("poc"));
+
+    let dirs: Vec<&str> = working_directory.split('/').collect();
+
+    let mut current_path = String::new();
+
+    for dir in dirs {
+        current_path = if current_path.is_empty() {
+            dir.to_string()
+        } else {
+            format!("{}/{}", current_path, dir)
+        };
+        let path = Path::new(&current_path);
+        if shell::sftp_directory_is_exist(&sftp, &path) == false {
+            sftp.mkdir(path, 0o755)
+                .expect(format!("创建{}失败", current_path).as_str());
+            println!("创建{}目录成功", current_path);
+        }
     }
 
-    let poc_logs = Path::new("poc/logs");
+    let paths_to_be_created = vec!["logs", "poc-cases", "ddl"];
 
-    if shell::sftp_directory_is_exist(&sftp, &poc_logs) == false {
-        sftp.mkdir(poc_logs, 0o755).expect("创建poc/logs失败");
-        println!("创建poc/logs目录成功");
+    for path in paths_to_be_created {
+        let poc_path_dir = format!("{}/{}", working_directory, path);
+        let poc_path = Path::new(&poc_path_dir);
+        if shell::sftp_directory_is_exist(&sftp, &poc_path) == false {
+            sftp.mkdir(poc_path, 0o755)
+                .expect(format!("创建{}失败", poc_path_dir).as_str());
+            println!("创建{}目录成功", poc_path_dir);
+        }
     }
-
-    let poc_cases = Path::new("poc/poc-cases");
-    if shell::sftp_directory_is_exist(&sftp, &poc_cases) == false {
-        sftp.mkdir(poc_cases, 0o755).expect("创建poc/poc-cases失败");
-        println!("创建poc/poc-cases目录成功");
-    }
-
-    let poc_cases = Path::new("poc/ddl");
-    if shell::sftp_directory_is_exist(&sftp, &poc_cases) == false {
-        sftp.mkdir(poc_cases, 0o755).expect("创建poc/ddl失败");
-        println!("创建poc/ddl目录成功");
-    }
-
+    let _ = entities::server::update_server_initial_state(server_id, 1).await;
     let _ = shell::download_and_upload_sftp(
         "https://hexadb-fe.tos-cn-beijing.volces.com/poc/hexadb-poc.jar",
         &sftp,
-        "poc/hexadb-poc.jar",
+        format!("{}/hexadb-poc.jar", &working_directory).as_str(),
     )
     .await;
 
     let _ = shell::download_and_upload_sftp(
         "https://hexadb-fe.tos-cn-beijing.volces.com/poc/jdk-17_linux-x64_bin.tar.gz",
         &sftp,
-        "poc/jdk-17_linux-x64_bin.tar.gz",
+        format!("{}/jdk-17_linux-x64_bin.tar.gz", &working_directory).as_str(),
     )
     .await;
     println!("初始化成功");
-    entities::server::update_server_initial_state(server_id, 1).await
+    entities::server::update_server_initial_state(server_id, 2).await
 }
 
 fn is_empty<T>(_: &T) -> bool {
     mem::size_of::<T>() == 0
 }
 
+/**
+ * 上传
+ */
 #[tauri::command]
 async fn run_case(case_content: String, case_name: String) -> i32 {
     let server = entities::server::select_default_server().await;
     if is_empty(&server) {
         return -1;
     }
+    let working_directory = server.working_directory.unwrap_or(String::from("poc"));
     let session = shell::create_session(
         &server.host.unwrap(),
         server.port.unwrap(),
@@ -248,7 +260,7 @@ async fn run_case(case_content: String, case_name: String) -> i32 {
         &server.password.unwrap(),
     )
     .expect("创建会话失败");
-    let path = format!("poc/poc-cases/{}.yml", case_name);
+    let path = format!("{}/poc-cases/{}.yml", working_directory, case_name);
     shell::upload_content(&session, &path, &case_content)
     // TODO 目前还不支持获取执行的进度，先把这里注释掉
     // let command = format!(
@@ -317,6 +329,9 @@ async fn upload_ddl(ddl_content: String, ddl_name: String) -> i32 {
     if is_empty(&server) {
         return -1;
     }
+
+    let working_directory = server.working_directory.unwrap_or(String::from("poc"));
+
     let session = shell::create_session(
         &server.host.unwrap(),
         server.port.unwrap(),
@@ -324,7 +339,7 @@ async fn upload_ddl(ddl_content: String, ddl_name: String) -> i32 {
         &server.password.unwrap(),
     )
     .expect("创建会话失败");
-    let path = format!("poc/ddl/{}.sql", ddl_name);
+    let path = format!("{}/ddl/{}.sql", working_directory, ddl_name);
     shell::upload_content(&session, &path, &ddl_content)
 }
 

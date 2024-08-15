@@ -143,7 +143,10 @@ const ServerManage = () => {
             return <Tag>未初始化</Tag>;
           }
           if (initial_state === 1) {
-            return <Tag color="arcoblue">已初始化</Tag>;
+            return <Tag color="arcoblue">初始化中</Tag>;
+          }
+          if (initial_state === 2) {
+            return <Tag color="green">已初始化</Tag>;
           }
         },
       },

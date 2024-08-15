@@ -13,8 +13,8 @@ export interface EnvSettingsProps {}
  *
  */
 const EnvSettings = () => {
-  const [selectedKeys, setSelectKeys] = useState<string[]>();
-  const [action, setAction] = useState<string>();
+  const [selectedKeys, setSelectKeys] = useState<string[]>(["server"]);
+  const [action, setAction] = useState<string>("server");
 
   const onSelectMenuItem = useMemoizedFn((menuKey: string) => {
     setSelectKeys([menuKey]);
