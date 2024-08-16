@@ -34,6 +34,8 @@ async function updater() {
     tag: "v0.2.2",
   });
 
+  console.log(latestRelease);
+
   // 需要生成的静态 json 文件数据，根据自己的需要进行调整
   const updateData = {
     version: "v0.2.2",
