@@ -9,6 +9,7 @@ use entities::server::{self, PocServer};
 use entities::shared_types::RResult;
 use entities::statics::PocServerStatics;
 use entities::PageResult;
+use rbatis::rbdc::Error;
 use refinery::Migration;
 use rusqlite::Connection;
 use serde_json::json;
@@ -247,10 +248,14 @@ fn is_empty<T>(_: &T) -> bool {
  * 上传
  */
 #[tauri::command]
-async fn run_case(case_content: String, case_name: String) -> i32 {
-    let server = entities::server::select_default_server().await;
+async fn run_case(case_content: String, case_name: String) -> Result<i32, Error> {
+    let server = match entities::server::select_default_server().await {
+        Ok(server) => server,
+        Err(_) => return Err(Error::E(String::from("server is empty"))),
+    };
+
     if is_empty(&server) {
-        return -1;
+        return Err(Error::E(String::from("server is empty")));
     }
     let working_directory = server.working_directory.unwrap_or(String::from("poc"));
     let session = shell::create_session(
@@ -261,7 +266,7 @@ async fn run_case(case_content: String, case_name: String) -> i32 {
     )
     .expect("创建会话失败");
     let path = format!("{}/poc-cases/{}.yml", working_directory, case_name);
-    shell::upload_content(&session, &path, &case_content)
+    Ok(shell::upload_content(&session, &path, &case_content))
     // TODO 目前还不支持获取执行的进度，先把这里注释掉
     // let command = format!(
     //     "nohup java -jar poc/hexadb-poc.jar -config {} > poc/logs/poc_log.log 2>&1 &",
@@ -324,10 +329,14 @@ async fn delete_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
 }
 
 #[tauri::command]
-async fn upload_ddl(ddl_content: String, ddl_name: String) -> i32 {
-    let server = entities::server::select_default_server().await;
+async fn upload_ddl(ddl_content: String, ddl_name: String) -> Result<i32, Error> {
+    let server = match entities::server::select_default_server().await {
+        Ok(server) => server,
+        Err(error) => return Err(error),
+    };
+
     if is_empty(&server) {
-        return -1;
+        return Err(Error::E(String::from("server is empty")));
     }
 
     let working_directory = server.working_directory.unwrap_or(String::from("poc"));
@@ -340,7 +349,7 @@ async fn upload_ddl(ddl_content: String, ddl_name: String) -> i32 {
     )
     .expect("创建会话失败");
     let path = format!("{}/ddl/{}.sql", working_directory, ddl_name);
-    shell::upload_content(&session, &path, &ddl_content)
+    Ok(shell::upload_content(&session, &path, &ddl_content))
 }
 
 fn main() {

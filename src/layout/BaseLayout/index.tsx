@@ -16,7 +16,9 @@ import {
 } from "@arco-design/web-react/icon";
 import { useEffect, useState } from "react";
 import { useMemoizedFn } from "ahooks";
+import icon from "@/assets/Icon.svg";
 import logo from "@/assets/logo.svg";
+
 import IconWindowMaximize from "@/assets/mdi_window-maximize.svg?react";
 import IconWindowMinimize from "@/assets/mdi_window-minimize.svg?react";
 import IconWindowClose from "@/assets/mdi_close.svg?react";
@@ -126,7 +128,10 @@ const BaseLayout = () => {
   return (
     <Layout className={styles.baseLayout} style={{ height: "100vh" }}>
       <Header data-tauri-drag-region className={styles.header}>
-        <img className={styles.logo} src={logo} />
+        <div className={styles.headerLogo}>
+          <img className={styles.logo} src={icon} />
+          <img className={styles.logo} src={logo} />
+        </div>
         <div className={styles.systemWrapper}>
           <PiBookBookmark className={styles.windowIcon} />
           <IconSettings className={styles.windowIcon} />

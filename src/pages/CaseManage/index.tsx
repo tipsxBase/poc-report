@@ -180,9 +180,13 @@ const CaseManage = () => {
   const doExecute = useMemoizedFn((row: CaseEntity) => {
     const case_json = JSON.parse(JSON.parse(row.case_content));
     const case_content = parseJsonToYml(case_json);
-    runCase(row.case_name, case_content).then(() => {
-      Message.success("上传成功。");
-    });
+    runCase(row.case_name, case_content)
+      .then(() => {
+        Message.success("上传成功。");
+      })
+      .catch(() => {
+        Message.warning("请先指定环境");
+      });
   });
 
   const columns = useMemo<ColumnProps[]>(() => {

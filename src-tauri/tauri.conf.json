@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "POCMaster",
-    "version": "v0.2.3"
+    "productName": "POCBench",
+    "version": "0.2.3"
   },
   "tauri": {
     "allowlist": {

@@ -4,6 +4,7 @@ import { simpleGit } from "simple-git";
 import fs from "fs-extra";
 import path from "path";
 import * as semver from "semver";
+import { getChangelogByVersion } from "./changelog.mjs";
 
 const git = simpleGit({
   baseDir: process.cwd(),
@@ -32,7 +33,7 @@ if (tags && tags.latest) {
   currentVersion = tags.latest;
 }
 
-const nextVersion = `v${semver.inc(currentVersion, "patch")}`;
+const nextVersion = `${semver.inc(currentVersion, "patch")}`;
 console.log(nextVersion);
 
 packageJSON.version = nextVersion;
@@ -41,9 +42,18 @@ tauriJSON.package.version = nextVersion;
 fs.writeJSONSync(packageJSONPath, packageJSON, { spaces: 2 });
 fs.writeJSONSync(tauriJSONPath, tauriJSON, { spaces: 2 });
 
+const nextTag = `v${nextVersion}`;
+
+const changelog = getChangelogByVersion(nextTag);
+const commit = `feat: ${nextTag}
+# ${changelog.title}
+${changelog.content}`;
+
 // 提交到 develop
-await git.add(".").commit(`feat: ${nextVersion}`).push("origin", "develop");
+await git.add(".").commit(commit).push("origin", "develop");
 
 await git.checkout("main").merge(["develop"]).push("origin", "main");
 
 await git.push("github", "main");
+
+await git.tag(nextTag).push("github", "main");

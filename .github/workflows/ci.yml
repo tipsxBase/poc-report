@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  release:
+  publish-release:
     permissions:
       contents: write
     strategy:
@@ -59,3 +59,29 @@ jobs:
           releaseBody: "See the assets to download and install this version."
           releaseDraft: true
           prerelease: false
+
+  updater:
+    runs-on: ubuntu-latest
+    needs: [publish-release]
+
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: 安装pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/checkout@v2
+      - run: pnpm i
+      - run: pnpm updater
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy install.json
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./updater
+          force_orphan: true

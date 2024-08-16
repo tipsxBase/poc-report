@@ -7,7 +7,7 @@ use crate::entities::PageResult;
 
 use super::shared_types::RResult;
 
-#[derive(serde::Serialize, serde::Deserialize, Clone)]
+#[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
 pub struct PocServer {
     pub server_id: Option<i64>,
     pub server_name: Option<String>,
@@ -232,7 +232,7 @@ pub async fn select_server_by_id(server_id: i64) -> PocServer {
     data
 }
 
-pub async fn select_default_server() -> PocServer {
+pub async fn select_default_server() -> RResult<PocServer> {
     _ = fast_log::init(
         fast_log::Config::new()
             .console()
@@ -248,7 +248,7 @@ pub async fn select_default_server() -> PocServer {
     rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
         .unwrap();
 
-    let data = select_default(&rb).await.unwrap();
+    let data = select_default(&rb).await;
     data
 }
 
