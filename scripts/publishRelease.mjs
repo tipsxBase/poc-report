@@ -46,7 +46,6 @@ const nextTag = `v${nextVersion}`;
 
 const changelog = getChangelogByVersion(nextTag);
 const commit = `feat: ${nextTag}
-# ${changelog.title}
 ${changelog.content}`;
 
 // 提交到 develop
