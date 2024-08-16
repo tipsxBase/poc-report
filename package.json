@@ -1,7 +1,7 @@
 {
   "name": "poc-report",
   "private": true,
-  "version": "0.2.3",
+  "version": "0.2.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -31,6 +31,8 @@
     "react-router": "^6.22.3",
     "react-router-dom": "^6.22.3",
     "rspress": "^1.24.0",
+    "semver": "^7.6.3",
+    "simple-git": "^3.25.0",
     "sql-bricks": "^3.0.1",
     "sql-bricks-sqlite": "^1.0.0",
     "sql-formatter": "^15.3.1",

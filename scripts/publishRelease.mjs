@@ -55,4 +55,4 @@ await git.checkout("main").merge(["develop"]).push("origin", "main");
 
 await git.push("github", "main");
 
-await git.tag(nextTag).push("github", "main");
+await git.tag([nextTag]).push("github", "main");
