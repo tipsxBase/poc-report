@@ -21,7 +21,7 @@ export function getChangelogByVersion(version) {
 
     return {
       title: title.replace("##", "").trim(),
-      content: content.split("\n"),
+      content: content,
     };
   }
 
