@@ -31,16 +31,14 @@ async function updater() {
   // 获取此 tag 的详细信息
   const { data: latestRelease } = await github.rest.repos.getReleaseByTag({
     ...options,
-    tag: "v0.2.2",
+    tag: tag.name,
   });
-
-  console.log("latestRelease", latestRelease);
 
   // 需要生成的静态 json 文件数据，根据自己的需要进行调整
   const updateData = {
-    version: "v0.2.2",
+    version: tag.name,
     // 使用 UPDATE_LOG.md，如果不需要版本更新日志，则将此字段置空
-    notes: getChangelogByVersion("v0.2.2").content,
+    notes: getChangelogByVersion(tag.name).content,
     pub_date: new Date().toISOString(),
     platforms: {
       win64: { signature: "", url: "" }, // compatible with older formats
