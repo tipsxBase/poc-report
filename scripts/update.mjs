@@ -60,7 +60,7 @@ async function updater() {
       console.log("before getSignature");
       sig = await getSignature(asset.browser_download_url);
       console.log("after getSignature", sig);
-      getSignatureTest(asset.browser_download_url);
+      // getSignatureTest(asset.browser_download_url);
     }
     platforms.forEach((platform) => {
       console.log(asset.name, platform, reg.test(asset.name));
@@ -120,17 +120,17 @@ async function getSignature(url) {
     return "";
   }
 }
-async function getSignatureTest(url) {
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-    });
-    const text = await response.text();
-    const blob = await response.blob();
-    console.log("text", text);
-    console.log("blob", blob);
-  } catch (err) {
-    console.log("err", err);
-    return "";
-  }
-}
+// async function getSignatureTest(url) {
+//   try {
+//     const response = await fetch(url, {
+//       method: "GET",
+//     });
+//     const text = await response.text();
+//     const blob = await response.blob();
+//     console.log("text", text);
+//     console.log("blob", blob);
+//   } catch (err) {
+//     console.log("err", err);
+//     return "";
+//   }
+// }
