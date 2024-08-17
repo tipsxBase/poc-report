@@ -54,7 +54,7 @@ async function updater() {
   };
 
   const setAsset = async (asset, reg, platforms) => {
-    console.log("asset", asset, platforms);
+    console.log("asset", asset.name, platforms);
     let sig = "";
     if (/.sig$/.test(asset.name)) {
       console.log("before getSignature");
@@ -115,7 +115,8 @@ async function getSignature(url) {
       headers: { "Content-Type": "application/octet-stream" },
     });
     return response.text();
-  } catch (_) {
+  } catch (err) {
+    console.log("err", err);
     return "";
   }
 }
@@ -128,7 +129,8 @@ async function getSignatureTest(url) {
     const blob = await response.blob();
     console.log("text", text);
     console.log("blob", blob);
-  } catch (_) {
+  } catch (err) {
+    console.log("err", err);
     return "";
   }
 }
