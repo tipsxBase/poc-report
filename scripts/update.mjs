@@ -24,9 +24,13 @@ async function updater() {
   });
 
   // 过滤包含 `v` 版本信息的 tag
-  const tag = tags.find((t) => t.name.startsWith("v"));
+  // const tag = tags.find((t) => t.name.startsWith("v"));
 
-  if (!tag) return;
+  // if (!tag) return;
+
+  const tag = {
+    name: "v0.2.13",
+  };
 
   // 获取此 tag 的详细信息
   const { data: latestRelease } = await github.rest.repos.getReleaseByTag({
@@ -50,9 +54,12 @@ async function updater() {
   };
 
   const setAsset = async (asset, reg, platforms) => {
+    console.log("asset", asset, platforms);
     let sig = "";
     if (/.sig$/.test(asset.name)) {
+      console.log("before getSignature");
       sig = await getSignature(asset.browser_download_url);
+      console.log("after getSignature", sig);
       getSignatureTest(asset.browser_download_url);
     }
     platforms.forEach((platform) => {
@@ -73,6 +80,7 @@ async function updater() {
 
   const promises = latestRelease.assets.map(async (asset) => {
     // windows
+
     await setAsset(asset, /.msi.zip/, ["win64", "windows-x86_64"]);
 
     // darwin
@@ -101,6 +109,7 @@ updater().catch(console.error);
 // 获取签名内容
 async function getSignature(url) {
   try {
+    console.log("getSignature", url);
     const response = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/octet-stream" },
