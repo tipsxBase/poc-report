@@ -85,7 +85,7 @@ async function updater() {
 
   const signatureAsset = latestRelease.assets.find((e) => /.sig$/.test(e.name));
 
-  console.log(signatureAsset);
+  console.log("signatureAsset", signatureAsset);
 
   const signatureAssetResponse = await github.request(
     "GET /repos/{owner}/{repo}/releases/assets/{asset_id}",
@@ -99,11 +99,11 @@ async function updater() {
     }
   );
 
-  console.log(signatureAssetResponse);
+  console.log("signatureAssetResponse", signatureAssetResponse);
   if (signatureAssetResponse) {
     console.log(
       "signatureAssetData",
-      JSON.parse(Buffer.from(signatureAssetResponse.data).toString())
+      Buffer.from(signatureAssetResponse.data).toString()
     );
   }
 
