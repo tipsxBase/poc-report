@@ -87,7 +87,7 @@ async function updater() {
 
   console.log(signatureAsset);
 
-  const signatureAssetData = await github.request(
+  const signatureAssetResponse = await github.request(
     "GET /repos/{owner}/{repo}/releases/assets/{asset_id}",
     {
       owner: context.repo.owner,
@@ -97,12 +97,15 @@ async function updater() {
         accept: "application/octet-stream",
       },
     }
-  ).data;
-
-  console.log(
-    "signatureAssetData",
-    JSON.parse(Buffer.from(signatureAssetData).toString())
   );
+
+  console.log(signatureAssetResponse);
+  if (signatureAssetResponse) {
+    console.log(
+      "signatureAssetData",
+      JSON.parse(Buffer.from(signatureAssetResponse.data).toString())
+    );
+  }
 
   const asset = latestRelease.assets.find((e) => e.name === versionFilename);
 
