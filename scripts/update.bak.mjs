@@ -23,6 +23,10 @@ async function updater() {
     page: 1,
   });
 
+  github.request({
+    method: "get",
+  });
+
   // 过滤包含 `v` 版本信息的 tag
   // const tag = tags.find((t) => t.name.startsWith("v"));
 
