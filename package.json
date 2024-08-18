@@ -1,7 +1,7 @@
 {
   "name": "poc-report",
   "private": true,
-  "version": "0.2.18",
+  "version": "0.2.19",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "release": "node ./scripts/publishRelease.mjs",
-    "updater": "node ./scripts/update.mjs"
+    "updater": "node ./scripts/updater.mjs"
   },
   "dependencies": {
     "@actions/github": "^6.0.0",
@@ -26,7 +26,6 @@
     "icon": "link:@arco-design/web-react/icon",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
