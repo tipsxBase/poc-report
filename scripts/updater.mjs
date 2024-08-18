@@ -110,16 +110,18 @@ async function updater() {
   const asset = latestRelease.assets.find((e) => e.name === versionFilename);
 
   console.log("asset", asset);
-  const assetData = await github.request(
-    "GET /repos/{owner}/{repo}/releases/assets/{asset_id}",
-    {
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      asset_id: asset.id,
-      headers: {
-        accept: "application/octet-stream",
-      },
-    }
+  const assetData = (
+    await github.request(
+      "GET /repos/{owner}/{repo}/releases/assets/{asset_id}",
+      {
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        asset_id: asset.id,
+        headers: {
+          accept: "application/octet-stream",
+        },
+      }
+    )
   ).data;
 
   console.log(versionFilename, JSON.parse(Buffer.from(assetData).toString()));
