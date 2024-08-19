@@ -7,18 +7,7 @@
   },
   "package": {
     "productName": "POCBench",
-    "version": {
-      "options": {},
-      "loose": false,
-      "includePrerelease": false,
-      "raw": "v0.2.10",
-      "major": 0,
-      "minor": 2,
-      "patch": 10,
-      "prerelease": [],
-      "build": [],
-      "version": "0.2.10"
-    }
+    "version": "0.2.10"
   },
   "tauri": {
     "allowlist": {

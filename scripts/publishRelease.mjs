@@ -32,7 +32,7 @@ const argv = minimist(process.argv.slice(2));
 let currentVersion = tauriJSON.package.version;
 let nextVersion = `${semver.inc(currentVersion, "patch")}`;
 if (argv && argv.tag) {
-  nextVersion = semver.parse(argv.tag);
+  nextVersion = semver.parse(argv.tag).version;
 } else {
   const tags = await git.tags();
 
