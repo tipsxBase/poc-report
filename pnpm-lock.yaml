@@ -44,6 +44,9 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  minimist:
+    specifier: ^1.2.8
+    version: 1.2.8
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -4524,6 +4527,10 @@ packages:
     dependencies:
       brace-expansion: 2.0.1
     dev: true
+
+  /minimist@1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+    dev: false
 
   /moo@0.5.2:
     resolution: {integrity: sha512-iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==}

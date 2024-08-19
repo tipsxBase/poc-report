@@ -41,3 +41,10 @@ git push github main
 git tag v0.1
 git push github v0.1
 ```
+
+3. 使用命令
+   不指定参数时，会获取最新 tag
+
+```
+npm run release -- --tag=v0.3.0
+```

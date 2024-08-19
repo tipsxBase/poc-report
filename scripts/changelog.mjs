@@ -24,9 +24,4 @@ export function getChangelogByVersion(version) {
       content: content,
     };
   }
-
-  return {
-    title: "",
-    context: "",
-  };
 }
