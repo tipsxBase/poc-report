@@ -52,7 +52,7 @@ const ProcessorConfig = (props: ProcessorConfigProps) => {
       </Form.List>
       <Button
         onClick={addProcessor}
-        type="outline"
+        type="primary"
         icon={<IconPlus />}
         size="small"
       >

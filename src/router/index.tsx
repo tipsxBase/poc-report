@@ -3,6 +3,7 @@ import BaseLayout from "../layout/BaseLayout";
 import CaseManage from "@/pages/CaseManage";
 import BusinessManage from "@/pages/BusinessManage";
 import DDLManage from "@/pages/DDLManage";
+import ResourceManage from "@/pages/ResourceManage";
 
 const routes: RouteObject[] = [
   {
@@ -20,6 +21,10 @@ const routes: RouteObject[] = [
       {
         path: "/ddl",
         element: <DDLManage />,
+      },
+      {
+        path: "/resource",
+        element: <ResourceManage />,
       },
     ],
   },

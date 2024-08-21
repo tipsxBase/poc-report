@@ -53,7 +53,7 @@ export enum MockRuleType {
 }
 
 export enum ProcessorType {
-  PocMultiSqlExecuteProcessor = "批量插入执行器",
+  PocMultiSqlExecuteProcessor = "更新执行器（新增、修改、删除、DDL）",
   PocSqlQueryExecuteProcessor = "查询执行器",
   PocCopyInsertProcessor = "Copy插入执行器",
 }

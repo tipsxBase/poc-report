@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="36.560001"
+   version="1.1"
+   width="171.47"
+   viewBox="0 0 171.47 36.560001"
+   id="svg10"
+   sodipodi:docname="Bench.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6"
+     inkscape:cx="85.5"
+     inkscape:cy="18.5"
+     inkscape:window-width="1800"
+     inkscape:window-height="1012"
+     inkscape:window-x="0"
+     inkscape:window-y="142"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient876">
+      <stop
+         style="stop-color:#fffffc;stop-opacity:1;"
+         offset="0"
+         id="stop872" />
+      <stop
+         style="stop-color:#2e32ff;stop-opacity:0.99435025;"
+         offset="0.5"
+         id="stop880" />
+      <stop
+         style="stop-color:#fff251;stop-opacity:1;"
+         offset="1"
+         id="stop874" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient876"
+       id="linearGradient878"
+       x1="-0.0027504"
+       y1="18.279999"
+       x2="171.46725"
+       y2="18.279999"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     id="g8"
+     transform="translate(0.00275035)"
+     style="fill-opacity:1;fill:url(#linearGradient878)">
+    <g
+       id="g6"
+       style="fill-opacity:1;fill:url(#linearGradient878)">
+      <path
+         d="m 3.45,0 h 14.63 c 10.91,0 13.96,-4.27 13.96,-9.9 0,-5.18 -4.82,-8.07 -10.61,-8.33 v -0.25 c 4.41,-0.51 7.46,-3.2 7.46,-7.97 0,-4.98 -2.28,-9.09 -12.18,-9.09 H 3.45 Z m 6.86,-20.77 v -9.39 h 5.63 c 4.52,0 6.45,1.37 6.45,4.47 0,3.65 -2.84,4.92 -6.7,4.92 z m 0,15.34 v -10.16 h 6.04 c 5.03,0 8.43,1.78 8.43,5.33 0,3.56 -2.59,4.83 -8.33,4.83 z M 91.04,0 h 6.7 v -35.54 h -6.55 v 24.47 H 90.94 L 73.78,-35.54 H 35.85 v 6.65 H 71.29 Z M 68.65,0 h 6.65 v -15.28 l -6.65,-9.5 z m -6.5,-14.62 v -6.3 h -26.3 v 6.3 z M 35.85,0 h 26.3 v -6.7 h -26.3 z m 85.4,0.51 c 10.11,0 15.59,-5.94 16.76,-13.31 h -6.96 c -1.17,4.42 -4.77,7.32 -10,7.32 -6.96,0 -11.37,-6.15 -11.37,-12.8 0,-7.01 4.92,-11.73 11.27,-11.73 6.04,0 9.19,3.4 10.2,7.62 h 6.86 c -1.02,-8.74 -7.87,-13.66 -17.52,-13.66 -10.81,0 -17.52,8.17 -17.52,18.28 0,10.05 6.15,18.28 18.28,18.28 z m 31.74,-15.84 h 15.08 V 0 h 6.85 v -35.54 h -6.85 v 13.71 H 152.99 Z M 142.98,0 h 6.86 v -35.54 h -6.86 z"
+         transform="translate(-3.4527504,36.049999)"
+         id="path4"
+         style="fill-opacity:1;fill:url(#linearGradient878)" />
+    </g>
+  </g>
+</svg>

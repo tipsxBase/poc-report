@@ -108,7 +108,7 @@ const JobConfig = forwardRef<JobConfigInstance, JobConfigProps>(
     return (
       <div className={styles.job}>
         <div className={styles.actionWrapper}>
-          <Button onClick={doAddJob} type="outline" icon={<IconPlus />}>
+          <Button onClick={doAddJob} type="primary" icon={<IconPlus />}>
             添加执行Job
           </Button>
         </div>

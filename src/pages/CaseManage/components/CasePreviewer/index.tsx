@@ -13,7 +13,7 @@ export interface CasePreviewerProps {
 const CasePreviewer = (props: CasePreviewerProps) => {
   const { config } = props;
 
-  const { case_name, category_name, case_content } = config;
+  const { case_name, category_name, case_content, case_description } = config;
 
   const initialValues = JSON.parse(JSON.parse(case_content));
 
@@ -30,11 +30,17 @@ const CasePreviewer = (props: CasePreviewerProps) => {
       value: category_name,
       span: 12,
     },
+    {
+      key: "case_description",
+      label: "项目名称",
+      value: case_description,
+      span: 24,
+    },
   ];
 
   return (
     <div className={styles.casePreviewer}>
-      <GridDescriptions showDivider data={data} />
+      <GridDescriptions labelWidth={100} showDivider data={data} />
       <ConfigPreview initialValues={initialValues} />
     </div>
   );

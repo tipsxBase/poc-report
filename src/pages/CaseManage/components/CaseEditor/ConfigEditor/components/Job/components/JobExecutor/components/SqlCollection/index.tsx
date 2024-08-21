@@ -55,7 +55,7 @@ const SqlCollection = (props: SqlCollectionProps) => {
             </div>
           ))}
       </div>
-      <Button onClick={onAdd} icon={<IconPlus />} type="outline">
+      <Button onClick={onAdd} icon={<IconPlus />} type="primary">
         添加SQL
       </Button>
     </div>

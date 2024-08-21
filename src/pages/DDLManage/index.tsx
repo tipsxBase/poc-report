@@ -21,7 +21,7 @@ import DdlEditor, { DdlEditorInstance } from "./DdlEditor";
 import LuBanDrawer from "@/components/LuBanDrawer";
 import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
 import { dialog, invoke } from "@tauri-apps/api";
-
+import { isBuildInCategory } from "@/shared/isBuildInCategory";
 /**
  *
  */
@@ -137,18 +137,20 @@ const BusinessManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 270,
+        width: 280,
         render: (_, item) => {
           return (
             <Space>
               <Link
-                disabled={item.ddl_type === 1}
+                disabled={isBuildInCategory(item.category_type)}
                 onClick={() => onUpdate(item)}
               >
                 修改
               </Link>
               <Popconfirm title="确认删除？" onOk={() => doDelete(item)}>
-                <Link disabled={item.ddl_type === 1}>删除</Link>
+                <Link disabled={isBuildInCategory(item.category_type)}>
+                  删除
+                </Link>
               </Popconfirm>
               <Link onClick={() => onUpload(item)}>上传至当前环境</Link>
               <Link onClick={() => onDownload(item)}>下载</Link>
@@ -203,7 +205,7 @@ const BusinessManage = () => {
           }}
           submitButton={
             <>
-              <Button htmlType="submit" type="outline" icon={<IconSearch />}>
+              <Button htmlType="submit" type="primary" icon={<IconSearch />}>
                 搜 索
               </Button>
               <Button type="secondary" onClick={onReset} icon={<IconRefresh />}>
@@ -222,7 +224,7 @@ const BusinessManage = () => {
       </Form>
       <Divider type="horizontal" />
       <div>
-        <Button onClick={onAddDdl} icon={<IconPlus />} type="outline">
+        <Button onClick={onAddDdl} icon={<IconPlus />} type="primary">
           新建脚本
         </Button>
       </div>

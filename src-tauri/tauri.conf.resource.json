@@ -1,0 +1,105 @@
+{
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:9000",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "POCBench",
+    "version": "0.2.11"
+  },
+  "tauri": {
+    "allowlist": {
+      "dialog": {
+        "all": true,
+        "ask": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["http://**", "https://**"]
+      },
+      "fs": {
+        "all": true,
+        "scope": ["$RESOURCE/*", "$RESOURCE/resources/*"]
+      },
+      "path": {
+        "all": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.poc-report.dev",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": ["resources/*"],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": true,
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlFNEM0MTczQTFBQzc0QzYKUldUR2RLeWhjMEZNbm1FL2U4QnMzQUI3cTh6NUpkTjRwV2pTY2hmTUk0SGIwR1lkck1MNGdOcEUK",
+      "endpoints": [
+        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/updater/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive",
+        "installerArgs": []
+      }
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 720,
+        "resizable": true,
+        "title": "POC工具",
+        "width": 1440,
+        "decorations": false
+      }
+    ]
+  }
+}

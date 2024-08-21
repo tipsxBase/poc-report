@@ -71,7 +71,7 @@ const MockDataLine = (props: MockDataLineProps) => {
       <Button
         size="small"
         onClick={addMockRule}
-        type="outline"
+        type="primary"
         icon={<IconPlus />}
       >
         添加规则

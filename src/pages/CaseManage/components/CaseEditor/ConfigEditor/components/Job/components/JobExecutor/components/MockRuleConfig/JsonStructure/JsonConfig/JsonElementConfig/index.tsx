@@ -127,6 +127,7 @@ const JsonElementConfig = (props: JsonElementConfigProps) => {
                 <Form.Item
                   key="min"
                   label="最小值"
+                  rules={[{ required: true, message: "请输入最小值" }]}
                   field={toFormPath(parentField, "min")}
                 >
                   <Input placeholder="请输入最小值" />
@@ -137,6 +138,7 @@ const JsonElementConfig = (props: JsonElementConfigProps) => {
                 <Form.Item
                   key="max"
                   label="最大值"
+                  rules={[{ required: true, message: "请输入最大值" }]}
                   field={toFormPath(parentField, "max")}
                 >
                   <Input placeholder="请输入最大值" />
@@ -161,6 +163,7 @@ const JsonElementConfig = (props: JsonElementConfigProps) => {
                 <Form.Item
                   key="fakerExpression"
                   label="Faker表达式"
+                  rules={[{ required: true, message: "请输入Faker表达式" }]}
                   field={toFormPath(parentField, "fakerExpression")}
                 >
                   <Input placeholder="请输入Faker表达式" />
@@ -173,6 +176,7 @@ const JsonElementConfig = (props: JsonElementConfigProps) => {
                 <Form.Item
                   key="path"
                   label="Faker方法路径"
+                  rules={[{ required: true, message: "请输入Faker方法路径" }]}
                   field={toFormPath(parentField, "path")}
                 >
                   <Input placeholder="请输入Faker方法路径" />

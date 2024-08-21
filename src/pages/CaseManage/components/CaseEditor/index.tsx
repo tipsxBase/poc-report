@@ -11,6 +11,7 @@ import { useMemoizedFn } from "ahooks";
 import ConfigEditor, { ConfigEditorInstance } from "./ConfigEditor";
 import CategorySelect from "@/components/CategorySelect";
 import { CaseEntity } from "@/service/case";
+import Scrollbars from "react-custom-scrollbars-2";
 
 export interface CaseEditorProps {
   action: "add" | "update" | "copy" | "uploadCase";
@@ -54,7 +55,8 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
         };
       }
       if (action === "update" || action === "copy") {
-        const { case_name, case_content, category_id } = rawEntity;
+        const { case_name, case_content, category_id, case_description } =
+          rawEntity;
         let config = null;
         try {
           config = JSON.parse(JSON.parse(case_content));
@@ -64,6 +66,7 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
 
         const formInitialValues: any = {
           case_name,
+          case_description,
         };
 
         if (action === "update") {
@@ -151,37 +154,46 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
                   <CategorySelect />
                 </Form.Item>
               </Col>
+              <Col xxl={24} xs={24} xxxl={24} md={24}>
+                <Form.Item field="case_description" label="用例描述">
+                  <Input.TextArea placeholder="请输入描述" />
+                </Form.Item>
+              </Col>
             </Row>
           </Form>
         </div>
         <div className={styles.editorWrapper}>
           <div className={styles.steps}>
-            <Steps direction="vertical" type="dot" current={step}>
-              <Step
-                title="配置全局预处理器"
-                description="全局预处理器负责提前执行查询SQL，返回结果可以在执行单元中使用"
-              />
-              <Step
-                title="配置Job"
-                description="每个Job可以包括多个执行单元，不同Job是按序执行的"
-              />
-              <Step
-                title="配置监听器"
-                description="监听器负责监听整个过程中的一些指标"
-              />
-              <Step
-                title="配置数据源"
-                description="配置POC过程中的数据库连接信息"
-              />
-              <Step
-                title="基本信息配置"
-                description="配置POC过程中的数据库连接信息"
-              />
-              <Step
-                title="结果查看"
-                description="配置POC过程中的数据库连接信息"
-              />
-            </Steps>
+            <Scrollbars>
+              <div className={styles.stepScrollWrapper}>
+                <Steps direction="vertical" type="dot" current={step}>
+                  <Step
+                    title="配置全局预处理器"
+                    description="全局预处理器负责提前执行查询SQL，返回结果可以在执行单元中使用"
+                  />
+                  <Step
+                    title="配置Job"
+                    description="每个Job可以包括多个执行单元，不同Job是按序执行的"
+                  />
+                  <Step
+                    title="配置监听器"
+                    description="监听器负责监听整个过程中的一些指标"
+                  />
+                  <Step
+                    title="配置数据源"
+                    description="配置POC过程中的数据库连接信息"
+                  />
+                  <Step
+                    title="基本信息配置"
+                    description="配置POC过程中的数据库连接信息"
+                  />
+                  <Step
+                    title="结果查看"
+                    description="配置POC过程中的数据库连接信息"
+                  />
+                </Steps>
+              </div>
+            </Scrollbars>
           </div>
           <ConfigEditor
             initialCaseConfig={initialCaseConfig}

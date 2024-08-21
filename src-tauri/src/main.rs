@@ -1,356 +1,16 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use entities::case::PocCase;
-use entities::category::PocCategory;
-use entities::ddl::PocDdl;
-use entities::metric::PocMetric;
-use entities::server::{self, PocServer};
-use entities::shared_types::RResult;
-use entities::statics::PocServerStatics;
-use entities::PageResult;
-use rbatis::rbdc::Error;
 use refinery::Migration;
 use rusqlite::Connection;
-use serde_json::json;
-use std::fs::File;
-use std::io::Write;
-use std::mem;
-use std::{collections::HashMap, path::Path};
+
 use tauri::Manager;
-use zip::write::SimpleFileOptions;
-use zip::ZipWriter;
+pub mod command;
 pub mod entities;
 pub mod request;
 pub mod shell;
-use base64::{engine::general_purpose::STANDARD, Engine as _};
 
 refinery::embed_migrations!("migrations");
-
-#[tauri::command]
-fn download_file(file_name: String, content: String) -> Result<(), String> {
-    let mut file = File::create(file_name).map_err(|e| e.to_string())?;
-    file.write_all(content.as_bytes())
-        .map_err(|e| e.to_string())?;
-    Ok(())
-}
-
-#[tauri::command]
-async fn insert_category(
-    category: PocCategory,
-) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result: Result<
-        Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>,
-        rbatis::rbdc::Error,
-    > = entities::category::add(category).await;
-    result
-}
-
-#[tauri::command]
-async fn query_category_list(
-    category: PocCategory,
-    current: u64,
-    size: u64,
-) -> RResult<PageResult<PocCategory>> {
-    let result = entities::category::query(category, current, size).await;
-    result
-}
-
-#[tauri::command]
-async fn update_category(
-    category: PocCategory,
-) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result = entities::category::update(category).await;
-    result
-}
-
-#[tauri::command]
-async fn delete_category(
-    category: PocCategory,
-) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result = entities::category::delete(category).await;
-    result
-}
-
-#[tauri::command]
-async fn query_category_all() -> RResult<Vec<PocCategory>> {
-    let result = entities::category::query_all().await;
-    result
-}
-
-#[tauri::command]
-async fn insert_case(
-    case: PocCase,
-) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result: Result<
-        Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>,
-        rbatis::rbdc::Error,
-    > = entities::case::add(case).await;
-    result
-}
-
-#[tauri::command]
-async fn query_case_list(case: PocCase, current: u64, size: u64) -> RResult<PageResult<PocCase>> {
-    let result = entities::case::query(case, current, size).await;
-    result
-}
-
-#[tauri::command]
-async fn update_case(
-    case: PocCase,
-) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result = entities::case::update(case).await;
-    result
-}
-
-#[tauri::command]
-async fn delete_case(
-    case: PocCase,
-) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
-    let result = entities::case::delete(case).await;
-    result
-}
-
-#[tauri::command]
-async fn insert_metric(metrics: Vec<PocMetric>) -> RResult<rbatis::rbdc::db::ExecResult> {
-    println!("{}", json!(metrics));
-    let result = entities::metric::insert_batch(metrics).await;
-    result
-}
-
-#[tauri::command]
-async fn insert_statics(statics: Vec<PocServerStatics>) -> RResult<rbatis::rbdc::db::ExecResult> {
-    println!("{}", json!(statics));
-    let result = entities::statics::insert_batch(statics).await;
-    result
-}
-
-#[tauri::command]
-async fn select_metric(case_id: i64) -> RResult<Vec<PocMetric>> {
-    let result = entities::metric::select_metrics(case_id).await;
-    result
-}
-
-#[tauri::command]
-async fn select_statics(case_id: i64, static_type: i8) -> RResult<Vec<PocServerStatics>> {
-    let result = entities::statics::select_statics(case_id, static_type).await;
-    result
-}
-
-#[tauri::command]
-async fn insert_server(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let result = entities::server::add(server).await;
-    result
-}
-
-#[tauri::command]
-async fn query_server_list(
-    server: PocServer,
-    current: u64,
-    size: u64,
-) -> RResult<PageResult<PocServer>> {
-    let result = entities::server::query(server, current, size).await;
-    result
-}
-
-#[tauri::command]
-async fn query_all_server_list() -> RResult<Vec<PocServer>> {
-    let result = entities::server::query_all_servers().await;
-    result
-}
-
-#[tauri::command]
-async fn update_server(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let result = entities::server::update(server).await;
-    result
-}
-
-#[tauri::command]
-async fn delete_server(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let result = entities::server::delete(server).await;
-    result
-}
-
-#[tauri::command]
-async fn update_server_check_default(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let result = entities::server::update_check(server_id).await;
-    result
-}
-
-#[tauri::command]
-async fn server_init(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let server = entities::server::select_server_by_id(server_id).await;
-
-    let session = shell::create_session(
-        &server.host.unwrap(),
-        server.port.unwrap(),
-        &server.username.unwrap(),
-        &server.password.unwrap(),
-    )
-    .expect("创建会话失败");
-
-    let sftp = session.sftp().expect("创建sftp失败");
-
-    let working_directory = server.working_directory.unwrap_or(String::from("poc"));
-
-    let dirs: Vec<&str> = working_directory.split('/').collect();
-
-    let mut current_path = String::new();
-
-    for dir in dirs {
-        current_path = if current_path.is_empty() {
-            dir.to_string()
-        } else {
-            format!("{}/{}", current_path, dir)
-        };
-        let path = Path::new(&current_path);
-        if shell::sftp_directory_is_exist(&sftp, &path) == false {
-            sftp.mkdir(path, 0o755)
-                .expect(format!("创建{}失败", current_path).as_str());
-            println!("创建{}目录成功", current_path);
-        }
-    }
-
-    let paths_to_be_created = vec!["logs", "poc-cases", "ddl"];
-
-    for path in paths_to_be_created {
-        let poc_path_dir = format!("{}/{}", working_directory, path);
-        let poc_path = Path::new(&poc_path_dir);
-        if shell::sftp_directory_is_exist(&sftp, &poc_path) == false {
-            sftp.mkdir(poc_path, 0o755)
-                .expect(format!("创建{}失败", poc_path_dir).as_str());
-            println!("创建{}目录成功", poc_path_dir);
-        }
-    }
-    let _ = entities::server::update_server_initial_state(server_id, 1).await;
-    let _ = shell::download_and_upload_sftp(
-        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/hexadb-poc.jar",
-        &sftp,
-        format!("{}/hexadb-poc.jar", &working_directory).as_str(),
-    )
-    .await;
-
-    let _ = shell::download_and_upload_sftp(
-        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/jdk-17_linux-x64_bin.tar.gz",
-        &sftp,
-        format!("{}/jdk-17_linux-x64_bin.tar.gz", &working_directory).as_str(),
-    )
-    .await;
-    println!("初始化成功");
-    entities::server::update_server_initial_state(server_id, 2).await
-}
-
-fn is_empty<T>(_: &T) -> bool {
-    mem::size_of::<T>() == 0
-}
-
-/**
- * 上传
- */
-#[tauri::command]
-async fn run_case(case_content: String, case_name: String) -> Result<i32, Error> {
-    let server = match entities::server::select_default_server().await {
-        Ok(server) => server,
-        Err(_) => return Err(Error::E(String::from("server is empty"))),
-    };
-
-    if is_empty(&server) {
-        return Err(Error::E(String::from("server is empty")));
-    }
-    let working_directory = server.working_directory.unwrap_or(String::from("poc"));
-    let session = shell::create_session(
-        &server.host.unwrap(),
-        server.port.unwrap(),
-        &server.username.unwrap(),
-        &server.password.unwrap(),
-    )
-    .expect("创建会话失败");
-    let path = format!("{}/poc-cases/{}.yml", working_directory, case_name);
-    Ok(shell::upload_content(&session, &path, &case_content))
-    // TODO 目前还不支持获取执行的进度，先把这里注释掉
-    // let command = format!(
-    //     "nohup java -jar poc/hexadb-poc.jar -config {} > poc/logs/poc_log.log 2>&1 &",
-    //     path
-    // );
-    // shell::exec_command(&session, &command)
-}
-
-#[tauri::command]
-fn download_image(
-    image_data: HashMap<String, String>,
-    file_dir: String,
-    case_name: String,
-) -> &'static str {
-    let file = File::create(format!("{}/{case_name}.zip", file_dir)).unwrap();
-    let mut zip = ZipWriter::new(file);
-    let options = SimpleFileOptions::default()
-        .compression_method(zip::CompressionMethod::Stored)
-        .unix_permissions(0o755);
-
-    for (name, base64_data) in &image_data {
-        let decoded_data = STANDARD.decode(&base64_data[22..]);
-        match decoded_data {
-            Ok(data) => {
-                zip.start_file(format!("{}.png", name), options).unwrap();
-                zip.write_all(&data).unwrap();
-            }
-            Err(err) => {
-                println!("{}", err)
-            }
-        }
-    }
-    zip.finish().unwrap();
-    "success"
-}
-
-#[tauri::command]
-async fn insert_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let result = entities::ddl::add(ddl).await;
-    result
-}
-
-#[tauri::command]
-async fn query_ddl_list(ddl: PocDdl, current: u64, size: u64) -> RResult<PageResult<PocDdl>> {
-    let result = entities::ddl::query(ddl, current, size).await;
-    result
-}
-
-#[tauri::command]
-async fn update_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let result = entities::ddl::update(ddl).await;
-    result
-}
-
-#[tauri::command]
-async fn delete_ddl(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
-    println!("{:?}", ddl);
-    let result = entities::ddl::delete(ddl).await;
-    result
-}
-
-#[tauri::command]
-async fn upload_ddl(ddl_content: String, ddl_name: String) -> Result<i32, Error> {
-    let server = match entities::server::select_default_server().await {
-        Ok(server) => server,
-        Err(error) => return Err(error),
-    };
-
-    if is_empty(&server) {
-        return Err(Error::E(String::from("server is empty")));
-    }
-
-    let working_directory = server.working_directory.unwrap_or(String::from("poc"));
-
-    let session = shell::create_session(
-        &server.host.unwrap(),
-        server.port.unwrap(),
-        &server.username.unwrap(),
-        &server.password.unwrap(),
-    )
-    .expect("创建会话失败");
-    let path = format!("{}/ddl/{}.sql", working_directory, ddl_name);
-    Ok(shell::upload_content(&session, &path, &ddl_content))
-}
 
 fn main() {
     tauri::Builder::default()
@@ -377,34 +37,41 @@ fn main() {
             Ok({})
         })
         .invoke_handler(tauri::generate_handler![
-            download_file,
-            insert_category,
-            query_category_list,
-            update_category,
-            delete_category,
-            query_category_all,
-            insert_case,
-            query_case_list,
-            update_case,
-            delete_case,
-            insert_metric,
-            insert_statics,
-            select_metric,
-            select_statics,
-            insert_server,
-            query_all_server_list,
-            query_server_list,
-            update_server,
-            delete_server,
-            update_server_check_default,
-            server_init,
-            run_case,
-            download_image,
-            insert_ddl,
-            query_ddl_list,
-            update_ddl,
-            delete_ddl,
-            upload_ddl
+            command::common::download_file,
+            command::category::insert_category,
+            command::category::query_category_list,
+            command::category::update_category,
+            command::category::delete_category,
+            command::category::query_category_all,
+            command::case::insert_case,
+            command::case::query_case_list,
+            command::case::update_case,
+            command::case::delete_case,
+            command::case::run_case,
+            command::case::download_image,
+            command::metric::insert_metric,
+            command::metric::select_metric,
+            command::statics::insert_statics,
+            command::statics::select_statics,
+            command::server::insert_server,
+            command::server::query_all_server_list,
+            command::server::query_server_list,
+            command::server::update_server,
+            command::server::delete_server,
+            command::server::update_server_check_default,
+            command::server::server_init,
+            command::ddl::insert_ddl,
+            command::ddl::query_ddl_list,
+            command::ddl::update_ddl,
+            command::ddl::delete_ddl,
+            command::ddl::upload_ddl,
+            command::resource::query_resource_list,
+            command::resource::download_zip,
+            command::resource::upload_resource_by_sftp,
+            command::task::download_file_from_oss,
+            command::task::query_task_list,
+            command::task::delete_completed_task,
+            command::task::delete_by_id,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

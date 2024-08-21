@@ -16,6 +16,7 @@ export interface CaseEntity extends CommonEntity {
   category_type?: number;
   case_name?: string;
   case_content?: string;
+  case_description?: string;
 }
 
 export interface CaseMetric {

@@ -182,7 +182,7 @@ const JobExecutor = (props: JobExecutorProps) => {
         <Button
           onClick={addTasklet}
           size="small"
-          type="outline"
+          type="primary"
           icon={<IconPlus />}
         >
           添加执行单元

@@ -68,7 +68,7 @@ const ListenerConfig = forwardRef<ListenerInstance, ListenerConfigProps>(
     return (
       <div className={styles.listener}>
         <div className={styles.actionWrapper}>
-          <Button onClick={addListener} type="outline" icon={<IconPlus />}>
+          <Button onClick={addListener} type="primary" icon={<IconPlus />}>
             添加监听器
           </Button>
         </div>

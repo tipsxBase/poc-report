@@ -13,6 +13,7 @@ import {
 } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import {
+  IconInfoCircle,
   IconPlus,
   IconRefresh,
   IconSearch,
@@ -35,7 +36,7 @@ import ImportConfig, { ImportConfigInstance } from "./components/ImportConfig";
 import TableActionColumn from "@/components/TableActionColumn";
 import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
 import LuBanDrawer from "@/components/LuBanDrawer";
-
+import TextRender from "@/components/TextRender";
 /**
  * 用例管理
  */
@@ -106,13 +107,14 @@ const CaseManage = () => {
     }
 
     caseEditorInstance.current.getValues().then((res) => {
-      const { case_name, case_content, category_id } = res;
+      const { case_name, case_content, category_id, case_description } = res;
 
       if (action === "add" || action === "copy" || action === "uploadCase") {
         insertCase({
           category_id,
           case_name,
           case_content,
+          case_description,
         })
           .then((res) => {
             console.log(res);
@@ -131,6 +133,7 @@ const CaseManage = () => {
           category_id,
           case_name,
           case_content,
+          case_description,
         })
           .then((res) => {
             console.log(res);
@@ -201,20 +204,30 @@ const CaseManage = () => {
         dataIndex: "category_name",
         title: "项目名称",
         key: "category_name",
+        width: 200,
+        render: (t) => <TextRender text={t} />,
       },
       {
         dataIndex: "case_name",
         title: "用例名称",
         key: "case_name",
+        width: 200,
+        render: (t) => <TextRender text={t} />,
+      },
+      {
+        dataIndex: "case_description",
+        title: "用例描述",
+        key: "case_description",
+        render: (t) => <TextRender text={t} />,
       },
       {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 320,
+        width: 500,
         render: (_, item) => {
           return (
-            <TableActionColumn maxDisplayAction={5}>
+            <TableActionColumn maxDisplayAction={8}>
               <Link onClick={() => onView(item)}>查看</Link>
               <Link onClick={() => onCopy(item)}>复制</Link>
               <Tooltip
@@ -222,7 +235,10 @@ const CaseManage = () => {
                 disabled={item.category_type !== 1}
               >
                 <Link
-                  disabled={item.category_type === 1}
+                  disabled={
+                    process.env.NODE_ENV === "production" &&
+                    item.category_type === 1
+                  }
                   onClick={() => onUpdate(item)}
                 >
                   修改
@@ -231,7 +247,8 @@ const CaseManage = () => {
               <Tooltip content="上传至默认服务">
                 <Link onClick={() => doExecute(item)}>上传</Link>
               </Tooltip>
-              {item.category_type === 1 ? (
+              {process.env.NODE_ENV === "production" &&
+              item.category_type === 1 ? (
                 <Tooltip content="系统内置用例不允许删除">
                   <Link disabled>删除</Link>
                 </Tooltip>
@@ -242,8 +259,13 @@ const CaseManage = () => {
               )}
 
               <Link onClick={() => onDownload(item)}>下载</Link>
-              <Link onClick={() => onUploadResult(item)}>上传测试结果</Link>
-              <Link onClick={() => onViewResult(item)}>查看测试结果</Link>
+              <Link onClick={() => onUploadResult(item)}>
+                导入日志
+                <Tooltip content="上传测试用例产生的日志">
+                  <IconInfoCircle style={{ marginLeft: 4 }} />
+                </Tooltip>
+              </Link>
+              <Link onClick={() => onViewResult(item)}>查看结果</Link>
             </TableActionColumn>
           );
         },
@@ -333,7 +355,7 @@ const CaseManage = () => {
           }}
           submitButton={
             <>
-              <Button htmlType="submit" type="outline" icon={<IconSearch />}>
+              <Button htmlType="submit" type="primary" icon={<IconSearch />}>
                 搜 索
               </Button>
               <Button type="secondary" onClick={onReset} icon={<IconRefresh />}>
@@ -353,7 +375,7 @@ const CaseManage = () => {
       <Divider type="horizontal" />
       <div>
         <Space>
-          <Button type="outline" onClick={onAddCase} icon={<IconPlus />}>
+          <Button type="primary" onClick={onAddCase} icon={<IconPlus />}>
             新建用例
           </Button>
           <Button onClick={onUploadCase} icon={<IconUpload />}>
@@ -393,7 +415,7 @@ const CaseManage = () => {
             <Button onClick={clearAction}>返回</Button>
           ) : (
             <Space>
-              <Button type="outline" onClick={doConfirm}>
+              <Button type="primary" onClick={doConfirm}>
                 确认
               </Button>{" "}
               <Button onClick={clearAction}>取消</Button>

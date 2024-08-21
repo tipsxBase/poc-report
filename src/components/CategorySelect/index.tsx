@@ -13,7 +13,13 @@ const CategorySelectAll = (props: CategorySelectProps) => {
 
   useEffect(() => {
     queryCategoryForOptions().then((options) => {
-      setOptions(options.filter((o) => o.value !== CategoryType.BuiltIn));
+      setOptions(
+        options.filter(
+          (o) =>
+            process.env.NODE_ENV === "development" ||
+            o.value !== CategoryType.BuiltIn
+        )
+      );
     });
   }, []);
 

@@ -77,7 +77,7 @@ const JsonConfig = forwardRef<JsonConfigInstance, JsonConfigProps>(
           </Form.List>
         </Form>
 
-        <Button onClick={addMockRule} type="outline" icon={<IconPlus />}>
+        <Button onClick={addMockRule} type="primary" icon={<IconPlus />}>
           添加规则
         </Button>
       </div>

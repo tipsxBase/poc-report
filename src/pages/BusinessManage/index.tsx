@@ -163,7 +163,7 @@ const BusinessManage = () => {
           }}
           submitButton={
             <>
-              <Button htmlType="submit" type="outline" icon={<IconSearch />}>
+              <Button htmlType="submit" type="primary" icon={<IconSearch />}>
                 搜 索
               </Button>
               <Button type="secondary" onClick={onReset} icon={<IconRefresh />}>
@@ -179,7 +179,7 @@ const BusinessManage = () => {
       </Form>
       <Divider type="horizontal" />
       <div>
-        <Button onClick={onAddCategory} icon={<IconPlus />} type="outline">
+        <Button onClick={onAddCategory} icon={<IconPlus />} type="primary">
           新建项目
         </Button>
       </div>

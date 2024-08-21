@@ -7,7 +7,7 @@ use crate::entities::PageResult;
 
 use super::shared_types::RResult;
 
-enum CategoryType {
+pub enum CategoryType {
     BuiltIn,
     UserDefine,
 }

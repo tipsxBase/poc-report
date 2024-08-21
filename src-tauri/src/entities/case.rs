@@ -15,6 +15,8 @@ pub struct PocCase {
     pub category_type: Option<i8>,
     pub case_name: Option<String>,
     pub case_content: Option<String>,
+    pub case_description: Option<String>,
+    pub case_order: Option<i64>,
 }
 
 #[html_sql("mapper/case.html")]
@@ -70,6 +72,8 @@ pub async fn add(
         category_name: None,
         case_name: case.case_name,
         case_content: case.case_content,
+        case_description: case.case_description,
+        case_order: None,
     };
     let data = insert(&rb, &table).await;
     Ok(data)

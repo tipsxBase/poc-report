@@ -84,7 +84,7 @@ const GlobalConfig = forwardRef<GlobalConfigInstance, GlobalConfigProps>(
         <div className={styles.actionWrapper}>
           <Button
             onClick={doAddGlobalPreProcessor}
-            type="outline"
+            type="primary"
             icon={<IconPlus />}
           >
             添加全局预处理器

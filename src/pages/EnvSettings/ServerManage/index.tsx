@@ -124,7 +124,7 @@ const ServerManage = () => {
         dataIndex: "server_address",
         title: "服务地址",
         key: "server_address",
-        width: 150,
+        width: 180,
         render: (_, item) => {
           return (
             <span>
@@ -155,7 +155,7 @@ const ServerManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 190,
+        width: 200,
         render: (_, item) => {
           return (
             <Space
@@ -219,7 +219,7 @@ const ServerManage = () => {
           }}
           submitButton={
             <>
-              <Button htmlType="submit" type="outline" icon={<IconSearch />}>
+              <Button htmlType="submit" type="primary" icon={<IconSearch />}>
                 搜 索
               </Button>
               <Button type="secondary" onClick={onReset} icon={<IconRefresh />}>

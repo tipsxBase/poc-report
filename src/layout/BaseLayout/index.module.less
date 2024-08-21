@@ -6,8 +6,8 @@
     align-items: center;
     gap: 12px;
     justify-content: space-between;
-    background-color: var(--color-fill-4);
-
+    background-color: rgb(var(--primary-6));
+    cursor: move;
     .headerLogo {
       display: flex;
       align-items: center;
@@ -21,11 +21,59 @@
       }
     }
 
-    .systemWrapper {
-      display: flex;
-      gap: 8px;
-      .windowIcon {
-        cursor: pointer;
+    &.windowHeader {
+      .systemWrapper {
+        display: flex;
+        gap: 8px;
+        color: #fff;
+        .windowIcon {
+          cursor: pointer;
+        }
+      }
+    }
+
+    &.macHeader {
+      justify-content: flex-start;
+      .macBar {
+        display: flex;
+        gap: 8px;
+        .barItem {
+          border-radius: 50%;
+          width: 12px;
+          height: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          outline: none;
+          border: none;
+          cursor: pointer;
+          &:nth-child(1) {
+            background-color: red;
+          }
+
+          &:nth-child(2) {
+            background-color: yellow;
+          }
+
+          &:nth-child(3) {
+            background-color: green;
+          }
+
+          .macIcon {
+            opacity: 0;
+            width: 12px;
+            height: 12px;
+            min-width: 12px;
+          }
+        }
+
+        &:hover {
+          .barItem {
+            .macIcon {
+              opacity: 1;
+            }
+          }
+        }
       }
     }
   }
@@ -97,5 +145,13 @@
 
   .initialed {
     color: rgb(var(--arcoblue-6));
+  }
+}
+
+.taskPopover {
+  :global {
+    .arco-popover-content {
+      padding: 0 !important;
+    }
   }
 }

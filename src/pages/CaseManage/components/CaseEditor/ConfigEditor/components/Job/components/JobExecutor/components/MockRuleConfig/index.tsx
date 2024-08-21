@@ -162,6 +162,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                 <Form.Item
                   key="min"
                   label="起始时间"
+                  rules={[{ required: true, message: "请选择起始时间" }]}
                   field={toFormPath(parentField, "min")}
                 >
                   <DatePicker
@@ -176,6 +177,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                 <Form.Item
                   key="max"
                   label="结束时间"
+                  rules={[{ required: true, message: "请选择结束时间" }]}
                   field={toFormPath(parentField, "max")}
                 >
                   <DatePicker
@@ -190,6 +192,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                 <Form.Item
                   key="min"
                   label="最小值"
+                  rules={[{ required: true, message: "请输入最小值" }]}
                   field={toFormPath(parentField, "min")}
                 >
                   <Input placeholder="请输入最小值" />
@@ -200,6 +203,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                 <Form.Item
                   key="max"
                   label="最大值"
+                  rules={[{ required: true, message: "请输入最大值" }]}
                   field={toFormPath(parentField, "max")}
                 >
                   <Input placeholder="请输入最大值" />
@@ -225,6 +229,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
               <Form.Item
                 key="fakerExpression"
                 label="Faker表达式"
+                rules={[{ required: true, message: "请输入Faker表达式" }]}
                 field={toFormPath(parentField, "fakerExpression")}
               >
                 <Input placeholder="请输入Faker表达式" />
@@ -237,6 +242,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
               <Form.Item
                 key="path"
                 label="Faker方法路径"
+                rules={[{ required: true, message: "请输入Faker方法路径" }]}
                 field={toFormPath(parentField, "path")}
               >
                 <Input placeholder="请输入Faker方法路径" />
@@ -293,6 +299,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
                 key="enums"
                 label="枚举值"
                 field={toFormPath(parentField, "ref")}
+                rules={[{ required: true, message: "请选择枚举" }]}
               >
                 <Select options={globalEnumOptions} placeholder="请选择枚举" />
               </Form.Item>

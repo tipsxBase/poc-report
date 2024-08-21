@@ -4,10 +4,11 @@ pub mod case;
 pub mod category;
 pub mod ddl;
 pub mod metric;
+pub mod resource;
 pub mod server;
 pub mod shared_types;
 pub mod statics;
-
+pub mod task;
 pub struct Pagination {
     pub current: u64,
     pub size: u64,

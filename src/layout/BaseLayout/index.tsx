@@ -4,20 +4,17 @@ import {
   Button,
   Layout,
   Modal,
+  Popover,
   Select,
   SelectProps,
   Space,
 } from "@arco-design/web-react";
 import BaseMenu from "./BaseMenu";
-import {
-  IconMenuFold,
-  IconMenuUnfold,
-  IconSettings,
-} from "@arco-design/web-react/icon";
+import { IconMenuFold, IconMenuUnfold } from "@arco-design/web-react/icon";
 import { useEffect, useState } from "react";
 import { useMemoizedFn } from "ahooks";
 import icon from "@/assets/Icon.svg";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/Bench.svg";
 
 import IconWindowMaximize from "@/assets/mdi_window-maximize.svg?react";
 import IconWindowMinimize from "@/assets/mdi_window-minimize.svg?react";
@@ -31,6 +28,12 @@ import LuBanDrawer from "@/components/LuBanDrawer";
 import { PiBookBookmark } from "react-icons/pi";
 import ServerInitial from "@/assets/ServerInitial.svg?react";
 import ServerUninitial from "@/assets/ServerUninitial.svg?react";
+import { isMacOS } from "@/shared/platform";
+import { IoMdClose } from "react-icons/io";
+import MaximizeMac from "@/assets/Maximize-mac_24_24.svg?react";
+import MinimizeMac from "@/assets/Minimize-mac_24_24.svg?react";
+import { MdOutlineAddTask } from "react-icons/md";
+import TaskManage from "@/pages/TaskManage";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -125,31 +128,61 @@ const BaseLayout = () => {
     fetchServer();
   });
 
+  const isMac = isMacOS();
+
   return (
     <Layout className={styles.baseLayout} style={{ height: "100vh" }}>
-      <Header data-tauri-drag-region className={styles.header}>
-        <div className={styles.headerLogo}>
-          <img className={styles.logo} src={icon} />
-          <img className={styles.logo} src={logo} />
-        </div>
-        <div className={styles.systemWrapper}>
-          <PiBookBookmark className={styles.windowIcon} />
-          <IconSettings className={styles.windowIcon} />
-          <Space>
-            <IconWindowMinimize
-              className={styles.windowIcon}
-              onClick={windowMinimize}
-            />
-            <IconWindowMaximize
-              className={styles.windowIcon}
-              onClick={toggleMaximize}
-            />
-            <IconWindowClose
-              className={styles.windowIcon}
-              onClick={windowClose}
-            />
-          </Space>
-        </div>
+      <Header
+        data-tauri-drag-region
+        className={classNames(
+          styles.header,
+          isMac ? styles.macHeader : styles.windowHeader
+        )}
+      >
+        {isMac ? (
+          <>
+            <div className={styles.macBar}>
+              <button onClick={windowClose} className={styles.barItem}>
+                <IoMdClose className={styles.macIcon} />
+              </button>
+              <button onClick={windowMinimize} className={styles.barItem}>
+                <MinimizeMac className={styles.macIcon} />
+              </button>
+              <button onClick={toggleMaximize} className={styles.barItem}>
+                <MaximizeMac className={styles.macIcon} />
+              </button>
+            </div>
+            <div className={styles.headerLogo}>
+              <img className={styles.logo} src={icon} />
+              <img className={styles.logo} src={logo} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.headerLogo}>
+              <img className={styles.logo} src={icon} />
+              <img className={styles.logo} src={logo} />
+            </div>
+            <div className={styles.systemWrapper}>
+              <PiBookBookmark className={styles.windowIcon} />
+              {/* <IconSettings className={styles.windowIcon} /> */}
+              <Space>
+                <IconWindowMinimize
+                  className={styles.windowIcon}
+                  onClick={windowMinimize}
+                />
+                <IconWindowMaximize
+                  className={styles.windowIcon}
+                  onClick={toggleMaximize}
+                />
+                <IconWindowClose
+                  className={styles.windowIcon}
+                  onClick={windowClose}
+                />
+              </Space>
+            </div>
+          </>
+        )}
       </Header>
       <Layout className={classNames("poc_master_wrapper", styles.content)}>
         <Sider className={styles.sider} collapsed={collapse}>
@@ -163,7 +196,15 @@ const BaseLayout = () => {
               onClick={toggleCollapse}
               icon={collapse ? <IconMenuUnfold /> : <IconMenuFold />}
             />
-            <div className={styles.envSettings}>
+            <div className={classNames(styles.envSettings, "flex gap-2")}>
+              <Popover className={styles.taskPopover} content={<TaskManage />}>
+                <Button
+                  size="small"
+                  className="flex items-center justify-center"
+                  icon={<MdOutlineAddTask />}
+                />
+              </Popover>
+
               <Select
                 value={defaultServerId}
                 size="small"

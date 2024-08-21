@@ -120,7 +120,7 @@ const GlobalPreProcessorConfig = (props) => {
                       <div className={styles.resultOperation}>
                         <Button
                           onClick={addResultDefine}
-                          type="outline"
+                          type="primary"
                           icon={<IconPlus />}
                         >
                           添加结果列

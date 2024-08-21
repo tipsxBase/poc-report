@@ -138,7 +138,7 @@ const ConfigEditor = forwardRef<ConfigEditorInstance, ConfigEditorProps>(
           {step !== 6 ? <Button onClick={saveTemporarily}>暂存</Button> : null}
           {step !== 1 ? <Button onClick={toPrev}>上一步</Button> : null}
           {step !== 6 ? (
-            <Button type="outline" onClick={toNextStep}>
+            <Button type="primary" onClick={toNextStep}>
               下一步
             </Button>
           ) : null}

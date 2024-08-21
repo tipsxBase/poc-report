@@ -4,7 +4,13 @@ use std::{
     path::Path,
 };
 
-use crate::request;
+use crate::{
+    entities::{
+        self,
+        task::{get_task_status, get_task_type, PocTask, PocTaskStatus, PocTaskType},
+    },
+    request,
+};
 use futures::StreamExt;
 use ssh2::{Session, Sftp};
 
@@ -59,17 +65,94 @@ pub fn sftp_directory_is_exist(sftp: &Sftp, dirname: &Path) -> bool {
 pub async fn download_and_upload_sftp(
     url: &str,
     sftp: &Sftp,
+    file_name: &str,
     remote_path: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    let task = PocTask {
+        task_id: None,
+        task_name: Some(format!("{}", file_name)),
+        task_status: get_task_status(PocTaskStatus::NotStarted),
+        task_type: get_task_type(PocTaskType::UploadTask),
+        task_progress: Some(0.0),
+        task_payload: None,
+    };
+    let last_insert_id = match entities::task::add_task(task).await {
+        Ok(res) => res.last_insert_id.as_u64(),
+        Err(err) => {
+            println!("创建任务失败: {}", err);
+            None
+        }
+    };
+
     let response = request::get_by_url(url).await;
+    let content_length = match response.content_length() {
+        Some(content_length) => content_length,
+        _ => 0,
+    };
+    println!("content_length: {}", content_length);
+    let mut uploaded_length: usize = 0;
     let mut remote_file = sftp.create(Path::new(remote_path))?;
     // 从下载流中读取数据并写入远程文件
     let mut stream = response.bytes_stream();
 
     while let Some(chunk) = stream.next().await {
         let chunk = chunk?;
-        remote_file.write_all(&chunk)?;
+        println!("chunk{}", chunk.len());
+        uploaded_length += chunk.len();
+        match remote_file.write_all(&chunk).map_err(|e| e.to_string()) {
+            Ok(_) => {
+                entities::task::update_task(PocTask {
+                    task_id: last_insert_id,
+                    task_status: get_task_status(PocTaskStatus::InProgress),
+                    task_progress: Some(uploaded_length as f64 / content_length as f64),
+                    task_name: None,
+                    task_type: None,
+                    task_payload: None,
+                })
+                .await
+                .unwrap();
+            }
+            Err(_) => {
+                entities::task::update_task(PocTask {
+                    task_id: last_insert_id,
+                    task_status: get_task_status(PocTaskStatus::Failed),
+                    task_progress: Some(uploaded_length as f64 / content_length as f64),
+                    task_name: None,
+                    task_type: None,
+                    task_payload: None,
+                })
+                .await
+                .unwrap();
+            }
+        }
     }
-    remote_file.flush()?;
+    match remote_file.flush() {
+        Ok(_) => {
+            entities::task::update_task(PocTask {
+                task_id: last_insert_id,
+                task_status: get_task_status(PocTaskStatus::Completed),
+                task_progress: Some(1.0),
+                task_name: None,
+                task_type: None,
+                task_payload: None,
+            })
+            .await
+            .unwrap();
+        }
+        Err(err) => {
+            println!("{}", err);
+            entities::task::update_task(PocTask {
+                task_id: last_insert_id,
+                task_status: get_task_status(PocTaskStatus::Failed),
+                task_progress: None,
+                task_name: None,
+                task_type: None,
+                task_payload: None,
+            })
+            .await
+            .unwrap();
+        }
+    }
+
     Ok(())
 }

@@ -2,9 +2,12 @@
   PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
   <insert id="insert">
-    `insert into poc_case (category_id, case_name, case_content) values `
+    `insert into poc_case (category_id, case_name, case_content, case_description) values `
     <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
       <if test="key == 'case_id'">
+        <continue />
+      </if>
+      <if test="key == 'case_order'">
         <continue />
       </if>
       <if test="key == 'category_name'">
@@ -32,15 +35,16 @@
       </if>
     </where>
     <if test="do_count == false">
-      ` order by p_case.case_name ASC`
+      ` order by p_case.case_order, p_case.created_at ASC`
     </if>
     <if test="do_count == false"> ` limit ${page_no},${page_size}` </if>
 
   </select>
 
   <update id="update_by_id">
-    update poc_case set case_name = #{case.case_name}, case_content =
-    #{case.case_content}, category_id = #{case.category_id}, updated_at = datetime(CURRENT_TIMESTAMP, 'localtime') where
+    update poc_case set case_name = #{case.case_name}, case_content = #{case.case_content}, case_order =
+    #{case.case_order},case_description = #{case.case_description}, category_id = #{case.category_id}, updated_at =
+    datetime(CURRENT_TIMESTAMP, 'localtime') where
     case_id = #{case.case_id}
   </update>
 

@@ -10,7 +10,7 @@ export interface EnumManageProps {}
 const EnumManage = () => {
   return (
     <div className={styles.enumManage}>
-      <Button type="outline" icon={<IconPlus />}>
+      <Button type="primary" icon={<IconPlus />}>
         添加枚举
       </Button>
       <Table />

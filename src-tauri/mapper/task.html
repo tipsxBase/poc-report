@@ -1,0 +1,50 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+
+  <insert id="insert">
+    `insert into poc_task (task_name, task_status, task_progress, task_type, task_payload) values `
+    <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
+      <if test="key == 'task_id'">
+        <continue />
+      </if>
+      #{item}
+    </foreach>
+  </insert>
+
+  <select id="select_list">
+    `select`
+    <if test="do_count == true">
+      ` count(1) from poc_task`
+    </if>
+    <if test="do_count == false">
+      ` * from poc_task`
+    </if>
+    <where>
+      ` is_deleted = 0`
+      <if test="task.task_name != null && task.task_name != ''">
+        ` and task_name like #{task.task_name}`
+      </if>
+      <if test="task.task_type != null && task.task_type != ''">
+        ` and task_type = #{task.task_type}`
+      </if>
+      <if test="task.task_status != null && task.task_status != ''">
+        ` and task_status = #{task.task_status}`
+      </if>
+    </where>
+    ` order by updated_at desc`
+    <if test="do_count == false">
+      ` limit ${page_no},${page_size}`
+    </if>
+
+  </select>
+
+  <update id="delete_completed_task_impl">
+    update poc_task set is_deleted = 1 where task_status = 3 OR task_status = 0;
+  </update>
+
+  <update id="delete_task_by_id_impl">
+    update poc_task set is_deleted = 1 where task_id = #{task_id} ;
+  </update>
+
+</mapper>
