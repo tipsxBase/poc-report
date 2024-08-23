@@ -43,7 +43,10 @@ const BusinessManage = () => {
     fetchCategoryList(values);
   });
 
-  const onReset = useMemoizedFn(() => {});
+  const onReset = useMemoizedFn(() => {
+    form.resetFields();
+    doSearch();
+  });
 
   const onUpdate = useMemoizedFn((row: CategoryEntity) => {
     setAction("update");

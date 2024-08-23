@@ -102,7 +102,11 @@ pub async fn add(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
     Ok(data)
 }
 
-pub async fn query(server: PocServer, current: u64, size: u64) -> RResult<PageResult<PocServer>> {
+pub async fn query(
+    mut server: PocServer,
+    current: u64,
+    size: u64,
+) -> RResult<PageResult<PocServer>> {
     _ = fast_log::init(
         fast_log::Config::new()
             .console()
@@ -118,6 +122,9 @@ pub async fn query(server: PocServer, current: u64, size: u64) -> RResult<PageRe
 
     rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
         .unwrap();
+
+    server.server_name = shared::util::like_pattern(&server.server_name);
+
     let data: Page<PocServer> = select_list(&rb, &PageRequest::new(current, size), &server)
         .await
         .unwrap();

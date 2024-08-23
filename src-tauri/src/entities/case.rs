@@ -1,7 +1,7 @@
 use anyhow::Error;
 use rbatis::{
     crud, dark_std::defer, executor::Executor, html_sql, htmlsql_select_page, impl_select,
-    plugin::page::PageRequest, rbdc::db::ExecResult, Page, RBatis,
+    plugin::page::PageRequest, Page, RBatis,
 };
 
 use crate::entities::PageResult;
@@ -110,7 +110,7 @@ pub async fn add(
     Ok(data)
 }
 
-pub async fn query(case: PocCase, current: u64, size: u64) -> RResult<PageResult<PocCase>> {
+pub async fn query(mut case: PocCase, current: u64, size: u64) -> RResult<PageResult<PocCase>> {
     _ = fast_log::init(
         fast_log::Config::new()
             .console()
@@ -126,6 +126,9 @@ pub async fn query(case: PocCase, current: u64, size: u64) -> RResult<PageResult
 
     rb.init(rbdc_sqlite::driver::SqliteDriver {}, &get_driver_url)
         .unwrap();
+
+    case.case_name = shared::util::like_pattern(&case.case_name);
+
     let data: Page<PocCase> = select_list(&rb, &PageRequest::new(current, size), &case)
         .await
         .unwrap();

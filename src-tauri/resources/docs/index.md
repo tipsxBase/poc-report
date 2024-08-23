@@ -56,36 +56,36 @@ sh olap_guc.sh
 
 **注：**
 
-1.  **如果资产库已有的用例已经有测试结果并且已经满足客户的测试需求的，大家可以跳过实际测试，直接拿测试结果。**
-2.  **如果客户没有特别具体的测试需求，那么我们可以按照客户的业务场景，比如  TP  还是  AP，然后从 POC 测试资产中选择适量用例形成测试报告。**
+1. **如果资产库已有的用例已经有测试结果并且已经满足客户的测试需求的，大家可以跳过实际测试，直接拿测试结果。**
+2. **如果客户没有特别具体的测试需求，那么我们可以按照客户的业务场景，比如  TP  还是  AP，然后从 POC 测试资产中选择适量用例形成测试报告。**
 
 ### 创建需要测试数据表
 
-1.  连接数据库
+1. 连接数据库
 
 ```postgresql
 $ gsql -r -p 26700 -d postgres
 ```
 
-2.  创建用户，poc 测试时推荐创建用户时指标  sysadmin  角色，后面可以省去不少表没有权限的情况
+2. 创建用户，poc 测试时推荐创建用户时指标  sysadmin  角色，后面可以省去不少表没有权限的情况
 
 ```postgresql
 hexadb=# create user poc_train_row sysadmin password 'hexadb@2024';
 ```
 
-3.  创建库
+3. 创建库
 
 ```postgresql
 hexadb=# CREATE DATABASE poc owner poc_admin_row ENCODING 'UTF8' dbcompatibility = 'PG';
 ```
 
-4.  使用新建的用户连接数据库
+4. 使用新建的用户连接数据库
 
 ```postgresql
 $ gsql -d poc -U poc_admin_row -W poc@20240408 -p 26700 -r
 ```
 
-5.  创建 schema，推荐 schema  的名称跟用户名一样，这样在使用 jdbc 连接数据库的时候就可以不用指定  schema  名称，可以很容易的实现不同的用户连接不同的 schema。
+5. 创建 schema，推荐 schema  的名称跟用户名一样，这样在使用 jdbc 连接数据库的时候就可以不用指定  schema  名称，可以很容易的实现不同的用户连接不同的 schema。
 
 ```postgresql
   poc=> create schema poc_admin_row;

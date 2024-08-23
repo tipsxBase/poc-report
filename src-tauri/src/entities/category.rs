@@ -108,11 +108,13 @@ pub async fn query(
     let mut url = String::from("sqlite://");
     url.push_str(&database);
 
+    let category_name = shared::util::like_pattern(&category.category_name);
+
     rb.init(rbdc_sqlite::driver::SqliteDriver {}, &url).unwrap();
     let data: Page<PocCategory> = select_list(
         &rb,
         &PageRequest::new(current, size),
-        &category.category_name.unwrap(),
+        &category_name.unwrap(),
     )
     .await
     .unwrap();

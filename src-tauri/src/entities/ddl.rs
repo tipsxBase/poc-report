@@ -61,7 +61,7 @@ pub async fn add(ddl: PocDdl) -> RResult<rbatis::rbdc::db::ExecResult> {
     Ok(data)
 }
 
-pub async fn query(ddl: PocDdl, current: u64, size: u64) -> RResult<PageResult<PocDdl>> {
+pub async fn query(mut ddl: PocDdl, current: u64, size: u64) -> RResult<PageResult<PocDdl>> {
     _ = fast_log::init(
         fast_log::Config::new()
             .console()
@@ -76,6 +76,8 @@ pub async fn query(ddl: PocDdl, current: u64, size: u64) -> RResult<PageResult<P
     let driver_url = shared::sqlite::get_driver_url();
     rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
         .unwrap();
+
+    ddl.ddl_name = shared::util::like_pattern(&ddl.ddl_name);
 
     let data: Page<PocDdl> = select_list(&rb, &PageRequest::new(current, size), &ddl).await?;
 
