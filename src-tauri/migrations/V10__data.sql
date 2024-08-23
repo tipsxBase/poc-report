@@ -494,3 +494,6 @@ SET
 	case_order = 1
 WHERE
 	case_id = 45;
+
+
+update poc_case set case_order = case_id;

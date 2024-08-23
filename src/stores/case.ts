@@ -14,11 +14,13 @@ import {
   insertMetric,
   insertStatics,
   queryCaseList,
+  resetOrder,
   runCase,
   selectMetric,
   selectStatics,
   updateCase,
 } from "@/service/case";
+import { TauriCommandResponse } from "@/service/fetch";
 
 interface CaseStore {
   pagination: PaginationParam;
@@ -42,6 +44,11 @@ interface CaseStore {
     fileDir: string,
     case_name: string
   ) => Promise<unknown>;
+  resetOrder: (
+    case_id: number,
+    params: CaseEntity,
+    direction: "forward" | "backward"
+  ) => Promise<TauriCommandResponse<string>>;
 }
 
 const useCaseStore = create<CaseStore>((set, get) => ({
@@ -131,6 +138,10 @@ const useCaseStore = create<CaseStore>((set, get) => ({
     case_name: string
   ) => {
     return downloadImage(imageData, fileDir, case_name);
+  },
+
+  resetOrder(case_id, params, direction) {
+    return resetOrder(case_id, params, direction);
   },
 }));
 

@@ -1,5 +1,6 @@
 import { CommonEntity, PageResult, PaginationParam } from "@/stores/SharedType";
 import { invoke } from "@tauri-apps/api/tauri";
+import { tauriInvoke } from "./fetch";
 
 export interface CaseParams extends PaginationParam {
   case_id?: number;
@@ -17,6 +18,7 @@ export interface CaseEntity extends CommonEntity {
   case_name?: string;
   case_content?: string;
   case_description?: string;
+  case_order?: number;
 }
 
 export interface CaseMetric {
@@ -153,5 +155,20 @@ export const downloadImage = async (
     imageData,
     fileDir,
     caseName,
+  });
+};
+
+export const resetOrder = async (
+  caseId: number,
+  params: CaseEntity,
+  direction: "forward" | "backward"
+) => {
+  return tauriInvoke<string>("reset_order", {
+    caseId,
+    searchCase: {
+      case_name: params.case_name ?? null,
+      category_id: params.category_id ?? null,
+    },
+    direction,
   });
 };

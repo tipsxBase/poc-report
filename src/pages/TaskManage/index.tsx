@@ -1,5 +1,6 @@
 import useTaskStore, { taskStatusOption, taskTypeOption } from "@/stores/task";
 import {
+  Empty,
   Form,
   Grid,
   Pagination,
@@ -106,15 +107,17 @@ const TaskManage = () => {
         ) : (
           <Scrollbars>
             <div className="flex flex-col gap-2 px-4">
-              {records &&
-                records.length > 0 &&
+              {records && records.length > 0 ? (
                 records.map((item) => (
                   <TaskCard
                     deleteTask={doDeleteTask}
                     key={item.task_id}
                     task={item}
                   />
-                ))}
+                ))
+              ) : (
+                <Empty />
+              )}
             </div>
           </Scrollbars>
         )}

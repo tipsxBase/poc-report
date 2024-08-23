@@ -24,11 +24,20 @@
         "close": true,
         "hide": true,
         "show": true,
+        "create": true,
         "maximize": true,
         "minimize": true,
         "unmaximize": true,
         "unminimize": true,
         "startDragging": true
+      },
+      "fs": {
+        "all": true,
+        "scope": [
+          "$RESOURCE/*",
+          "$RESOURCE/resources/*",
+          "$RESOURCE/resources/docs/**/*"
+        ]
       },
       "path": {
         "all": true
@@ -58,7 +67,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": ["resources/*", "resources/docs/**/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

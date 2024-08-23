@@ -65,6 +65,7 @@ const CaseManage = () => {
     resetPagination,
     insertCase,
     runCase,
+    resetOrder,
   } = useCaseStore();
 
   const doSearch = useMemoizedFn(() => {
@@ -192,6 +193,25 @@ const CaseManage = () => {
       });
   });
 
+  const rankOrder = useMemoizedFn((row: CaseEntity, direction) => {
+    const values = form.getFieldsValue();
+
+    resetOrder(
+      row.case_id,
+      {
+        ...values,
+      },
+      direction
+    )
+      .then(() => {
+        doSearch();
+        Message.success(`${direction === "forward" ? "上移" : "下移"}成功`);
+      })
+      .catch((err) => {
+        Message.warning(err.message);
+      });
+  });
+
   const columns = useMemo<ColumnProps[]>(() => {
     return [
       {
@@ -224,10 +244,10 @@ const CaseManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 500,
+        width: 590,
         render: (_, item) => {
           return (
-            <TableActionColumn maxDisplayAction={8}>
+            <TableActionColumn maxDisplayAction={10}>
               <Link onClick={() => onView(item)}>查看</Link>
               <Link onClick={() => onCopy(item)}>复制</Link>
               <Tooltip
@@ -266,6 +286,8 @@ const CaseManage = () => {
                 </Tooltip>
               </Link>
               <Link onClick={() => onViewResult(item)}>查看结果</Link>
+              <Link onClick={() => rankOrder(item, "forward")}>上移</Link>
+              <Link onClick={() => rankOrder(item, "backward")}>下移</Link>
             </TableActionColumn>
           );
         },

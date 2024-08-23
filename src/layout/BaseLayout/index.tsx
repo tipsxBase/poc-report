@@ -34,6 +34,7 @@ import MaximizeMac from "@/assets/Maximize-mac_24_24.svg?react";
 import MinimizeMac from "@/assets/Minimize-mac_24_24.svg?react";
 import { MdOutlineAddTask } from "react-icons/md";
 import TaskManage from "@/pages/TaskManage";
+import { WebviewWindow } from "@tauri-apps/api/window";
 
 const Sider = Layout.Sider;
 const Header = Layout.Header;
@@ -128,6 +129,20 @@ const BaseLayout = () => {
     fetchServer();
   });
 
+  const openWindow = useMemoizedFn(() => {
+    const webview = new WebviewWindow("DOCS", {
+      url: "/doc",
+      title: "帮助文档",
+    });
+
+    webview.once("tauri://created", function () {
+      // webview window successfully created
+    });
+    webview.once("tauri://error", function (e) {
+      console.error(e);
+    });
+  });
+
   const isMac = isMacOS();
 
   return (
@@ -156,6 +171,10 @@ const BaseLayout = () => {
               <img className={styles.logo} src={icon} />
               <img className={styles.logo} src={logo} />
             </div>
+            <PiBookBookmark
+              onClick={openWindow}
+              className="text-white cursor-pointer"
+            />
           </>
         ) : (
           <>

@@ -2,12 +2,9 @@
   PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
   <insert id="insert">
-    `insert into poc_case (category_id, case_name, case_content, case_description) values `
+    `insert into poc_case (category_id, case_name, case_content, case_description, case_order) values `
     <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
       <if test="key == 'case_id'">
-        <continue />
-      </if>
-      <if test="key == 'case_order'">
         <continue />
       </if>
       <if test="key == 'category_name'">
@@ -41,9 +38,45 @@
 
   </select>
 
+
+  <select id="select_next">
+    `select p_case.case_id, p_case.case_order from poc_case p_case`
+    <where>
+      ` p_case.case_order > #{case_order}`
+      <if test="case.case_name != null && case.case_name != ''">
+        ` and p_case.case_name like #{case.case_name}`
+      </if>
+      <if test="case.category_id != null && case.category_id != ''"> ` and p_case.category_id = #{case.category_id}`
+      </if>
+    </where>
+    ` order by p_case.case_order asc limit 1`
+  </select>
+
+
+  <select id="select_prev">
+    `select p_case.case_id, p_case.case_order from poc_case p_case`
+    <where>
+      ` p_case.case_order < #{case_order}` <if test="case.case_name != null && case.case_name != ''">
+        ` and p_case.case_name like #{case.case_name}`
+        </if>
+        <if test="case.category_id != null && case.category_id != ''"> ` and p_case.category_id = #{case.category_id}`
+        </if>
+    </where>
+    ` order by p_case.case_order desc limit 1`
+  </select>
+
+
   <update id="update_by_id">
     update poc_case set case_name = #{case.case_name}, case_content = #{case.case_content}, case_order =
-    #{case.case_order},case_description = #{case.case_description}, category_id = #{case.category_id}, updated_at =
+    #{case.case_order}, case_description = #{case.case_description}, category_id = #{case.category_id}, updated_at =
+    datetime(CURRENT_TIMESTAMP, 'localtime') where
+    case_id = #{case.case_id}
+  </update>
+
+
+  <update id="update_order_by_id">
+    update poc_case set case_order =
+    #{case.case_order}, updated_at =
     datetime(CURRENT_TIMESTAMP, 'localtime') where
     case_id = #{case.case_id}
   </update>
@@ -51,4 +84,8 @@
   <delete id="delete_by_id">
     delete from poc_case where case_id = #{case_id}
   </delete>
+
+  <select id="max_case_order">
+    select max(case_order) from poc_case
+  </select>
 </mapper>

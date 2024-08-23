@@ -49,6 +49,7 @@ fn main() {
             command::case::delete_case,
             command::case::run_case,
             command::case::download_image,
+            command::case::reset_order,
             command::metric::insert_metric,
             command::metric::select_metric,
             command::statics::insert_statics,

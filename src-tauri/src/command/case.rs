@@ -7,7 +7,12 @@ use shared::util::is_empty;
 use zip::{write::SimpleFileOptions, ZipWriter};
 
 use crate::{
-    entities::{self, case::PocCase, shared_types::RResult, PageResult},
+    entities::{
+        self,
+        case::PocCase,
+        shared_types::{CommandResult, RResult, Response},
+        PageResult,
+    },
     shell,
 };
 
@@ -107,4 +112,22 @@ pub fn download_image(
     "success"
 }
 
-pub fn resetOrder(case_id: i64) {}
+#[tauri::command]
+pub async fn reset_order(
+    case_id: i64,
+    search_case: PocCase,
+    direction: String,
+) -> CommandResult<String> {
+    match entities::case::reset_order(case_id, search_case, direction).await {
+        Ok(_) => Ok(Response {
+            message: format!("成功"),
+            success: true,
+            data: Some(format!("成功")),
+        }),
+        Err(err) => Err(Response {
+            message: err.to_string(),
+            success: false,
+            data: None,
+        }),
+    }
+}
