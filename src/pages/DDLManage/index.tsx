@@ -22,12 +22,13 @@ import LuBanDrawer from "@/components/LuBanDrawer";
 import CategorySelectIncludeBuiltIn from "@/components/CategorySelectIncludeBuiltIn";
 import { dialog, invoke } from "@tauri-apps/api";
 import { isBuildInCategory } from "@/shared/isBuildInCategory";
+import TLink from "@/components/TLink";
 /**
  *
  */
 const BusinessManage = () => {
   const [form] = Form.useForm();
-  const [action, setAction] = useState<"update" | "add">();
+  const [action, setAction] = useState<"update" | "add" | "copy">();
   const rawEntityRef = useRef<DdlEntity>();
   const ddlEditorInstance = useRef<DdlEditorInstance>();
   const {
@@ -57,6 +58,11 @@ const BusinessManage = () => {
     rawEntityRef.current = row;
   });
 
+  const onCopy = useMemoizedFn((row: DdlEntity) => {
+    setAction("copy");
+    rawEntityRef.current = row;
+  });
+
   const doDelete = useMemoizedFn((row: DdlEntity) => {
     deleteDdl(row).then(() => {
       Message.success("删除成功");
@@ -67,7 +73,7 @@ const BusinessManage = () => {
 
   const doConfirm = useMemoizedFn(() => {
     ddlEditorInstance.current.getValues().then((res) => {
-      if (action === "add") {
+      if (action === "add" || action === "copy") {
         insertDdl(res).then(() => {
           Message.success("新建成功");
           resetPagination();
@@ -137,10 +143,11 @@ const BusinessManage = () => {
         dataIndex: "action",
         title: "操作",
         key: "action",
-        width: 280,
+        width: 250,
         render: (_, item) => {
           return (
             <Space>
+              <Link onClick={() => onCopy(item)}>复制</Link>
               <Link
                 disabled={isBuildInCategory(item.category_type)}
                 onClick={() => onUpdate(item)}
@@ -152,14 +159,16 @@ const BusinessManage = () => {
                   删除
                 </Link>
               </Popconfirm>
-              <Link onClick={() => onUpload(item)}>上传至当前环境</Link>
+              <TLink tooltip="上传至当前环境" onClick={() => onUpload(item)}>
+                上传
+              </TLink>
               <Link onClick={() => onDownload(item)}>下载</Link>
             </Space>
           );
         },
       },
     ];
-  }, [doDelete, onDownload, onUpdate, onUpload]);
+  }, [doDelete, onCopy, onDownload, onUpdate, onUpload]);
 
   const onPaginationUpdate = useMemoizedFn(
     (pageNumber: number, pageSize: number) => {

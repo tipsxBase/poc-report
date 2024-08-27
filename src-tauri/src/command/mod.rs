@@ -2,6 +2,7 @@ pub mod case;
 pub mod category;
 pub mod common;
 pub mod ddl;
+pub mod initial_task;
 pub mod metric;
 pub mod resource;
 pub mod server;

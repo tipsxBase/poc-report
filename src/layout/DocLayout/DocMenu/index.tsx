@@ -19,6 +19,8 @@ const DocMenu = () => {
     return [pathname.replace("/render/", "")];
   }, [pathname]);
 
+  console.log("selectedKeys", selectedKeys);
+
   return (
     <div className={styles.baseMenu}>
       <Menu selectedKeys={selectedKeys}>

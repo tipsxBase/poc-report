@@ -1,6 +1,4 @@
 DROP INDEX IF EXISTS poc_ddl_ddl_name_IDX;
-ALTER TABLE poc_case ADD COLUMN case_description TEXT; 
-ALTER TABLE poc_case ADD COLUMN case_order INTEGER DEFAULT(1); 
 CREATE INDEX IF NOT EXISTS poc_ddl_ddl_name_category_id_IDX ON poc_ddl (ddl_name,category_id);
 
 INSERT INTO poc_ddl (ddl_name,category_id,ddl_content) VALUES
@@ -214,7 +212,15 @@ partition by range (created_at)
 	partition p202401 values LESS THAN (''2024-02-01 00:00:00''),
 	partition p202402 values LESS THAN (''2024-03-01 00:00:00''),
 	partition p202403 values LESS THAN (''2024-04-01 00:00:00''),
-	partition p202404 values LESS THAN (''2024-05-01 00:00:00'')
+	partition p202404 values LESS THAN (''2024-05-01 00:00:00''),
+	partition p202405 values LESS THAN (''2024-06-01 00:00:00''),
+	partition p202406 values LESS THAN (''2024-07-01 00:00:00''),
+	partition p202407 values LESS THAN (''2024-08-01 00:00:00''),
+	partition p202408 values LESS THAN (''2024-09-01 00:00:00''),
+	partition p202409 values LESS THAN (''2024-10-01 00:00:00''),
+	partition p202410 values LESS THAN (''2024-11-01 00:00:00''),
+	partition p202411 values LESS THAN (''2024-12-01 00:00:00''),
+	partition p202412 values LESS THAN (''2025-01-01 00:00:00'')				
 );
 
 COMMENT ON TABLE poc_order IS ''订单表'';
@@ -455,7 +461,15 @@ partition by range (created_at)
 	partition p202401 values LESS THAN (''2024-02-01 00:00:00''),
 	partition p202402 values LESS THAN (''2024-03-01 00:00:00''),
 	partition p202403 values LESS THAN (''2024-04-01 00:00:00''),
-	partition p202404 values LESS THAN (''2024-05-01 00:00:00'')
+	partition p202404 values LESS THAN (''2024-05-01 00:00:00''),
+	partition p202405 values LESS THAN (''2024-06-01 00:00:00''),
+	partition p202406 values LESS THAN (''2024-07-01 00:00:00''),
+	partition p202407 values LESS THAN (''2024-08-01 00:00:00''),
+	partition p202408 values LESS THAN (''2024-09-01 00:00:00''),
+	partition p202409 values LESS THAN (''2024-10-01 00:00:00''),
+	partition p202410 values LESS THAN (''2024-11-01 00:00:00''),
+	partition p202411 values LESS THAN (''2024-12-01 00:00:00''),
+	partition p202412 values LESS THAN (''2025-01-01 00:00:00'')		
 );
 
 COMMENT ON COLUMN "poc_order"."order_id" IS ''订单ID'';
@@ -538,7 +552,15 @@ partition by range (created_at)
 	partition p202401 values LESS THAN (''2024-02-01 00:00:00''),
 	partition p202402 values LESS THAN (''2024-03-01 00:00:00''),
 	partition p202403 values LESS THAN (''2024-04-01 00:00:00''),
-	partition p202404 values LESS THAN (''2024-05-01 00:00:00'')
+	partition p202404 values LESS THAN (''2024-05-01 00:00:00''),
+	partition p202405 values LESS THAN (''2024-06-01 00:00:00''),
+	partition p202406 values LESS THAN (''2024-07-01 00:00:00''),
+	partition p202407 values LESS THAN (''2024-08-01 00:00:00''),
+	partition p202408 values LESS THAN (''2024-09-01 00:00:00''),
+	partition p202409 values LESS THAN (''2024-10-01 00:00:00''),
+	partition p202410 values LESS THAN (''2024-11-01 00:00:00''),
+	partition p202411 values LESS THAN (''2024-12-01 00:00:00''),
+	partition p202412 values LESS THAN (''2025-01-01 00:00:00'')		
 );
 
 COMMENT ON COLUMN "poc_product"."product_id" IS ''商品ID'';
@@ -596,7 +618,15 @@ partition by range (created_at)
 	partition p202401 values LESS THAN (''2024-02-01 00:00:00''),
 	partition p202402 values LESS THAN (''2024-03-01 00:00:00''),
 	partition p202403 values LESS THAN (''2024-04-01 00:00:00''),
-	partition p202404 values LESS THAN (''2024-05-01 00:00:00'')
+	partition p202404 values LESS THAN (''2024-05-01 00:00:00''),
+	partition p202405 values LESS THAN (''2024-06-01 00:00:00''),
+	partition p202406 values LESS THAN (''2024-07-01 00:00:00''),
+	partition p202407 values LESS THAN (''2024-08-01 00:00:00''),
+	partition p202408 values LESS THAN (''2024-09-01 00:00:00''),
+	partition p202409 values LESS THAN (''2024-10-01 00:00:00''),
+	partition p202410 values LESS THAN (''2024-11-01 00:00:00''),
+	partition p202411 values LESS THAN (''2024-12-01 00:00:00''),
+	partition p202412 values LESS THAN (''2025-01-01 00:00:00'')		
 );
 
 COMMENT ON COLUMN "poc_product_user_relation"."relation_id" IS ''关系ID'';
@@ -637,7 +667,15 @@ partition by range (created_at)
 	partition p202401 values LESS THAN (''2024-02-01 00:00:00''),
 	partition p202402 values LESS THAN (''2024-03-01 00:00:00''),
 	partition p202403 values LESS THAN (''2024-04-01 00:00:00''),
-	partition p202404 values LESS THAN (''2024-05-01 00:00:00'')
+	partition p202404 values LESS THAN (''2024-05-01 00:00:00''),
+	partition p202405 values LESS THAN (''2024-06-01 00:00:00''),
+	partition p202406 values LESS THAN (''2024-07-01 00:00:00''),
+	partition p202407 values LESS THAN (''2024-08-01 00:00:00''),
+	partition p202408 values LESS THAN (''2024-09-01 00:00:00''),
+	partition p202409 values LESS THAN (''2024-10-01 00:00:00''),
+	partition p202410 values LESS THAN (''2024-11-01 00:00:00''),
+	partition p202411 values LESS THAN (''2024-12-01 00:00:00''),
+	partition p202412 values LESS THAN (''2025-01-01 00:00:00'')		
 );
 
 COMMENT ON TABLE poc_sellers IS ''卖家信息表'';  
@@ -700,7 +738,15 @@ partition by range (created_at)
 	partition p202401 values LESS THAN (''2024-02-01 00:00:00''),
 	partition p202402 values LESS THAN (''2024-03-01 00:00:00''),
 	partition p202403 values LESS THAN (''2024-04-01 00:00:00''),
-	partition p202404 values LESS THAN (''2024-05-01 00:00:00'')
+	partition p202404 values LESS THAN (''2024-05-01 00:00:00''),
+	partition p202405 values LESS THAN (''2024-06-01 00:00:00''),
+	partition p202406 values LESS THAN (''2024-07-01 00:00:00''),
+	partition p202407 values LESS THAN (''2024-08-01 00:00:00''),
+	partition p202408 values LESS THAN (''2024-09-01 00:00:00''),
+	partition p202409 values LESS THAN (''2024-10-01 00:00:00''),
+	partition p202410 values LESS THAN (''2024-11-01 00:00:00''),
+	partition p202411 values LESS THAN (''2024-12-01 00:00:00''),
+	partition p202412 values LESS THAN (''2025-01-01 00:00:00'')		
 );
 
 COMMENT ON TABLE poc_order IS "用户表";

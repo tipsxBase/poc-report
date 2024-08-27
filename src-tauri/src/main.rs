@@ -73,6 +73,10 @@ fn main() {
             command::task::query_task_list,
             command::task::delete_completed_task,
             command::task::delete_by_id,
+            command::initial_task::insert_initial_task,
+            command::initial_task::query_initial_task_list,
+            command::initial_task::update_initial_task,
+            command::initial_task::delete_initial_task
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

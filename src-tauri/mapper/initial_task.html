@@ -1,0 +1,52 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+
+  <insert id="insert">
+    `insert into poc_initial_task (category_id, task_name, task_description, task_config) values `
+    <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
+      <if test="key == 'task_id'">
+        <continue />
+      </if>
+      <if test="key == 'category_name'">
+        <continue />
+      </if>
+      #{item}
+    </foreach>
+  </insert>
+
+  <select id="select_list_page">
+    `select`
+    <if test="do_count == true">
+      ` count(1) from poc_initial_task pit`
+    </if>
+    <if test="do_count == false">
+      ` pit.*, pc.category_name from poc_initial_task pit`
+    </if>
+    ` left join poc_category pc on pit.category_id = pc.category_id`
+    <where>
+      <if test="task.task_name != null && task.task_name != ''">
+        ` and task_name like #{task.task_name}`
+      </if>
+      <if test="task.category_id != null && task.category_id != ''">
+        ` and pc.category_id = #{task.category_id}`
+      </if>
+    </where>
+    <if test="do_count == false">
+      ` order by pit.updated_at desc limit ${page_no},${page_size}`
+    </if>
+
+  </select>
+
+  <update ud="update_by_id">
+    update poc_initial_task set task_name = #{task.task_name}, category_id = #{task.category_id}, task_description =
+    #{task.task_description}, task_config = #{task.task_config}, updated_at =
+    datetime(CURRENT_TIMESTAMP, 'localtime') where
+    task_id = #{task.task_id}
+  </update>
+
+  <delete id="delete_by_id">
+    delete from poc_initial_task where task_id = #{task_id}
+  </delete>
+
+</mapper>

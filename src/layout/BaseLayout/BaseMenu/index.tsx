@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { GrProjects, GrResources } from "react-icons/gr";
 import { GrTest } from "react-icons/gr";
 import { TbFileTypeSql } from "react-icons/tb";
+import { SiOpenapiinitiative } from "react-icons/si";
 
 const MenuItem = Menu.Item;
 
@@ -17,6 +18,7 @@ const routeMapping = {
   "/business": "business",
   "/ddl": "ddl",
   "/resource": "resource",
+  "/initial": "initial",
 };
 
 /**
@@ -56,6 +58,12 @@ const BaseMenu = (props: BaseMenuProps) => {
           <MenuItem key="resource">
             <GrResources className="arco-icon" />
             资源管理
+          </MenuItem>
+        </Link>
+        <Link to="/initial">
+          <MenuItem key="initial">
+            <SiOpenapiinitiative className="arco-icon" />
+            数据初始化
           </MenuItem>
         </Link>
       </Menu>

@@ -22,3 +22,5 @@ pub struct PageResponse<T> {
 }
 
 pub type CommandPageResult<T> = Result<PageResponse<T>, PageResponse<()>>;
+
+pub type EntityResult<T> = Result<T, anyhow::Error>;

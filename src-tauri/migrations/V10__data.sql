@@ -1,4 +1,6 @@
 UPDATE poc_category SET category_name='POC资产库' WHERE category_id=1;
+ALTER TABLE poc_case ADD COLUMN case_description TEXT; 
+ALTER TABLE poc_case ADD COLUMN case_order INTEGER DEFAULT(1); 
 
 UPDATE
 	poc_case

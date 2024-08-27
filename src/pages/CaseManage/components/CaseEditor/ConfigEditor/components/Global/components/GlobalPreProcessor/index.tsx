@@ -69,6 +69,12 @@ const GlobalPreProcessorConfig = (props) => {
       <div className={styles.formWrapper}>
         <Form.Item
           label="预处理器类型"
+          tooltip={
+            <div>
+              <p>数据预查询：对有关联关系的数据表提前查询关联数据</p>
+              <p>枚举定义： 定义枚举值，可以在数据 Mock 中引用</p>
+            </div>
+          }
           field={toFormPath(parentField, "klass")}
         >
           <Select
@@ -115,7 +121,11 @@ const GlobalPreProcessorConfig = (props) => {
                   >
                     <SqlEditor />
                   </Form.Item>
-                  <Form.Item required label="结果列定义">
+                  <Form.Item
+                    required
+                    tooltip="定义数据预查询中查询的数据的结构，在 Mock 配置中，可以取结果列中相应名称的值"
+                    label="结果列定义"
+                  >
                     <div>
                       <div className={styles.resultOperation}>
                         <Button

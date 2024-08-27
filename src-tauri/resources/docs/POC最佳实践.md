@@ -1,8 +1,6 @@
-# POC 最佳实践
-
 ## POC  测试流程
 
-![/Users/zhaowencong/Desktop/POC流程图-第 2 页.drawio.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/1GXn4BW12zvDODQ4/img/f300d867-0176-4b42-b620-dd0d85d30723.png)
+![POC流程图-第 2 页.drawio.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/1GXn4BW12zvDODQ4/img/491e8940-98ea-4125-ad10-4d5a3c023c98.png)
 
 ## 从零开始做 POC
 
@@ -91,9 +89,9 @@ $ gsql -d poc -U poc_admin_row -W poc@20240408 -p 26700 -r
 
 DDL 区分是  AP  还是  TP？
 
-TP  场景则选择[请至钉钉文档查看附件《ddl-row_oltp.sql》](https://alidocs.dingtalk.com/i/nodes/NkDwLng8ZePP3RLmsmqAZ4PrJKMEvZBY?doc_type=wiki_doc&iframeQuery=anchorId%3DX02m00qy57lk6fghf614n)
+TP  场景则选择  [请至钉钉文档查看附件《ddl-row-oltp.sql》](https://alidocs.dingtalk.com/i/nodes/NkDwLng8ZePP3RLmsmqAZ4PrJKMEvZBY?doc_type=wiki_doc&iframeQuery=anchorId%3DX02m00qy57lk6fghf614n)
 
-AP  场景选择[请至钉钉文档查看附件《ddl-column_olap.sql》](https://alidocs.dingtalk.com/i/nodes/NkDwLng8ZePP3RLmsmqAZ4PrJKMEvZBY?doc_type=wiki_doc&iframeQuery=anchorId%3DX02m00qyvxi7tyn8dp05xh)
+AP  场景选择[请至钉钉文档查看附件《ddl-column-olap.sql》](https://alidocs.dingtalk.com/i/nodes/NkDwLng8ZePP3RLmsmqAZ4PrJKMEvZBY?doc_type=wiki_doc&iframeQuery=anchorId%3DX02m00qyvxi7tyn8dp05xh)
 
 将 DDL 语句先上传至服务器中，通过命令创建数据表，也可以使用客户端工具比如  Navicat  或  DBeaver  等工具进行创建
 

@@ -9,20 +9,23 @@ import { useMemoizedFn } from "ahooks";
 import "viewerjs/dist/viewer.css";
 import Viewer from "viewerjs";
 import "./index.less";
+import { getMeta } from "mpa-routes";
+import { H1 } from "./components/title";
 const regex = /^---(?:\r?\n|\r)(?:([\s\S]*?)(?:\r?\n|\r))?---(?:\r?\n|\r|$)/;
 
 const DocRender = () => {
   const params = useParams();
   const [md, setMd] = useState<string>("");
-  const { path } = params;
-
+  const { pathKey } = params;
+  const meta = getMeta(pathKey);
+  console.log(meta);
   useEffect(() => {
-    resolveResource(path.split("___").join("/")).then((res) => {
+    resolveResource(pathKey.split("___").join("/")).then((res) => {
       readTextFile(res).then((md) => {
         setMd(md.replace(regex, ""));
       });
     });
-  }, [path]);
+  }, [pathKey]);
 
   const onClickBody = useMemoizedFn((e) => {
     if (document.documentElement.clientWidth <= 768) {
@@ -61,6 +64,7 @@ const DocRender = () => {
   return (
     <Scrollbars>
       <div onClick={onClickBody} className="px-4 py-4 markdown-body">
+        <H1>{meta.title}</H1>
         <Markdown components={getCustomMDXComponent()}>{md}</Markdown>
       </div>
     </Scrollbars>

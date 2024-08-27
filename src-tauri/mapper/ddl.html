@@ -37,7 +37,8 @@
 
   <update id="update_by_id">
     update poc_ddl set ddl_name = #{ddl.ddl_name}, category_id = #{ddl.category_id}, ddl_content =
-    #{ddl.ddl_content} where
+    #{ddl.ddl_content}, updated_at =
+    datetime(CURRENT_TIMESTAMP, 'localtime') where
     ddl_id = #{ddl.ddl_id}
   </update>
 

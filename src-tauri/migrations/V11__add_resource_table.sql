@@ -37,4 +37,13 @@ CREATE TABLE poc_task (
   updated_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime'))
 );
 
-
+-- 数据初始化任务
+CREATE TABLE poc_initial_task (
+	task_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	task_name TEXT NOT NULL,
+	category_id INTEGER NOT NULL,
+	task_description TEXT,
+	task_config TEXT NOT NULL,
+  created_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime')),
+  updated_at TimeStamp default (datetime(CURRENT_TIMESTAMP, 'localtime'))
+)

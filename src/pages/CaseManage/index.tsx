@@ -302,6 +302,7 @@ const CaseManage = () => {
     onUploadResult,
     onView,
     onViewResult,
+    rankOrder,
   ]);
 
   const onPaginationUpdate = useMemoizedFn(

@@ -255,6 +255,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
               <Form.Item
                 key="ref"
                 label="引用全局"
+                tooltip="引用的全局预处理器"
                 field={toFormPath(parentField, "ref")}
               >
                 {() => {

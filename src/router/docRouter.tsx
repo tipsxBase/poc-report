@@ -8,7 +8,7 @@ const routes: RouteObject[] = [
     element: <DocLayout />,
     children: [
       {
-        path: "/render/:path",
+        path: "/render/:pathKey",
         element: <DocRender />,
       },
     ],

@@ -3,6 +3,7 @@ use serde::Serialize;
 pub mod case;
 pub mod category;
 pub mod ddl;
+pub mod initial_task;
 pub mod metric;
 pub mod resource;
 pub mod server;

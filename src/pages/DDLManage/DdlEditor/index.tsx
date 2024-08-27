@@ -6,7 +6,7 @@ import CategorySelect from "@/components/CategorySelect";
 import SqlEditor from "@/components/SqlEditor";
 
 export interface DdlEditorProps {
-  action: "add" | "update";
+  action: "add" | "update" | "copy";
   rawEntity?: DdlEntity;
 }
 
@@ -24,7 +24,7 @@ const DdlEditor = forwardRef<DdlEditorInstance, DdlEditorProps>(
     const [form] = Form.useForm();
 
     const initialValues = useMemo(() => {
-      if (action === "update") {
+      if (action === "update" || action === "copy") {
         return rawEntity;
       }
     }, [action, rawEntity]);

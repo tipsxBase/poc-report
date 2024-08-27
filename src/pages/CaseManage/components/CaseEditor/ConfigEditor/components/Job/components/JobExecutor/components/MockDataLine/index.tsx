@@ -47,7 +47,11 @@ const MockDataLine = (props: MockDataLineProps) => {
 
   return (
     <div className={styles.mockDataLine}>
-      <Form.Item label="批次大小" field={toFormPath(parentField, "batch")}>
+      <Form.Item
+        label="批次大小"
+        tooltip="一个事务提交 SQL 的条数，查询时一般为1，更新时对对应批处理的大小"
+        field={toFormPath(parentField, "batch")}
+      >
         <InputNumber placeholder="一个批次的大小" />
       </Form.Item>
       <div className={styles.dataDefineList}>

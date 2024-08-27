@@ -4,6 +4,7 @@ import CaseManage from "@/pages/CaseManage";
 import BusinessManage from "@/pages/BusinessManage";
 import DDLManage from "@/pages/DDLManage";
 import ResourceManage from "@/pages/ResourceManage";
+import DataInitial from "@/pages/DataInitial";
 
 const routes: RouteObject[] = [
   {
@@ -25,6 +26,10 @@ const routes: RouteObject[] = [
       {
         path: "/resource",
         element: <ResourceManage />,
+      },
+      {
+        path: "/initial",
+        element: <DataInitial />,
       },
     ],
   },

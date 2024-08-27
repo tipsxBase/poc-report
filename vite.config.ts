@@ -15,6 +15,9 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  define: {
+    "process.env": {},
+  },
   build: {
     rollupOptions: {
       input: {
@@ -23,5 +26,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [vitePluginForArco({}), mpa() as Plugin, react(), svgr()],
+  plugins: [vitePluginForArco({}), mpa() as any, react(), svgr()],
 });

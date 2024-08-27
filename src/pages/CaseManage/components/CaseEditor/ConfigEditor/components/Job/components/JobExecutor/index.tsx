@@ -133,17 +133,23 @@ const JobExecutor = (props: JobExecutorProps) => {
       >
         <Input placeholder="请输入Job名称" />
       </Form.Item>
-      <Form.Item label="线程数" field={toFormPath(parentField, "numOfThread")}>
+      <Form.Item
+        label="线程数"
+        tooltip="全局线程数据"
+        field={toFormPath(parentField, "numOfThread")}
+      >
         <InputNumber placeholder="请输入Job名称" min={1} />
       </Form.Item>
       <Form.Item
         label="线程暂停时间"
+        tooltip="每个线程执行完暂停的时间"
         field={toFormPath(parentField, "pauseTime")}
       >
         <InputNumber placeholder="暂停时间" suffix="ms" min={0} />
       </Form.Item>
       <Form.Item
         label="是否启用"
+        tooltip="当前 Job 是否生效"
         field={toFormPath(parentField, "enable")}
         triggerPropName="checked"
       >

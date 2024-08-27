@@ -43,12 +43,14 @@ const TaskUnit = (props: TaskUnitProps) => {
         </Form.Item>
         <Form.Item
           label="线程数"
+          tooltip="执行单的线程数，优先级高于全局线程数，如果执行单元配置了线程数则本执行单会使用配置的线程数，如果不使用则使用全局线程数"
           field={toFormPath(parentField, "numOfThread")}
         >
           <InputNumber placeholder="请输入线程数" min={0} />
         </Form.Item>
         <Form.Item
           label="循环次数"
+          tooltip="当前线程循环的次数"
           field={toFormPath(parentField, "loopCount")}
         >
           <InputNumber placeholder="请输入循环次数" min={0} />
