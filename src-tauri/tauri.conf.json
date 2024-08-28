@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "POCBench",
-    "version": "0.2.11"
+    "version": "0.3.0"
   },
   "tauri": {
     "allowlist": {
@@ -67,7 +67,10 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["resources/*", "resources/docs/**/*"],
+      "resources": [
+        "resources/*",
+        "resources/docs/**/*"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {
