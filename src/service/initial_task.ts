@@ -43,3 +43,21 @@ export const inertInitialTask = (task: InitialTaskEntity) => {
     task,
   });
 };
+
+export const downloadScript = (
+  scriptData: any,
+  fileDir: string,
+  fileName: string
+) => {
+  return tauriInvoke<string>("download_script", {
+    scriptData,
+    fileDir,
+    fileName,
+  });
+};
+
+export const uploadScript = (scriptData: any) => {
+  return tauriInvoke<string>("upload_script", {
+    scriptData,
+  });
+};

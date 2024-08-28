@@ -1,3 +1,15 @@
+import {
+  getBrandJob,
+  getCategoryJob,
+  getClearJob,
+  getInitialConfig,
+  getOrderJob,
+  getProductJob,
+  getSellersJob,
+  getUserJob,
+} from "./job";
+import { parseJsonToYml } from "./yaml";
+
 export const generateShellScript = (task: any) => {
   const { database_name, password, username, schema } = task;
 
@@ -17,4 +29,41 @@ export const generateShellScript = (task: any) => {
   }
 
   return snippets.join("\n");
+};
+
+export const generateYmlScript = (task: any) => {
+  const {
+    clear_data,
+    brand_to_product,
+    category_number,
+    product_to_order,
+    seller_number,
+    seller_to_brand,
+    user_number,
+  } = task;
+  const config = getInitialConfig();
+
+  if (clear_data) {
+    config.jobs.push(getClearJob());
+  }
+
+  config.jobs.push(getCategoryJob(category_number));
+
+  config.jobs.push(getUserJob(user_number));
+
+  config.jobs.push(getSellersJob(seller_number));
+
+  config.jobs.push(getBrandJob(seller_number * seller_to_brand));
+
+  config.jobs.push(
+    getProductJob(seller_number * seller_to_brand * brand_to_product)
+  );
+
+  config.jobs.push(
+    getOrderJob(
+      seller_number * seller_to_brand * brand_to_product * product_to_order
+    )
+  );
+
+  return parseJsonToYml(config);
 };

@@ -65,7 +65,7 @@ const MockRuleConfig = (props: MockRuleConfigProps) => {
     <CollapseWrapper
       leftWrapperClassName={styles.formWrapper}
       className={styles.mockRuleConfig}
-      collapseHeight={28}
+      collapseHeight={60}
       actionRender={() => {
         return <Button icon={<IconDelete />} onClick={remove} />;
       }}

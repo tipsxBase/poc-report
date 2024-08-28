@@ -18,11 +18,13 @@ import DataInitialEditor, {
   DataInitialEditorInstance,
 } from "./DataInitialEditor";
 import { useMemo, useRef, useState } from "react";
-import UseInitialStore from "@/stores/initial";
+import UseInitialStore, { DataInitialTaskType } from "@/stores/initial";
 import Scrollbars from "react-custom-scrollbars-2";
 import DataInitialCard from "./DataInitialCard";
 import { InitialTaskEntity } from "@/service/initial_task";
 import DataInitialScript from "./DataInitialScript";
+import { dialog } from "@tauri-apps/api";
+import { generateShellScript, generateYmlScript } from "@/shared/script";
 
 export type DataInitialAction = "add" | "update" | "copy" | "viewScript";
 
@@ -44,6 +46,8 @@ const DataInitial = () => {
     insertInitialTask,
     deleteInitialTask,
     updateInitialTask,
+    downloadScript,
+    uploadScript,
   } = UseInitialStore();
 
   const rawEntityRef = useRef<InitialTaskEntity>();
@@ -138,6 +142,58 @@ const DataInitial = () => {
     setAction("viewScript");
   });
 
+  const onDownload = useMemoizedFn(async (entity: InitialTaskEntity) => {
+    let config: any[];
+    try {
+      config = JSON.parse(JSON.parse(entity.task_config));
+    } catch (error) {
+      /* empty */
+      config = [] as any;
+    }
+    // 选择下载目录
+    const selectedDirectory = await dialog.open({
+      directory: true,
+      multiple: false,
+      title: "选择下载目录",
+    });
+
+    const script = config.reduce((prev, current) => {
+      const { task_type } = current;
+      if (task_type === DataInitialTaskType.DATABASE_INITIAL) {
+        prev[`${task_type}.sh`] = generateShellScript(current);
+      } else if (task_type === DataInitialTaskType.DATA_INITIAL) {
+        prev[`${task_type}.yml`] = generateYmlScript(current);
+      }
+      return prev;
+    }, {});
+
+    await downloadScript(script, selectedDirectory as string, "数据初始化脚本");
+    Message.success("脚本下载成功。");
+  });
+
+  const onUpload = useMemoizedFn(async (entity: InitialTaskEntity) => {
+    let config: any[];
+    try {
+      config = JSON.parse(JSON.parse(entity.task_config));
+    } catch (error) {
+      /* empty */
+      config = [] as any;
+    }
+
+    const script = config.reduce((prev, current) => {
+      const { task_type } = current;
+      if (task_type === DataInitialTaskType.DATABASE_INITIAL) {
+        prev[`${task_type}.sh`] = generateShellScript(current);
+      } else if (task_type === DataInitialTaskType.DATA_INITIAL) {
+        prev[`${task_type}.yml`] = generateYmlScript(current);
+      }
+      return prev;
+    }, {});
+
+    await uploadScript(script);
+    Message.success("脚本上传成功。");
+  });
+
   return (
     <>
       <div className={styles.dataInitial}>
@@ -197,6 +253,8 @@ const DataInitial = () => {
                         onCopy={onCopy}
                         onDelete={onDelete}
                         onViewScript={onViewScript}
+                        onDownload={onDownload}
+                        onUpload={onUpload}
                         key={task.task_id}
                         entity={task}
                       />
@@ -225,7 +283,7 @@ const DataInitial = () => {
       <LuBanDrawer
         title={editorDrawerTitle}
         onCancel={onClose}
-        width={640}
+        width={EditorAction.includes(action) ? 640 : 1200}
         visible={!!action}
         unmountOnExit
         onOk={onConfirm}

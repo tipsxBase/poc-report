@@ -115,7 +115,7 @@ const JobExecutor = (props: JobExecutorProps) => {
     <CollapseWrapper
       leftWrapperClassName={styles.formWrapper}
       className={styles.jobExecutor}
-      collapseHeight={240}
+      collapseHeight={230}
       actionRender={actionRender}
     >
       <Form.Item hidden field={toFormPath(parentField, "id")}>

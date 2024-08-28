@@ -1,4 +1,4 @@
-import { Form, InputNumber } from "@arco-design/web-react";
+import { Form, InputNumber, Switch } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { formPathGenerator, toFormPath } from "@/shared/path";
 import { useCallback, useContext, useMemo, useState } from "react";
@@ -152,6 +152,16 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
         <h1 className="cursor-pointer py-2" onClick={toggleCollapse}>
           高级配置 {collapse ? <IconDown /> : <IconUp />}
         </h1>
+
+        <Form.Item
+          label="清除数据"
+          tooltip="插入前先清除表中之前的数据"
+          field={getFormPath("clear_data")}
+          triggerPropName="checked"
+        >
+          <Switch />
+        </Form.Item>
+
         <Form.Item
           label="卖家->品牌"
           tooltip="一个卖家对应多少个品牌"

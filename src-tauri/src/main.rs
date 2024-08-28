@@ -76,7 +76,9 @@ fn main() {
             command::initial_task::insert_initial_task,
             command::initial_task::query_initial_task_list,
             command::initial_task::update_initial_task,
-            command::initial_task::delete_initial_task
+            command::initial_task::delete_initial_task,
+            command::initial_task::download_script,
+            command::initial_task::upload_script,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

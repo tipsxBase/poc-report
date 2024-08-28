@@ -9,6 +9,8 @@ import { DataInitialAction } from "..";
 import CategorySelect from "@/components/CategorySelect";
 import Scrollbars from "react-custom-scrollbars-2";
 import { InitialTaskEntity } from "@/service/initial_task";
+import classNames from "classnames";
+import styles from "./index.module.less";
 
 export interface DataInitialEditorProps {
   action: DataInitialAction;
@@ -95,7 +97,12 @@ const DataInitialEditor = forwardRef<
 
   return (
     <Scrollbars>
-      <div className="flex flex-col gap-2 px-3 py-4">
+      <div
+        className={classNames(
+          styles.dataInitialEditor,
+          "flex flex-col gap-2 px-3 py-4"
+        )}
+      >
         <Form form={form} initialValues={initialValues}>
           <DataInitialContext.Provider value={providerValue}>
             <Form.Item

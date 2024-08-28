@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import ShellEditor from "@/components/ShellEditor";
 import UseInitialStore, { DataInitialTaskType } from "@/stores/initial";
 import YamlEditor from "@/components/YamlEditor";
-import { generateShellScript } from "@/shared/script";
+import { generateShellScript, generateYmlScript } from "@/shared/script";
 
 export interface DataInitialScriptProps {
   rawEntity: InitialTaskEntity;
@@ -38,7 +38,7 @@ const DataInitialScript = (props: DataInitialScriptProps) => {
           )}
 
           {task.task_type === DataInitialTaskType.DATA_INITIAL && (
-            <YamlEditor readOnly value={""} />
+            <YamlEditor readOnly value={generateYmlScript(task)} />
           )}
         </div>
       ))}

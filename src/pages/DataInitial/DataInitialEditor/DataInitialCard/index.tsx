@@ -54,6 +54,7 @@ const DataInitialCard = (props: DataInitialCardProps) => {
       case DataInitialTaskType.DATA_INITIAL: {
         task = {
           task_type,
+          clear_data: false,
           seller_number: 10,
           seller_to_brand: 10,
           brand_to_product: 100,

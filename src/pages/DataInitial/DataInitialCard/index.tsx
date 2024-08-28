@@ -11,13 +11,24 @@ export interface DataInitialCardProps {
   onCopy: (entity: InitialTaskEntity) => void;
   onDelete: (entity: InitialTaskEntity) => void;
   onViewScript: (entity: InitialTaskEntity) => void;
+  onDownload: (entity: InitialTaskEntity) => void;
+
+  onUpload: (entity: InitialTaskEntity) => void;
 }
 
 /**
  *
  */
 const DataInitialCard = (props: DataInitialCardProps) => {
-  const { entity, onUpdate, onCopy, onDelete, onViewScript } = props;
+  const {
+    entity,
+    onUpdate,
+    onCopy,
+    onDelete,
+    onViewScript,
+    onDownload,
+    onUpload,
+  } = props;
   const { task_id, task_name, task_description, task_config } = entity;
   const { getTaskTypeLabel } = UseInitialStore();
   const tasks = useMemo(() => {
@@ -80,8 +91,8 @@ const DataInitialCard = (props: DataInitialCardProps) => {
         <Link onClick={() => onCopy(entity)}>复制</Link>
         <Link onClick={() => onUpdate(entity)}>修改</Link>
         <Link onClick={() => onViewScript(entity)}>查看脚本</Link>
-        <Link onClick={() => onUpdate(entity)}>下载脚本</Link>
-        <Link onClick={() => onUpdate(entity)}>上传脚本</Link>
+        <Link onClick={() => onDownload(entity)}>下载脚本</Link>
+        <Link onClick={() => onUpload(entity)}>上传脚本</Link>
         <Popconfirm
           title="确认删除？"
           position="right"

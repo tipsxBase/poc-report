@@ -2,11 +2,13 @@ import { create } from "zustand";
 import { PaginationParam } from "./SharedType";
 import {
   deleteInitialTask,
+  downloadScript,
   inertInitialTask,
   InitialTaskEntity,
   InitialTaskParams,
   queryInitialTaskList,
   updateInitialTask,
+  uploadScript,
 } from "@/service/initial_task";
 import { normalizePageResult } from "@/shared/pageResult";
 import { TauriCommandResponse } from "@/service/fetch";
@@ -34,6 +36,14 @@ interface InitialStore {
   updateInitialTask: (
     params: InitialTaskEntity
   ) => Promise<TauriCommandResponse<number>>;
+
+  downloadScript: (
+    scriptData: any,
+    fileDir: string,
+    fileName: string
+  ) => Promise<TauriCommandResponse<string>>;
+
+  uploadScript: (scriptData: any) => Promise<TauriCommandResponse<string>>;
 }
 
 export interface InitialTaskProps {
@@ -118,6 +128,13 @@ const UseInitialStore = create<InitialStore>((set, get) => ({
   },
   updateInitialTask: (params: InitialTaskEntity) => {
     return updateInitialTask(params);
+  },
+
+  downloadScript: (scriptData: any, fileDir: string, fileName: string) => {
+    return downloadScript(scriptData, fileDir, fileName);
+  },
+  uploadScript: (scriptData: any) => {
+    return uploadScript(scriptData);
   },
 }));
 
