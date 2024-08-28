@@ -36,7 +36,7 @@
         "scope": [
           "$RESOURCE/*",
           "$RESOURCE/resources/*",
-          "$RESOURCE/resources/docs/**/*"
+          "$RESOURCE/resources/docs/*"
         ]
       },
       "path": {
@@ -58,7 +58,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.poc-report.dev",
+      "identifier": "com.poc-bench.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -69,7 +69,7 @@
       },
       "resources": [
         "resources/*",
-        "resources/docs/**/*"
+        "resources/docs/*"
       ],
       "shortDescription": "",
       "targets": "all",
