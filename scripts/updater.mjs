@@ -30,7 +30,7 @@ async function updater() {
     ...options,
     tag: tag.name,
   });
-  console.log(latestRelease);
+
   const asset = latestRelease.assets.find((e) => e.name === versionFilename);
 
   if (!asset) {

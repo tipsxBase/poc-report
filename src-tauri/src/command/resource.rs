@@ -1,7 +1,6 @@
 use futures::StreamExt;
 use shared::util::is_empty;
 use std::{fs::File, io::Write};
-use tauri::VERSION;
 use zip::{write::SimpleFileOptions, ZipWriter};
 
 use crate::{
@@ -30,7 +29,14 @@ pub async fn query_resource_list() -> CommandResult<Vec<PocResource>> {
     }
 }
 #[tauri::command]
-pub async fn download_zip(file_dir: String, zip_name: String) -> CommandResult<String> {
+pub async fn download_zip(
+    file_dir: String,
+    zip_name: String,
+    app_handle: tauri::AppHandle,
+) -> CommandResult<String> {
+    let p = &app_handle.config().package;
+
+    println!("{:?}", p);
     tauri::async_runtime::spawn(async move {
         // 创建任务
         let task = PocTask {

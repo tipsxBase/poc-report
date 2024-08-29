@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "POCBench_Offline",
+    "productName": "POCBench",
     "version": "0.3.0"
   },
   "tauri": {
@@ -65,7 +65,7 @@
         "exceptionDomain": "",
         "frameworks": [],
         "providerShortName": null,
-        "signingIdentity": null
+        "signingIdentity": "-"
       },
       "resources": ["resources/*", "resources/docs/*"],
       "shortDescription": "",
