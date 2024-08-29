@@ -35,7 +35,7 @@ async function updater() {
     tag: tag.name,
   });
   console.log(latestRelease);
-  const asset = latestRelease.data.find((e) => e.name === versionFilename);
+  const asset = latestRelease.assets.find((e) => e.name === versionFilename);
 
   if (!asset) {
     return;
