@@ -90,7 +90,7 @@
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlFNEM0MTczQTFBQzc0QzYKUldUR2RLeWhjMEZNbm1FL2U4QnMzQUI3cTh6NUpkTjRwV2pTY2hmTUk0SGIwR1lkck1MNGdOcEUK",
       "endpoints": [
-        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/updater/latest.json"
+        "https://tipsxbase.github.io/poc-report/latest.json"
       ],
       "windows": {
         "installMode": "passive",

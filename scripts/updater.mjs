@@ -22,13 +22,9 @@ async function updater() {
     page: 1,
   });
 
-  // const tag = tags.find((t) => t.name.startsWith("v"));
+  const tag = tags.find((t) => t.name.startsWith("v"));
 
-  // if (!tag) return;
-
-  const tag = {
-    name: "v0.2.11",
-  };
+  if (!tag) return;
 
   const { data: latestRelease } = await github.rest.repos.getReleaseByTag({
     ...options,
@@ -56,11 +52,12 @@ async function updater() {
 
   const versionContent = JSON.parse(Buffer.from(assetData).toString());
 
-  versionContent.nodes = getChangelogByVersion(tag.name);
+  versionContent.nodes = getChangelogByVersion(tag.name).content;
 
   if (!fs.existsSync("updater")) {
     fs.mkdirSync("updater");
   }
+
   console.log("versionContent", versionContent);
   // 将数据写入文件
   fs.writeFileSync(
