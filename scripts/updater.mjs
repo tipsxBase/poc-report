@@ -45,8 +45,7 @@ async function updater() {
     await github.request(
       "GET /repos/{owner}/{repo}/releases/assets/{asset_id}",
       {
-        owner: owner,
-        repo: repo,
+        ...options,
         asset_id: asset.id,
         headers: {
           accept: "application/octet-stream",
