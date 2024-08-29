@@ -62,11 +62,11 @@ async function updater() {
   if (!fs.existsSync("updater")) {
     fs.mkdirSync("updater");
   }
-
+  console.log("versionContent", versionContent);
   // 将数据写入文件
   fs.writeFileSync(
     "./updater/latest.json",
-    JSON.stringify(updateData, null, 2)
+    JSON.stringify(versionContent, null, 2)
   );
   console.log("Generate updater/latest.json");
 }
