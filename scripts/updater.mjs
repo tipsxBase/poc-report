@@ -4,7 +4,7 @@ import fs from "fs";
 import { getChangelogByVersion } from "./changelog.mjs";
 
 const token = process.env.GITHUB_TOKEN;
-
+const versionFilename = "latest.json";
 async function updater() {
   if (!token) {
     console.log("GITHUB_TOKEN is required");
