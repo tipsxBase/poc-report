@@ -34,7 +34,7 @@ const ResourceManage = () => {
       <Button
         className="mb-3 flex items-center"
         type="primary"
-        icon={<FaDownload />}
+        icon={<FaDownload className="arco-icon" />}
         onClick={doDownloadZip}
       >
         作战包下载
