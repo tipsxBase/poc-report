@@ -33,7 +33,6 @@ fn main() {
                 // or run all migrations in one go
                 migrations::runner().run(&mut conn).unwrap();
             }
-
             Ok({})
         })
         .invoke_handler(tauri::generate_handler![

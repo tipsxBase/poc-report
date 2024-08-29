@@ -1,6 +1,7 @@
 use futures::StreamExt;
 use shared::util::is_empty;
 use std::{fs::File, io::Write};
+use tauri::VERSION;
 use zip::{write::SimpleFileOptions, ZipWriter};
 
 use crate::{

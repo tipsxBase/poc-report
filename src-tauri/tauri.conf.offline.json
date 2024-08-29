@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "POCBench",
-    "version": "0.2.11"
+    "productName": "POCBench_Offline",
+    "version": "0.3.0"
   },
   "tauri": {
     "allowlist": {
@@ -24,20 +24,20 @@
         "close": true,
         "hide": true,
         "show": true,
+        "create": true,
         "maximize": true,
         "minimize": true,
         "unmaximize": true,
         "unminimize": true,
         "startDragging": true
       },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["http://**", "https://**"]
-      },
       "fs": {
         "all": true,
-        "scope": ["$RESOURCE/*", "$RESOURCE/resources/*"]
+        "scope": [
+          "$RESOURCE/*",
+          "$RESOURCE/resources/*",
+          "$RESOURCE/resources/docs/*"
+        ]
       },
       "path": {
         "all": true
@@ -58,7 +58,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.poc-report.dev",
+      "identifier": "com.poc-bench.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -67,13 +67,16 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["resources/*"],
+      "resources": ["resources/*", "resources/docs/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "wix": {
+          "language": "zh-CN"
+        }
       }
     },
     "security": {
@@ -83,9 +86,7 @@
       "active": true,
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlFNEM0MTczQTFBQzc0QzYKUldUR2RLeWhjMEZNbm1FL2U4QnMzQUI3cTh6NUpkTjRwV2pTY2hmTUk0SGIwR1lkck1MNGdOcEUK",
-      "endpoints": [
-        "https://hexadb-fe.tos-cn-beijing.volces.com/poc/updater/latest.json"
-      ],
+      "endpoints": ["https://tipsxbase.github.io/poc-report/latest.json"],
       "windows": {
         "installMode": "passive",
         "installerArgs": []
