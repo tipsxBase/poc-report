@@ -30,12 +30,12 @@ async function updater() {
     name: "v0.2.11",
   };
 
-  const assets = await github.rest.repos.getReleaseByTag({
+  const { data: latestRelease } = await github.rest.repos.getReleaseByTag({
     ...options,
     tag: tag.name,
   });
-
-  const asset = assets.data.find((e) => e.name === versionFilename);
+  console.log(latestRelease);
+  const asset = latestRelease.data.find((e) => e.name === versionFilename);
 
   if (!asset) {
     return;
