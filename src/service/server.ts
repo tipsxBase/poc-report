@@ -20,6 +20,7 @@ export interface ServerEntity extends CommonEntity {
   password?: string;
   is_default?: number;
   initial_state?: number;
+  cn_url?: string;
 }
 
 export const queryServerList = async (params: ServerParams) => {
@@ -88,6 +89,12 @@ export const updateCheckDefaultServer = async (serverId: number) => {
 
 export const initServer = async (serverId: number) => {
   return invoke("server_init", {
+    serverId,
+  });
+};
+
+export const queryServerDetail = async (serverId: number) => {
+  return invoke("select_server_by_id", {
     serverId,
   });
 };

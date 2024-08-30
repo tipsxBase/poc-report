@@ -18,6 +18,7 @@ pub struct PocServer {
     pub is_default: Option<Option<i8>>,
     pub initial_state: Option<Option<i8>>,
     pub working_directory: Option<String>,
+    pub cn_url: Option<String>,
 }
 
 #[html_sql("mapper/server.html")]
@@ -95,6 +96,7 @@ pub async fn add(server: PocServer) -> RResult<rbatis::rbdc::db::ExecResult> {
         username: server.username,
         password: server.password,
         working_directory: server.working_directory,
+        cn_url: server.cn_url,
         is_default: None,
         initial_state: None,
     };

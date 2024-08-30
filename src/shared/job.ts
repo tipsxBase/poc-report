@@ -29,16 +29,20 @@ export const getClearJob = () => {
   };
 };
 
-export const getInitialConfig = () => {
+export const getInitialConfig = (
+  database_name: string,
+  password: string,
+  username: string,
+  cn_url: string
+) => {
   return {
     jobs: [],
     logPath: "/home/omm/poc/logs/data_initial",
     listeners: null,
     dataSource: {
-      jdbcUrl:
-        "jdbc:hexadb://192.168.200.165:26700,192.168.200.166:26700/poc?autoBalance=true",
-      username: "poc_admin_row",
-      password: "poc@20240408",
+      jdbcUrl: `jdbc:hexadb://${cn_url}/${database_name}?autoBalance=true`,
+      username: username,
+      password: password,
     },
     writeLogCronExpression: "0/30 * * * * ?",
     globalPreProcessors: [
@@ -61,8 +65,12 @@ export const getInitialConfig = () => {
 export const BASE_NUM_OF_THREAD = 10;
 export const BASE_BATCH = 1000;
 
-export const getCategoryJob = (category_number: number) => {
-  const loopCount = Math.ceil(category_number / BASE_BATCH);
+export const getCategoryJob = (
+  category_number: number,
+  num_of_thread = BASE_NUM_OF_THREAD,
+  batch = BASE_BATCH
+) => {
+  const loopCount = Math.ceil(category_number / num_of_thread / batch);
 
   return {
     id: "job_poc_category",
@@ -214,8 +222,12 @@ export const getCategoryJob = (category_number: number) => {
   };
 };
 
-export const getUserJob = (user_number: number) => {
-  const loopCount = Math.ceil(user_number / BASE_BATCH);
+export const getUserJob = (
+  user_number: number,
+  num_of_thread = BASE_NUM_OF_THREAD,
+  batch = BASE_BATCH
+) => {
+  const loopCount = Math.ceil(user_number / num_of_thread / batch);
   return {
     id: "job_poc_user",
     name: "单表用户100000",
@@ -438,8 +450,12 @@ export const getUserJob = (user_number: number) => {
   };
 };
 
-export const getSellersJob = (seller_number: number) => {
-  const loopCount = Math.ceil(seller_number / BASE_BATCH);
+export const getSellersJob = (
+  seller_number: number,
+  num_of_thread = BASE_NUM_OF_THREAD,
+  batch = BASE_BATCH
+) => {
+  const loopCount = Math.ceil(seller_number / num_of_thread / batch);
   return {
     id: "job_poc_sellers",
     name: "插入卖家表",
@@ -567,8 +583,12 @@ export const getSellersJob = (seller_number: number) => {
   };
 };
 
-export const getBrandJob = (brand_number: number) => {
-  const loopCount = Math.ceil(brand_number / BASE_BATCH);
+export const getBrandJob = (
+  brand_number: number,
+  num_of_thread = BASE_NUM_OF_THREAD,
+  batch = BASE_BATCH
+) => {
+  const loopCount = Math.ceil(brand_number / num_of_thread / batch);
   return {
     id: "job_poc_brands",
     name: "插入品牌表100000",
@@ -636,8 +656,12 @@ export const getBrandJob = (brand_number: number) => {
   };
 };
 
-export const getProductJob = (product_number: number) => {
-  const loopCount = Math.ceil(product_number / BASE_BATCH);
+export const getProductJob = (
+  product_number: number,
+  num_of_thread = BASE_NUM_OF_THREAD,
+  batch = BASE_BATCH
+) => {
+  const loopCount = Math.ceil(product_number / num_of_thread / batch);
   return {
     id: "job_poc_product",
     name: "插入产品表，及产品用户关系表",
@@ -925,8 +949,12 @@ export const getProductJob = (product_number: number) => {
   };
 };
 
-export const getOrderJob = (order_number: number) => {
-  const loopCount = Math.ceil(order_number / BASE_BATCH);
+export const getOrderJob = (
+  order_number: number,
+  num_of_thread = BASE_NUM_OF_THREAD,
+  batch = BASE_BATCH
+) => {
+  const loopCount = Math.ceil(order_number / num_of_thread / batch);
   return {
     id: "job_poc_order",
     name: "插入订单表",

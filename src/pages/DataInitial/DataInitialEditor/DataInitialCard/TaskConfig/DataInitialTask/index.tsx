@@ -135,7 +135,7 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
 
   return (
     <div className={styles.dataInitialTask}>
-      <h1>基本配置</h1>
+      <h1 className="text-sm">基本配置</h1>
       <Form.Item
         label="卖家数量"
         rules={[{ required: true, message: "请输入卖家数量" }]}
@@ -149,7 +149,7 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
           collapse ? "h-[30px] overflow-hidden" : "un-collapse h-auto"
         )}
       >
-        <h1 className="cursor-pointer py-2" onClick={toggleCollapse}>
+        <h1 className="cursor-pointer py-2 text-sm" onClick={toggleCollapse}>
           高级配置 {collapse ? <IconDown /> : <IconUp />}
         </h1>
 
@@ -163,12 +163,29 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
         </Form.Item>
 
         <Form.Item
+          label="线程数"
+          tooltip="插入数据使用的线程数"
+          rules={[{ required: true, message: "请输入线程数" }]}
+          field={getFormPath("num_of_thread")}
+        >
+          <InputNumber min={1} precision={0} placeholder="请输入" />
+        </Form.Item>
+        <Form.Item
+          label="批次大小"
+          tooltip="插入数据使用的批次大小"
+          rules={[{ required: true, message: "请输入批次大小" }]}
+          field={getFormPath("batch")}
+        >
+          <InputNumber min={1} precision={0} placeholder="请输入" />
+        </Form.Item>
+
+        <Form.Item
           label="卖家->品牌"
           tooltip="一个卖家对应多少个品牌"
           rules={[{ required: true, message: "请输入卖家数量" }]}
           field={getFormPath("seller_to_brand")}
         >
-          <InputNumber min={1} placeholder="请输入" />
+          <InputNumber min={1} precision={0} placeholder="请输入" />
         </Form.Item>
         <Form.Item
           label="品牌->产品"
@@ -176,7 +193,7 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
           rules={[{ required: true, message: "请输入卖家数量" }]}
           field={getFormPath("brand_to_product")}
         >
-          <InputNumber min={1} placeholder="请输入" />
+          <InputNumber min={1} precision={0} placeholder="请输入" />
         </Form.Item>
         <Form.Item
           label="产品->订单"
@@ -184,21 +201,31 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
           rules={[{ required: true, message: "请输入卖家数量" }]}
           field={getFormPath("product_to_order")}
         >
-          <InputNumber min={1} placeholder="请输入" />
+          <InputNumber min={1} precision={0} placeholder="请输入" />
         </Form.Item>
         <Form.Item
           label="类别数量"
           rules={[{ required: true, message: "请输入卖家数量" }]}
           field={toFormPath(parentField, "category_number")}
         >
-          <InputNumber min={1} step={1} placeholder="请输入类别数量" />
+          <InputNumber
+            min={1}
+            step={1}
+            precision={0}
+            placeholder="请输入类别数量"
+          />
         </Form.Item>
         <Form.Item
           label="用户数"
           rules={[{ required: true, message: "请输入卖家数量" }]}
           field={toFormPath(parentField, "user_number")}
         >
-          <InputNumber min={1} step={1} placeholder="请输入用户数量" />
+          <InputNumber
+            min={1}
+            step={1}
+            precision={0}
+            placeholder="请输入用户数量"
+          />
         </Form.Item>
       </div>
 

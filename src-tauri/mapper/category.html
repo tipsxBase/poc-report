@@ -3,9 +3,15 @@
 <mapper>
 
   <insert id="insert">
-    `insert into poc_category (category_name, category_type) values `
+    `insert into poc_category (category_name, category_type, server_id) values `
     <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
       <if test="key == 'category_id'">
+        <continue />
+      </if>
+      <if test="key == 'server_name'">
+        <continue />
+      </if>
+      <if test="key == 'cn_url'">
         <continue />
       </if>
       #{item}
@@ -13,16 +19,17 @@
   </insert>
 
   <select id="select_list">
-    `select`
+    `select `
     <if test="do_count == true">
-      ` count(1) from poc_category`
+      ` count(1) from poc_category pc`
     </if>
     <if test="do_count == false">
-      ` * from poc_category`
+      ` pc.*, ps.server_name, ps.cn_url from poc_category pc`
     </if>
+    ` left join poc_server ps on pc.server_id = ps.server_id`
     <where>
-      <if test="category_name != ''">
-        ` and category_name like #{category_name}`
+      <if test="category_name != '' && category_name != null">
+        ` and pc.category_name like #{category_name}`
       </if>
     </where>
     <if test="do_count == false">
@@ -31,16 +38,24 @@
   </select>
 
   <select id="select_all">
-    select category_name, category_id from poc_category
+    select pc.category_name, pc.category_id, pc.server_id, ps.server_name, ps.cn_url from poc_category pc left join
+    poc_server ps on pc.server_id = ps.server_id
   </select>
 
   <select id="select_enable_select">
-    select category_name, category_id from poc_category where category_type = 2
+    select pc.category_name, pc.category_id, pc.server_id, ps.server_name, ps.cn_url from poc_category pc left join
+    poc_server ps on pc.server_id = ps.server_id where pc.category_type = 2
+  </select>
+
+  <select id="select_server_by_category_id">
+    select ps.* from poc_category pc left join
+    poc_server ps on pc.server_id = ps.server_id where pc.category_id = #{category_id}
   </select>
 
 
   <update id="update_by_id">
-    update poc_category set category_name = #{category.category_name} where category_id = #{category.category_id}
+    update poc_category set category_name = #{category.category_name}, server_id = #{category.server_id} where
+    category_id = #{category.category_id}
   </update>
 
   <delete id="delete_by_id">

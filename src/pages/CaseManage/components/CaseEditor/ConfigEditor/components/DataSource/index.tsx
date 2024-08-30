@@ -6,6 +6,7 @@ import { toFormPath } from "@/shared/path";
 
 export interface DataSourceConfigProps {
   initialValues: DataSourceValue;
+  jdbcUrl: string;
 }
 
 interface DataSourceValue {
@@ -20,7 +21,7 @@ const DataSourceConfig = forwardRef<
   DataSourceConfigInstance,
   DataSourceConfigProps
 >((props, ref) => {
-  const { initialValues } = props;
+  const { initialValues, jdbcUrl } = props;
   const [form] = Form.useForm();
 
   useImperativeHandle(
@@ -42,6 +43,7 @@ const DataSourceConfig = forwardRef<
     <div className={styles.dataSource}>
       <Form form={form} initialValues={initialValues}>
         <Form.Item
+          initialValue={jdbcUrl}
           rules={[
             {
               required: true,

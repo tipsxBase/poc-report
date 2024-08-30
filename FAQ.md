@@ -3,5 +3,5 @@
 如果 mac 上遇到打不开的问题时，执行
 
 ```
-xattr -c /Applications/POCMaster.app
+xattr -c /Applications/POCBench.app
 ```

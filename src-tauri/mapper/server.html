@@ -2,7 +2,7 @@
   PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
   <insert id="insert">
-    `insert into poc_server (server_name, host, port, username, password, working_directory) values `
+    `insert into poc_server (server_name, host, port, username, password, working_directory, cn_url) values `
     <foreach collection="args" index="key" item="item" open="(" close=")" separator=",">
       <if test="key == 'server_id'">
         <continue />
@@ -51,7 +51,8 @@
   <update id="update_by_id">
     update poc_server set server_name = #{server.server_name}, host =
     #{server.host}, port = #{server.port},
-    username = #{server.username}, password = #{server.password}, working_directory = #{server.working_directory} where
+    username = #{server.username}, password = #{server.password}, working_directory = #{server.working_directory},
+    cn_url = #{server.cn_url} where
     server_id = #{server.server_id}
   </update>
 

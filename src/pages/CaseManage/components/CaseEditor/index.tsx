@@ -12,6 +12,7 @@ import ConfigEditor, { ConfigEditorInstance } from "./ConfigEditor";
 import CategorySelect from "@/components/CategorySelect";
 import { CaseEntity } from "@/service/case";
 import Scrollbars from "react-custom-scrollbars-2";
+import useCategoryStore from "@/stores/category";
 
 export interface CaseEditorProps {
   action: "add" | "update" | "copy" | "uploadCase";
@@ -40,7 +41,8 @@ const createInitialCase = () => {
 const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
   (props, ref) => {
     const { action, rawEntity } = props;
-
+    const { queryRefServer } = useCategoryStore();
+    const [jdbcUrl, setJdbcUrl] = useState<string>("jdbc:hexadb://");
     const { formInitialValues, initialCaseConfig } = useMemo(() => {
       if (!rawEntity || !action) {
         return {
@@ -124,7 +126,21 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
       if (step === 7) {
         return;
       }
-      setStep(step + 1);
+      if (step === 1) {
+        form.validate().then(() => {
+          setStep(step + 1);
+        });
+      } else {
+        setStep(step + 1);
+      }
+    });
+
+    const onCategorySelect = useMemoizedFn((category_id: number) => {
+      queryRefServer(category_id).then((res) => {
+        const { data } = res;
+        const { cn_url } = data;
+        setJdbcUrl(`jdbc:hexadb://${cn_url}`);
+      });
     });
 
     return (
@@ -151,7 +167,7 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
                   rules={[{ required: true, message: "请选择项目名称" }]}
                   label="项目名称"
                 >
-                  <CategorySelect />
+                  <CategorySelect onChange={onCategorySelect} />
                 </Form.Item>
               </Col>
               <Col xxl={24} xs={24} xxxl={24} md={24}>
@@ -198,6 +214,7 @@ const CaseEditor = forwardRef<CaseEditorInstance, CaseEditorProps>(
           <ConfigEditor
             initialCaseConfig={initialCaseConfig}
             ref={configEditorInstance}
+            jdbcUrl={jdbcUrl}
             step={step}
             toPrev={toPrev}
             toNext={toNext}

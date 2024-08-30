@@ -1,7 +1,14 @@
 use std::path::Path;
 
+use anyhow::Ok;
+
 use crate::{
-    entities::{self, server::PocServer, shared_types::RResult, PageResult},
+    entities::{
+        self,
+        server::PocServer,
+        shared_types::{CommandResult, RResult, Response},
+        PageResult,
+    },
     shell,
 };
 
@@ -46,8 +53,14 @@ pub async fn update_server_check_default(server_id: i64) -> RResult<rbatis::rbdc
 }
 
 #[tauri::command]
+pub async fn select_server_by_id(server_id: i64) -> PocServer {
+    let server: PocServer = entities::server::select_server_by_id(server_id).await;
+    server
+}
+
+#[tauri::command]
 pub async fn server_init(server_id: i64) -> RResult<rbatis::rbdc::db::ExecResult> {
-    let server = entities::server::select_server_by_id(server_id).await;
+    let server: PocServer = entities::server::select_server_by_id(server_id).await;
 
     let session = shell::create_session(
         &server.host.unwrap(),

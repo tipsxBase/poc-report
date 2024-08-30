@@ -1,3 +1,4 @@
+import { ServerEntity } from "@/service/server";
 import {
   getBrandJob,
   getCategoryJob,
@@ -31,7 +32,11 @@ export const generateShellScript = (task: any) => {
   return snippets.join("\n");
 };
 
-export const generateYmlScript = (task: any) => {
+export const generateYmlScript = (
+  task: any,
+  database,
+  server: ServerEntity
+) => {
   const {
     clear_data,
     brand_to_product,
@@ -40,28 +45,41 @@ export const generateYmlScript = (task: any) => {
     seller_number,
     seller_to_brand,
     user_number,
+    num_of_thread,
+    batch,
   } = task;
-  const config = getInitialConfig();
+
+  const { database_name, password, username } = database;
+  const { cn_url = "host:port" } = server;
+  const config = getInitialConfig(database_name, password, username, cn_url);
 
   if (clear_data) {
     config.jobs.push(getClearJob());
   }
 
-  config.jobs.push(getCategoryJob(category_number));
+  config.jobs.push(getCategoryJob(category_number, num_of_thread, batch));
 
-  config.jobs.push(getUserJob(user_number));
+  config.jobs.push(getUserJob(user_number, num_of_thread, batch));
 
-  config.jobs.push(getSellersJob(seller_number));
-
-  config.jobs.push(getBrandJob(seller_number * seller_to_brand));
+  config.jobs.push(getSellersJob(seller_number, num_of_thread, batch));
 
   config.jobs.push(
-    getProductJob(seller_number * seller_to_brand * brand_to_product)
+    getBrandJob(seller_number * seller_to_brand, num_of_thread, batch)
+  );
+
+  config.jobs.push(
+    getProductJob(
+      seller_number * seller_to_brand * brand_to_product,
+      num_of_thread,
+      batch
+    )
   );
 
   config.jobs.push(
     getOrderJob(
-      seller_number * seller_to_brand * brand_to_product * product_to_order
+      seller_number * seller_to_brand * brand_to_product * product_to_order,
+      num_of_thread,
+      batch
     )
   );
 

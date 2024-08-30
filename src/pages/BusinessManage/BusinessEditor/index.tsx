@@ -2,6 +2,7 @@ import { Form, Input } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { forwardRef, useImperativeHandle, useMemo } from "react";
 import { CategoryEntity } from "@/service/category";
+import ServerSelect from "@/components/ServerSelect";
 
 export interface BusinessEditorProps {
   action: "add" | "update";
@@ -53,6 +54,18 @@ const BusinessEditor = forwardRef<BusinessEditorInstance, BusinessEditorProps>(
             field="category_name"
           >
             <Input placeholder="请输入项目名称" />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "请选择关联服务",
+              },
+            ]}
+            label="关联服务"
+            field="server_id"
+          >
+            <ServerSelect />
           </Form.Item>
         </Form>
       </div>

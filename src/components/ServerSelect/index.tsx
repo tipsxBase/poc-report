@@ -1,36 +1,34 @@
 import { Select, SelectProps } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { useEffect, useState } from "react";
-import {
-  CategoryType,
-  queryCategoryForEnableOptions,
-} from "@/service/category";
+import useServerStore from "@/stores/server";
 
 export interface CategorySelectProps extends Omit<SelectProps, "options"> {}
 
 /**
  *
  */
-const CategorySelect = (props: CategorySelectProps) => {
+const ServerSelect = (props: CategorySelectProps) => {
   const [options, setOptions] = useState<SelectProps["options"]>();
+  const { fetchAllServerList } = useServerStore();
 
   useEffect(() => {
-    queryCategoryForEnableOptions().then((options) => {
-      setOptions(
-        options.filter(
-          (o) =>
-            process.env.NODE_ENV === "development" ||
-            o.value !== CategoryType.BuiltIn
-        )
-      );
+    fetchAllServerList().then((servers: any) => {
+      const options = servers.map((server) => {
+        return {
+          label: server.server_name,
+          value: server.server_id,
+        };
+      });
+      setOptions(options);
     });
-  }, []);
+  }, [fetchAllServerList]);
 
   return (
     <div className={styles.categorySelect}>
       <Select
         {...props}
-        placeholder="请选择项目"
+        placeholder="请选择关联服务"
         allowClear
         options={options}
       />
@@ -38,4 +36,4 @@ const CategorySelect = (props: CategorySelectProps) => {
   );
 };
 
-export default CategorySelect;
+export default ServerSelect;

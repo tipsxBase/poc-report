@@ -22,6 +22,7 @@ import ConfigPreview from "./components/ConfigPreview";
 
 export interface ConfigEditorProps {
   initialCaseConfig: object;
+  jdbcUrl: string;
   step: number;
   toPrev: () => void;
   toNext: () => void;
@@ -47,7 +48,7 @@ const basicKeys = ["logPath", "writeLogCronExpression"];
  */
 const ConfigEditor = forwardRef<ConfigEditorInstance, ConfigEditorProps>(
   (props, ref) => {
-    const { step, toPrev, toNext, initialCaseConfig } = props;
+    const { step, toPrev, toNext, initialCaseConfig, jdbcUrl } = props;
     const [config, setConfig] = useState<object>(initialCaseConfig);
 
     const instance = useRef<SharedInstance<any>>();
@@ -77,7 +78,13 @@ const ConfigEditor = forwardRef<ConfigEditorInstance, ConfigEditorProps>(
         case 3:
           return <Listener ref={instance} initialValues={initialValues} />;
         case 4:
-          return <DataSource ref={instance} initialValues={initialValues} />;
+          return (
+            <DataSource
+              jdbcUrl={jdbcUrl}
+              ref={instance}
+              initialValues={initialValues}
+            />
+          );
         case 5:
           return <BasicConfig ref={instance} initialValues={initialValues} />;
         case 6:

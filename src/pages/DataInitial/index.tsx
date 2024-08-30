@@ -25,6 +25,8 @@ import { InitialTaskEntity } from "@/service/initial_task";
 import DataInitialScript from "./DataInitialScript";
 import { dialog } from "@tauri-apps/api";
 import { generateShellScript, generateYmlScript } from "@/shared/script";
+import useCategoryStore from "@/stores/category";
+import { ServerEntity } from "@/service/server";
 
 export type DataInitialAction = "add" | "update" | "copy" | "viewScript";
 
@@ -50,7 +52,10 @@ const DataInitial = () => {
     uploadScript,
   } = UseInitialStore();
 
+  const { queryRefServer } = useCategoryStore();
+
   const rawEntityRef = useRef<InitialTaskEntity>();
+  const rawServerRef = useRef<ServerEntity>();
   const DataInitialEditorInstance = useRef<DataInitialEditorInstance>();
 
   const doSearch = useMemoizedFn(() => {
@@ -139,10 +144,15 @@ const DataInitial = () => {
 
   const onViewScript = useMemoizedFn((entity: InitialTaskEntity) => {
     rawEntityRef.current = entity;
-    setAction("viewScript");
+
+    queryServer(entity.category_id).then((res) => {
+      const { data } = res;
+      rawServerRef.current = data;
+      setAction("viewScript");
+    });
   });
 
-  const onDownload = useMemoizedFn(async (entity: InitialTaskEntity) => {
+  const getScript = useMemoizedFn(async (entity: InitialTaskEntity) => {
     let config: any[];
     try {
       config = JSON.parse(JSON.parse(entity.task_config));
@@ -150,6 +160,27 @@ const DataInitial = () => {
       /* empty */
       config = [] as any;
     }
+
+    const { data: server } = await queryRefServer(entity.category_id);
+
+    const database = config.find(
+      (c) => c.task_type === DataInitialTaskType.DATABASE_INITIAL
+    );
+
+    const script = config.reduce((prev, current) => {
+      const { task_type } = current;
+      if (task_type === DataInitialTaskType.DATABASE_INITIAL) {
+        prev[`${task_type}.sh`] = generateShellScript(current);
+      } else if (task_type === DataInitialTaskType.DATA_INITIAL) {
+        prev[`${task_type}.yml`] = generateYmlScript(current, database, server);
+      }
+      return prev;
+    }, {});
+
+    return script;
+  });
+
+  const onDownload = useMemoizedFn(async (entity: InitialTaskEntity) => {
     // 选择下载目录
     const selectedDirectory = await dialog.open({
       directory: true,
@@ -157,41 +188,20 @@ const DataInitial = () => {
       title: "选择下载目录",
     });
 
-    const script = config.reduce((prev, current) => {
-      const { task_type } = current;
-      if (task_type === DataInitialTaskType.DATABASE_INITIAL) {
-        prev[`${task_type}.sh`] = generateShellScript(current);
-      } else if (task_type === DataInitialTaskType.DATA_INITIAL) {
-        prev[`${task_type}.yml`] = generateYmlScript(current);
-      }
-      return prev;
-    }, {});
+    const script = await getScript(entity);
 
     await downloadScript(script, selectedDirectory as string, "数据初始化脚本");
     Message.success("脚本下载成功。");
   });
 
   const onUpload = useMemoizedFn(async (entity: InitialTaskEntity) => {
-    let config: any[];
-    try {
-      config = JSON.parse(JSON.parse(entity.task_config));
-    } catch (error) {
-      /* empty */
-      config = [] as any;
-    }
-
-    const script = config.reduce((prev, current) => {
-      const { task_type } = current;
-      if (task_type === DataInitialTaskType.DATABASE_INITIAL) {
-        prev[`${task_type}.sh`] = generateShellScript(current);
-      } else if (task_type === DataInitialTaskType.DATA_INITIAL) {
-        prev[`${task_type}.yml`] = generateYmlScript(current);
-      }
-      return prev;
-    }, {});
-
+    const script = await getScript(entity);
     await uploadScript(script);
     Message.success("脚本上传成功。");
+  });
+
+  const queryServer = useMemoizedFn((category_id) => {
+    return queryRefServer(category_id);
   });
 
   return (
@@ -297,7 +307,11 @@ const DataInitial = () => {
             rawEntity={rawEntityRef.current}
           />
         ) : action === "viewScript" ? (
-          <DataInitialScript rawEntity={rawEntityRef.current} />
+          <DataInitialScript
+            onDownload={onDownload}
+            serverEntity={rawServerRef.current}
+            rawEntity={rawEntityRef.current}
+          />
         ) : null}
       </LuBanDrawer>
     </>

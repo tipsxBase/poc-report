@@ -2,6 +2,7 @@ import { Form, Input, InputNumber } from "@arco-design/web-react";
 import styles from "./index.module.less";
 import { forwardRef, useImperativeHandle, useMemo } from "react";
 import { ServerEntity } from "@/service/server";
+import ServiceUrl from "./ServiceUrl";
 
 export interface ServerEditorProps {
   action: "add" | "update";
@@ -118,6 +119,26 @@ const ServerEditor = forwardRef<ServerEditorInstance, ServerEditorProps>(
             field="working_directory"
           >
             <Input prefix="$HOME /" placeholder="请输入工作目录" />
+          </Form.Item>
+          <Form.Item
+            label="CN地址"
+            rules={[
+              {
+                required: true,
+                message: "请输入CN地址",
+                validator(value: string, callback) {
+                  if (!value) {
+                    return callback("请输入CN地址");
+                  }
+                  if (value.split(",").some((v) => v.trim() === "")) {
+                    callback("请输入CN地址");
+                  }
+                },
+              },
+            ]}
+            field={"cn_url"}
+          >
+            <ServiceUrl />
           </Form.Item>
         </Form>
       </div>

@@ -9,6 +9,7 @@ import {
   initServer,
   insertServer,
   queryAllServerList,
+  queryServerDetail,
   queryServerList,
   updateCheckDefaultServer,
   updateServer,
@@ -26,6 +27,7 @@ interface ServerStore {
   updateCheckDefaultServer: (serverId: number) => Promise<unknown>;
   initServer: (serverId: number) => Promise<unknown>;
   fetchAllServerList: () => Promise<ServerEntity[]>;
+  queryServerDetail: (serverId: number) => Promise<ServerEntity>;
 }
 
 const useServerStore = create<ServerStore>((set, get) => ({
@@ -97,6 +99,10 @@ const useServerStore = create<ServerStore>((set, get) => ({
 
   initServer: (serverId: number) => {
     return initServer(serverId);
+  },
+
+  queryServerDetail: (serverId: number) => {
+    return queryServerDetail(serverId);
   },
 }));
 

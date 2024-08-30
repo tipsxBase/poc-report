@@ -1,7 +1,5 @@
-import { Button, Form, Input, Message } from "@arco-design/web-react";
-import { GrTask } from "react-icons/gr";
+import { Form, Input, Message } from "@arco-design/web-react";
 import DataInitialCard from "./DataInitialCard";
-import { useMemoizedFn } from "ahooks";
 import { forwardRef, useImperativeHandle, useMemo } from "react";
 import DataInitialContext from "./DataInitialContext";
 import { DataInitialTaskType } from "@/stores/initial";
@@ -51,21 +49,25 @@ const DataInitialEditor = forwardRef<
       task_name: undefined,
       category_id: undefined,
       task_description: undefined,
-      task_config: [],
+      task_config: [
+        {
+          task_type: DataInitialTaskType.DATABASE_INITIAL,
+        },
+        {
+          task_type: DataInitialTaskType.DATA_INITIAL,
+          clear_data: false,
+          num_of_thread: 10,
+          batch: 1000,
+          seller_number: 10,
+          seller_to_brand: 10,
+          brand_to_product: 100,
+          product_to_order: 1000,
+          category_number: 1000,
+          user_number: 100000,
+        },
+      ],
     };
   }, [action, rawEntity]);
-
-  const addTask = useMemoizedFn(() => {
-    let task_config = form.getFieldValue("task_config");
-    if (!task_config) {
-      task_config = [];
-    }
-    task_config.push({
-      task_type: DataInitialTaskType.DATABASE_INITIAL,
-    });
-
-    form.setFieldValue("task_config", task_config);
-  });
 
   const providerValue = useMemo(() => {
     return {
@@ -122,26 +124,14 @@ const DataInitialEditor = forwardRef<
             <Form.Item field="task_description" label="任务描述">
               <Input.TextArea placeholder="请输入任务描述" />
             </Form.Item>
-            <div>
-              <Button
-                className="mb-2"
-                icon={<GrTask className="arco-icon" />}
-                type="primary"
-                onClick={addTask}
-              >
-                新建任务
-              </Button>
-            </div>
-
             <Form.List field="task_config">
-              {(fields, { remove }) => {
+              {(fields) => {
                 return (
                   <div className="flex flex-col gap-4">
-                    {fields.map((field, index) => (
+                    {fields.map((field) => (
                       <DataInitialCard
                         key={field.key}
                         parentField={field.field}
-                        onDeleteTask={() => remove(index)}
                       />
                     ))}
                   </div>

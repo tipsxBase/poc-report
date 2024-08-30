@@ -1,4 +1,10 @@
-use crate::entities::{self, category::PocCategory, shared_types::RResult, PageResult};
+use crate::entities::{
+    self,
+    category::PocCategory,
+    server::PocServer,
+    shared_types::{CommandResult, RResult, Response},
+    PageResult,
+};
 
 #[tauri::command]
 pub async fn insert_category(
@@ -41,4 +47,20 @@ pub async fn delete_category(
 pub async fn query_category_all() -> RResult<Vec<PocCategory>> {
     let result = entities::category::query_all().await;
     result
+}
+
+#[tauri::command]
+pub async fn select_ref_server(category_id: i64) -> CommandResult<PocServer> {
+    match entities::category::select_ref_server_by_category_id(category_id).await {
+        Ok(server) => Ok(Response {
+            success: true,
+            message: String::from("success"),
+            data: Some(server),
+        }),
+        Err(err) => Err(Response {
+            success: false,
+            message: err.to_string(),
+            data: None,
+        }),
+    }
 }

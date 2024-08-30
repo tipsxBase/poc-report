@@ -1,27 +1,22 @@
-import { Button, Form, Popconfirm, Select } from "@arco-design/web-react";
+import { Form } from "@arco-design/web-react";
 import styles from "./index.module.less";
-import UseInitialStore, { DataInitialTaskType } from "@/stores/initial";
-import { IconDelete, IconInfoCircle } from "@arco-design/web-react/icon";
+import { DataInitialTaskType } from "@/stores/initial";
+import { IconInfoCircle } from "@arco-design/web-react/icon";
 import get from "lodash/get";
-import set from "lodash/set";
 import { useMemoizedFn } from "ahooks";
 import TaskConfig from "./TaskConfig";
 import { toFormPath } from "@/shared/path";
-import { useContext } from "react";
-import DataInitialContext from "../DataInitialContext";
 import CollapseWrapper from "@/components/CollapseWrapper";
+import TaskTypeLabel from "./TaskTypeLabel";
 
 export interface DataInitialCardProps {
-  onDeleteTask: () => void;
   parentField: string;
 }
 /**
  *
  */
 const DataInitialCard = (props: DataInitialCardProps) => {
-  const { taskTypeOptions } = UseInitialStore();
-  const { parentField, onDeleteTask } = props;
-  const { form } = useContext(DataInitialContext);
+  const { parentField } = props;
 
   const renderDescription = useMemoizedFn((taskType: DataInitialTaskType) => {
     switch (taskType) {
@@ -37,66 +32,14 @@ const DataInitialCard = (props: DataInitialCardProps) => {
     }
   });
 
-  const onTaskTypeChange = useMemoizedFn((task_type: DataInitialTaskType) => {
-    const values = form.getFieldsValue();
-    let task;
-    switch (task_type) {
-      case DataInitialTaskType.DATABASE_INITIAL: {
-        task = {
-          task_type,
-          database_name: undefined,
-          username: undefined,
-          password: undefined,
-          schema: undefined,
-        };
-        break;
-      }
-      case DataInitialTaskType.DATA_INITIAL: {
-        task = {
-          task_type,
-          clear_data: false,
-          seller_number: 10,
-          seller_to_brand: 10,
-          brand_to_product: 100,
-          product_to_order: 1000,
-          category_number: 1000,
-          user_number: 100000,
-        };
-        break;
-      }
-      default: {
-        task = {};
-      }
-    }
-    set(values, parentField, task);
-    form.setFieldsValue(values);
-  });
-
   return (
     <CollapseWrapper
-      actionRender={() => (
-        <Popconfirm
-          title="确定删除此任务？"
-          position="right"
-          onOk={onDeleteTask}
-        >
-          <Button icon={<IconDelete />} />
-        </Popconfirm>
-      )}
       leftWrapperClassName={styles.formWrapper}
       className={styles.processorUnit}
       collapseHeight={60}
     >
-      <Form.Item
-        field={toFormPath(parentField, "task_type")}
-        rules={[{ required: true, message: "请选择任务类型" }]}
-        label="任务类型"
-      >
-        <Select
-          onChange={onTaskTypeChange}
-          options={taskTypeOptions}
-          placeholder="请选择任务类型"
-        />
+      <Form.Item field={toFormPath(parentField, "task_type")} label="任务类型">
+        <TaskTypeLabel />
       </Form.Item>
       <Form.Item
         noStyle

@@ -99,6 +99,11 @@ const BusinessManage = () => {
         key: "category_name",
       },
       {
+        dataIndex: "server_name",
+        title: "关联服务",
+        key: "server_name",
+      },
+      {
         dataIndex: "action",
         title: "操作",
         key: "action",

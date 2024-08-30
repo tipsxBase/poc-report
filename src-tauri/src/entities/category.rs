@@ -2,10 +2,14 @@ use rbatis::{
     dark_std::defer, executor::Executor, html_sql, htmlsql_select_page, plugin::page::PageRequest,
     snowflake::new_snowflake_id, Page, RBatis,
 };
+use shared::util::like_pattern;
 
 use crate::entities::PageResult;
 
-use super::shared_types::RResult;
+use super::{
+    server::PocServer,
+    shared_types::{EntityResult, RResult},
+};
 
 pub enum CategoryType {
     BuiltIn,
@@ -24,6 +28,9 @@ pub struct PocCategory {
     pub category_id: Option<i64>,
     pub category_name: Option<String>,
     pub category_type: Option<i8>,
+    pub server_id: Option<i64>,
+    pub server_name: Option<String>,
+    pub cn_url: Option<String>,
 }
 
 #[html_sql("mapper/category.html")]
@@ -59,6 +66,11 @@ async fn select_enable_select(rb: &dyn Executor) -> Vec<PocCategory> {
     impled!()
 }
 
+#[html_sql("mapper/category.html")]
+async fn select_server_by_category_id(rb: &dyn Executor, category_id: i64) -> PocServer {
+    impled!()
+}
+
 pub async fn add(
     category: PocCategory,
 ) -> RResult<std::result::Result<rbatis::rbdc::db::ExecResult, rbatis::rbdc::Error>> {
@@ -83,6 +95,9 @@ pub async fn add(
         category_id: Some(new_snowflake_id()),
         category_name: category.category_name,
         category_type: get_category_type_value(CategoryType::UserDefine),
+        server_id: category.server_id,
+        server_name: None,
+        cn_url: None,
     };
     let data = insert(&rb, &table).await;
     Ok(data)
@@ -114,7 +129,7 @@ pub async fn query(
     let data: Page<PocCategory> = select_list(
         &rb,
         &PageRequest::new(current, size),
-        &category_name.unwrap(),
+        like_pattern(&category_name).unwrap().as_str(),
     )
     .await
     .unwrap();
@@ -187,7 +202,35 @@ pub async fn update(
     let driver_url = shared::sqlite::get_driver_url();
 
     rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
-        .unwrap_err();
+        .map_err(|err| {
+            eprintln!("{}", err.to_string());
+        })
+        .unwrap();
+
     let data = update_by_id(&rb, &category).await;
     Ok(data)
+}
+
+pub async fn select_ref_server_by_category_id(category_id: i64) -> EntityResult<PocServer> {
+    _ = fast_log::init(
+        fast_log::Config::new()
+            .console()
+            .level(log::LevelFilter::Debug),
+    );
+    defer!(|| {
+        log::logger().flush();
+    });
+
+    let rb = RBatis::new();
+
+    let driver_url = shared::sqlite::get_driver_url();
+
+    rb.init(rbdc_sqlite::driver::SqliteDriver {}, &driver_url)
+        .map_err(|err| {
+            eprintln!("{}", err.to_string());
+            anyhow::Error::msg(err.to_string())
+        })?;
+
+    let server = select_server_by_category_id(&rb, category_id).await?;
+    Ok(server)
 }

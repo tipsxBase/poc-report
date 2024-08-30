@@ -8,8 +8,11 @@ import {
   deleteCategory,
   insertCategory,
   queryCategoryList,
+  queryRefServer,
   updateCategory,
 } from "@/service/category";
+import { TauriCommandResponse } from "@/service/fetch";
+import { ServerEntity } from "@/service/server";
 
 interface CategoryStore {
   pagination: PaginationParam;
@@ -20,6 +23,9 @@ interface CategoryStore {
   deleteCategory: (params: CategoryEntity) => Promise<unknown>;
   insertCategory: (params: CategoryEntity) => Promise<unknown>;
   updateCategory: (params: CategoryEntity) => Promise<unknown>;
+  queryRefServer: (
+    categoryId: number
+  ) => Promise<TauriCommandResponse<ServerEntity>>;
 }
 
 const useCategoryStore = create<CategoryStore>((set, get) => ({
@@ -81,6 +87,10 @@ const useCategoryStore = create<CategoryStore>((set, get) => ({
 
   updateCategory: (params: CategoryEntity) => {
     return updateCategory(params);
+  },
+
+  queryRefServer: (categoryId: number) => {
+    return queryRefServer(categoryId);
   },
 }));
 
