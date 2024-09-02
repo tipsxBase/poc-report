@@ -50,10 +50,13 @@ export default async function map() {
     configureServer({ middlewares: app }: any) {
       app.use(
         history({
-          verbose: Boolean(process.env.DEBUG) && process.env.DEBUG !== "false",
+          verbose: Boolean(process.env.NODE_ENV === "development"),
           disableDotRule: undefined,
           htmlAcceptHeaders: ["text/html", "application/xhtml+xml"],
-          rewrites: [{ from: /\/doc/, to: "/doc.html" }],
+          rewrites: [
+            // { from: /\/docs\/(.*$)/, to: "/docs/$1" },
+            // { from: /\/doc/, to: "/doc.html" },
+          ],
         })
       );
     },

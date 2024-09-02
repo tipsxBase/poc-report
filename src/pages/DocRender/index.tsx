@@ -11,6 +11,7 @@ import Viewer from "viewerjs";
 import "./index.less";
 import { getMeta } from "mpa-routes";
 import { H1 } from "./components/title";
+
 const regex = /^---(?:\r?\n|\r)(?:([\s\S]*?)(?:\r?\n|\r))?---(?:\r?\n|\r|$)/;
 
 const DocRender = () => {
@@ -18,7 +19,6 @@ const DocRender = () => {
   const [md, setMd] = useState<string>("");
   const { pathKey } = params;
   const meta = getMeta(pathKey);
-  console.log(meta);
   useEffect(() => {
     resolveResource(pathKey.split("___").join("/")).then((res) => {
       readTextFile(res).then((md) => {
@@ -65,7 +65,12 @@ const DocRender = () => {
     <Scrollbars>
       <div onClick={onClickBody} className="px-4 py-4 markdown-body">
         <H1>{meta.title}</H1>
-        <Markdown components={getCustomMDXComponent()}>{md}</Markdown>
+        <Markdown
+          // remarkPlugins={[remarkGfm]}
+          components={getCustomMDXComponent()}
+        >
+          {md}
+        </Markdown>
       </div>
     </Scrollbars>
   );

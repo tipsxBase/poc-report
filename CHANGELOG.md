@@ -1,5 +1,9 @@
 # POC-MASTER CHANGELOG
 
+## v0.3.2
+
+1. bugfix:样式优化
+
 ## v0.3.1
 
 ### feat

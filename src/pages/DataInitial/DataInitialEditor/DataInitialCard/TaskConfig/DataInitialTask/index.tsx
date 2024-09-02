@@ -135,7 +135,7 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
 
   return (
     <div className={styles.dataInitialTask}>
-      <h1 className="text-sm">基本配置</h1>
+      <h1 className="text-sm m-0">基本配置</h1>
       <Form.Item
         label="卖家数量"
         rules={[{ required: true, message: "请输入卖家数量" }]}
@@ -149,7 +149,10 @@ const DataInitialTask = (props: DataInitialTaskProps) => {
           collapse ? "h-[30px] overflow-hidden" : "un-collapse h-auto"
         )}
       >
-        <h1 className="cursor-pointer py-2 text-sm" onClick={toggleCollapse}>
+        <h1
+          className="cursor-pointer py-2 text-sm  m-0"
+          onClick={toggleCollapse}
+        >
           高级配置 {collapse ? <IconDown /> : <IconUp />}
         </h1>
 

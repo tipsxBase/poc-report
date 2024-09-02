@@ -131,7 +131,7 @@ const BaseLayout = () => {
 
   const openWindow = useMemoizedFn(() => {
     const webview = new WebviewWindow("DOCS", {
-      url: "/doc",
+      url: "/docs/poc/index.html",
       title: "帮助文档",
     });
 

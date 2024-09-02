@@ -26,6 +26,14 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "plugin/sql-plugin/sql.d.ts", "plugins/mpa/matter.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src",
+    "plugin/sql-plugin/sql.d.ts",
+    "plugins/mpa/matter.ts",
+    "repress.config.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "mdx": {
+    "checkMdx": true
+  }
 }
