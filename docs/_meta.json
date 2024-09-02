@@ -8,5 +8,10 @@
     "text": "TPC-C",
     "link": "/tpcc/",
     "activeMatch": "/tpcc/"
+  },
+  {
+    "text": "TPC-H",
+    "link": "/TPC-H/",
+    "activeMatch": "/TPC-H/"
   }
 ]
