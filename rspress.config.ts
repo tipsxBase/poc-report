@@ -8,7 +8,7 @@ export default defineConfig({
   base: "/docs",
   outDir: path.join(__dirname, "public/docs"),
   themeConfig: {
-    darkMode: false,
-    search: false,
+    darkMode: true,
+    search: true,
   },
 });
