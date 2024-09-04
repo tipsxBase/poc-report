@@ -1,0 +1,20 @@
+{
+  "version": "0.3.3",
+  "notes": "bugfix:复制用例 bug",
+  "pub_date": "2024-09-04T05:37:59.923Z",
+  "platforms": {
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUR2RLeWhjMEZNbnU1R3l1aHpISHVna1hCOU9SWnByS09YSC9keU91a0kzNXNkNjNkZVVXTFV2cUFTMzBaM2Fad0N4L1h6RDBIdVFQVmFlZCtKQldRRVBjSUdlVG9ldmdnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI1NDI3NTc5CWZpbGU6UE9DQmVuY2guYXBwLnRhci5negphbFBLVnhnT2RMc2lNYk5mdk0xNWFRb1kvRXFDcjZiaXR1RU9uQXkzSDZqVW1SZWFuVU92MHBFbUZwNkxsbERGeEFGOWNuTTJ4S0RPUTcyRFBJZkdEZz09Cg==",
+      "url": "https://github.com/tipsxBase/poc-report/releases/latest/download/POCBench_aarch64.app.tar.gz"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUR2RLeWhjMEZNbmsyb3ZaeVY3elBIM3I3U3hQc2QwZ1l2dXgzTUZNL0JyUWxTM0F5NnhJWTNyUDdrL05RWGRSaEtiZk9BbFphTWJKeVRrM1hzTW9ZR2FCTDd4Qi9lZlFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI1NDI3NjY0CWZpbGU6UE9DQmVuY2guYXBwLnRhci5negoycWU1WFdqRHUyY1BJbjBGM0N2b2ZjYVNUR3c1cGZmZ1pLUVozRUFrNXU4OGkvTXluajhKQk1SandWUm43SFVIaTlZcGlVUG8zK0pRK0hNRWprYWZBUT09Cg==",
+      "url": "https://github.com/tipsxBase/poc-report/releases/latest/download/POCBench_x64.app.tar.gz"
+    },
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUR2RLeWhjMEZNbmtyYmp5OTByUCtVbzhqc255b1FPdTZ1c3NlNytiUkx4bExLQ2p2bXVZN3FnTzRQUVkyOWdwbnpWK3lxSmdiY1dFczV5MWMyREt4NW9YeDU0VmlKclEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI1NDI4Mjc1CWZpbGU6UE9DQmVuY2hfMC4zLjNfeDY0X3poLUNOLm1zaS56aXAKZE1uYnIrZWFKQTZSelpkcTdJTHFPb2lDTCtiRWs4ZjJ1aU55UjdDM1VhV2o4dHhoSlJqYUdXWm8xSzM2KzBWdXZxR1lOY2N4aDNJZitaRkZyekt1QlE9PQo=",
+      "url": "https://github.com/tipsxBase/poc-report/releases/latest/download/POCBench_0.3.3_x64_zh-CN.msi.zip"
+    }
+  },
+  "nodes": "1. bugfix:复制用例 bug"
+}
