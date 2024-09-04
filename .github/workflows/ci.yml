@@ -95,6 +95,7 @@ jobs:
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
           args: ${{ matrix.args }}
+          releaseBody: "bugfix:复制用例 bug"
 
   publish-release:
     permissions:

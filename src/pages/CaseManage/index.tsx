@@ -75,6 +75,7 @@ const CaseManage = () => {
 
   const onReset = useMemoizedFn(() => {
     form.resetFields();
+    resetPagination();
     doSearch();
   });
 
@@ -359,12 +360,17 @@ const CaseManage = () => {
     return "";
   }, [action]);
 
+  const onSearchSubmit = useMemoizedFn(() => {
+    resetPagination();
+    doSearch();
+  });
+
   return (
     <div className={styles.caseManage}>
       <Form
         className="has-divider"
         form={form}
-        onSubmit={doSearch}
+        onSubmit={onSearchSubmit}
         autoComplete="off"
       >
         <ListSearchLayout

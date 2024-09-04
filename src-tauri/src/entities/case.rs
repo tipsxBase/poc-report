@@ -18,7 +18,7 @@ pub struct PocCase {
     pub case_content: Option<String>,
     pub case_description: Option<String>,
     pub case_order: Option<i64>,
-    pub server_id: Option<i64>,
+    // pub server_id: Option<i64>,
 }
 
 crud!(PocCase {});
@@ -105,7 +105,7 @@ pub async fn add(
         case_content: case.case_content,
         case_description: case.case_description,
         case_order: Some(current_order + 1),
-        server_id: case.server_id,
+        // server_id: case.server_id,
     };
 
     let data = insert(&rb, &table).await;
